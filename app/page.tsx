@@ -81,6 +81,28 @@ function StructaLogo({ size = 32 }: { size?: number }) {
   )
 }
 
+function PlatformMarquee() {
+  const items = [...PLATFORMS, ...PLATFORMS, ...PLATFORMS]
+  const duped = [...items, ...items]
+  return (
+    <div style={{ overflow: 'hidden', background: BASE, borderBottom: `1px solid ${BORDER}`, position: 'relative' }}>
+      {/* Fade edges */}
+      <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to right, ${BASE}, transparent)`, zIndex: 1, pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to left, ${BASE}, transparent)`, zIndex: 1, pointerEvents: 'none' }} />
+      <div style={{ display: 'flex', alignItems: 'center', animation: 'marquee 32s linear infinite', width: 'max-content' }}>
+        {duped.map((name, i) => (
+          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 0, flexShrink: 0 }}>
+            <span style={{ fontFamily: M, fontSize: 11, letterSpacing: '0.14em', color: 'rgba(255,255,255,0.18)', whiteSpace: 'nowrap', textTransform: 'uppercase', padding: '18px 28px' }}>
+              {name}
+            </span>
+            <div style={{ width: 3, height: 3, borderRadius: '50%', background: ACCENT, opacity: 0.35, flexShrink: 0 }} />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 const MOCKUP_BAR = (
   <div className="flex items-center gap-2 px-3 py-2.5 border-b" style={{ background: SURFACE, borderColor: BORDER }}>
     <div className="w-2 h-2 rounded-full bg-[#ff5f57]" />
@@ -376,8 +398,42 @@ function ScrollFeatureSection() {
 
 export default function LandingPage() {
   const [email, setEmail] = useState('')
+  const [ctaEmail, setCtaEmail] = useState('')
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [ctaStatus, setCtaStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [message, setMessage] = useState('')
+  const [ctaMessage, setCtaMessage] = useState('')
   const [heroVisible, setHeroVisible] = useState(true)
   const heroRef = useRef<HTMLDivElement>(null)
+
+  async function handleSubmit(
+    emailValue: string,
+    setStatusFn: (s: 'idle' | 'loading' | 'success' | 'error') => void,
+    setMessageFn: (m: string) => void,
+    clearEmailFn: () => void,
+  ) {
+    if (!emailValue.trim()) return
+    setStatusFn('loading')
+    try {
+      const res = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailValue }),
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setStatusFn('success')
+        setMessageFn(data.message)
+        clearEmailFn()
+      } else {
+        setStatusFn('error')
+        setMessageFn(data.error || 'Something went wrong')
+      }
+    } catch {
+      setStatusFn('error')
+      setMessageFn('Something went wrong. Please try again.')
+    }
+  }
 
   useEffect(() => {
     const el = heroRef.current
@@ -486,9 +542,8 @@ export default function LandingPage() {
               maxWidth: 940,
             }}
           >
-            Your team shouldn&apos;t be{' '}
-            <span style={{ color: ACCENT }}>managing spreadsheets.</span>{' '}
-            They should be making decisions.
+            Ai Ecommerce manager that automates your product cataalog across &apos;{' '}
+            <span style={{ color: ACCENT }}>every marketplace.</span>{' '}
           </h1>
 
           {/* Subtext */}
@@ -500,23 +555,40 @@ export default function LandingPage() {
           </p>
 
           {/* CTA */}
-          <div className="animate-fade-up flex flex-col sm:flex-row items-start gap-3" style={{ animationDelay: '0.2s' }}>
-            <div className="flex items-center overflow-hidden" style={{ border: `1px solid rgba(255,255,255,0.1)`, background: 'rgba(255,255,255,0.04)', borderRadius: 6 }}>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Work email"
-                className="h-[52px] px-5 text-[14px] focus:outline-none bg-transparent text-white placeholder:text-[rgba(255,255,255,0.25)]"
-                style={{ minWidth: 240 }}
-              />
-              <button
-                className="h-[52px] px-7 text-[12px] font-bold whitespace-nowrap transition-opacity hover:opacity-90"
-                style={{ background: ACCENT, color: BASE, fontFamily: M, letterSpacing: '0.07em' }}
+          <div className="animate-fade-up flex flex-col items-start gap-3" style={{ animationDelay: '0.2s' }}>
+            {status === 'success' ? (
+              <div className="flex items-center gap-3 h-[52px] px-6 rounded-md" style={{ background: ACCENT + '18', border: `1px solid ${ACCENT}44` }}>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="10" fill={ACCENT}/><path d="M6 10l3 3 5-5" stroke={BASE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <span className="text-[13px] font-medium" style={{ color: ACCENT, fontFamily: M }}>{message}</span>
+              </div>
+            ) : (
+              <form
+                onSubmit={(e) => { e.preventDefault(); handleSubmit(email, setStatus, setMessage, () => setEmail('')) }}
+                className="flex items-center overflow-hidden"
+                style={{ border: `1px solid rgba(255,255,255,0.1)`, background: 'rgba(255,255,255,0.04)', borderRadius: 6 }}
               >
-                JOIN WAITLIST
-              </button>
-            </div>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Work email"
+                  disabled={status === 'loading'}
+                  className="h-[52px] px-5 text-[14px] focus:outline-none bg-transparent text-white placeholder:text-[rgba(255,255,255,0.25)] disabled:opacity-50"
+                  style={{ minWidth: 240 }}
+                />
+                <button
+                  type="submit"
+                  disabled={status === 'loading'}
+                  className="h-[52px] px-7 text-[12px] font-bold whitespace-nowrap transition-opacity hover:opacity-90 disabled:opacity-60"
+                  style={{ background: ACCENT, color: BASE, fontFamily: M, letterSpacing: '0.07em' }}
+                >
+                  {status === 'loading' ? 'JOINING...' : 'JOIN WAITLIST'}
+                </button>
+              </form>
+            )}
+            {status === 'error' && (
+              <p className="text-[12px]" style={{ color: '#ef4444', fontFamily: M }}>{message}</p>
+            )}
           </div>
           <p className="mt-4 text-[11px]" style={{ color: MUTED, fontFamily: M, letterSpacing: '0.06em' }}>
             NO CREDIT CARD REQUIRED
@@ -591,6 +663,9 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Platform marquee */}
+      <PlatformMarquee />
+
       {/* Problem */}
       <section style={{ background: '#0D0D0D', borderBottom: `1px solid ${BORDER}` }}>
         <div className="max-w-[1100px] mx-auto px-6 py-28">
@@ -647,102 +722,120 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Platforms */}
-      <section id="platforms" style={{ background: BASE, borderBottom: `1px solid ${BORDER}` }}>
-        <div className="max-w-[900px] mx-auto px-6 py-28 text-center">
-          <SectionLabel n="05" text="PLATFORMS" centered />
-          <h2 className="text-[clamp(28px,4vw,48px)] font-bold leading-[1.1] text-white mb-5"
-            style={{ fontFamily: D, letterSpacing: '-0.04em', fontWeight: 800 }}>
-            Every marketplace. One workflow.
-          </h2>
-          <p className="text-[16px] mb-14 max-w-[460px] mx-auto leading-relaxed" style={{ color: SECONDARY }}>
-            Platform-specific field mappings, compliance rules, and category-conditional attributes built in.
-          </p>
-          <div className="flex flex-wrap justify-center gap-2.5">
-            {PLATFORMS.map((p) => (
-              <span
-                key={p}
-                className="px-5 py-2.5 text-[12px] font-medium"
-                style={{ border: `1px solid ${BORDER}`, background: SURFACE, color: SECONDARY, fontFamily: M, letterSpacing: '0.04em', borderRadius: 4 }}
-              >
-                {p}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Bottom CTA */}
-      <section id="cta" className="relative" style={{ background: '#09110A' }}>
+      <section id="cta" className="relative overflow-hidden" style={{ background: '#09110A', borderTop: `1px solid ${BORDER}` }}>
+        {/* Lime glow */}
         <div style={{
-          position: 'absolute', inset: 0, pointerEvents: 'none',
-          backgroundImage: 'radial-gradient(rgba(197,241,53,0.03) 1px, transparent 1px)',
-          backgroundSize: '36px 36px',
-        }} />
-        <div style={{
-          position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-          width: 700, height: 500, borderRadius: '50%',
-          background: 'radial-gradient(ellipse, rgba(197,241,53,0.07) 0%, transparent 70%)',
+          position: 'absolute', top: '-20%', right: '-10%',
+          width: 700, height: 700, borderRadius: '50%',
+          background: 'radial-gradient(ellipse, rgba(197,241,53,0.06) 0%, transparent 65%)',
           pointerEvents: 'none',
         }} />
-        <div className="max-w-[700px] mx-auto px-6 py-36 text-center relative">
-          <SectionLabel n="06" text="EARLY ACCESS — LIMITED SPOTS" centered />
-          <h2 className="font-bold leading-[1.04] text-white mb-6"
-            style={{ fontFamily: D, fontSize: 'clamp(32px,5vw,62px)', letterSpacing: '-0.04em', fontWeight: 800 }}>
-            Be the first to run a fully automated catalog.
-          </h2>
-          <p className="text-[17px] leading-[1.7] mb-12" style={{ color: SECONDARY }}>
-            We&apos;re onboarding a small group of early partners. Join the waitlist and we&apos;ll reach out personally. No spam, just a real conversation about your catalog.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <a
-              href="#"
-              className="h-[52px] px-10 inline-flex items-center text-[12px] font-bold transition-opacity hover:opacity-90"
-              style={{ background: ACCENT, color: BASE, fontFamily: M, letterSpacing: '0.08em', borderRadius: 4 }}
-            >
-              REQUEST EARLY ACCESS
-            </a>
-            <a
-              href="#"
-              className="h-[52px] px-10 inline-flex items-center text-[13px] transition-all hover:text-white"
-              style={{ border: `1px solid ${BORDER}`, color: SECONDARY, fontFamily: M, letterSpacing: '0.04em', borderRadius: 4 }}
-            >
-              Book a walkthrough →
-            </a>
+        {/* Giant ghost arrow */}
+        <div style={{
+          position: 'absolute', bottom: '-8%', right: '-2%',
+          fontFamily: D, fontWeight: 800,
+          fontSize: 'clamp(180px, 28vw, 400px)',
+          letterSpacing: '-0.06em', lineHeight: 0.85,
+          color: 'transparent',
+          WebkitTextStroke: `1px rgba(197,241,53,0.07)`,
+          pointerEvents: 'none', userSelect: 'none',
+        }}>→</div>
+
+        <div className="max-w-[1100px] mx-auto px-6 py-28 relative">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-start">
+            <div>
+              <SectionLabel n="06" text="EARLY ACCESS" />
+              <h2 className="font-bold leading-[1.04] text-white mb-6"
+                style={{ fontFamily: D, fontSize: 'clamp(32px,4.5vw,58px)', letterSpacing: '-0.04em', fontWeight: 800 }}>
+                Be the first to run a fully automated catalog.
+              </h2>
+              <p className="text-[16px] leading-[1.75]" style={{ color: SECONDARY }}>
+                We&apos;re onboarding a small group of early partners. Join the waitlist and we&apos;ll reach out personally. No spam — just a real conversation about your catalog.
+              </p>
+            </div>
+            <div className="flex flex-col md:pt-16">
+              {ctaStatus === 'success' ? (
+                <div className="mb-5 flex items-center gap-3 h-[54px] px-6 rounded-lg" style={{ background: ACCENT + '18', border: `1px solid ${ACCENT}44` }}>
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="10" fill={ACCENT}/><path d="M6 10l3 3 5-5" stroke={BASE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <span className="text-[13px] font-medium" style={{ color: ACCENT, fontFamily: M }}>{ctaMessage}</span>
+                </div>
+              ) : (
+                <form
+                  onSubmit={(e) => { e.preventDefault(); handleSubmit(ctaEmail, setCtaStatus, setCtaMessage, () => setCtaEmail('')) }}
+                  className="mb-5 overflow-hidden"
+                  style={{ border: `1px solid rgba(255,255,255,0.1)`, background: 'rgba(255,255,255,0.03)', borderRadius: 8 }}
+                >
+                  <input
+                    type="email"
+                    value={ctaEmail}
+                    onChange={(e) => setCtaEmail(e.target.value)}
+                    placeholder="Work email"
+                    disabled={ctaStatus === 'loading'}
+                    className="w-full h-[54px] px-5 text-[14px] focus:outline-none bg-transparent text-white placeholder:text-[rgba(255,255,255,0.25)] disabled:opacity-50"
+                  />
+                  <div style={{ height: 1, background: BORDER }} />
+                  <button
+                    type="submit"
+                    disabled={ctaStatus === 'loading'}
+                    className="w-full h-[54px] text-[12px] font-bold transition-opacity hover:opacity-90 disabled:opacity-60"
+                    style={{ background: ACCENT, color: BASE, fontFamily: M, letterSpacing: '0.08em' }}
+                  >
+                    {ctaStatus === 'loading' ? 'REQUESTING...' : 'REQUEST EARLY ACCESS'}
+                  </button>
+                </form>
+              )}
+              {ctaStatus === 'error' && (
+                <p className="text-[12px] mb-3" style={{ color: '#ef4444', fontFamily: M }}>{ctaMessage}</p>
+              )}
+              <div className="flex items-center gap-5">
+                <a href="#" className="text-[12px] transition-colors hover:text-white" style={{ color: SECONDARY, fontFamily: M, letterSpacing: '0.04em' }}>
+                  Book a walkthrough →
+                </a>
+                <span style={{ color: MUTED, fontSize: 11, fontFamily: M, letterSpacing: '0.04em' }}>No credit card required</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer style={{ background: BASE, borderTop: `1px solid ${BORDER}` }}>
-        <div className="max-w-[1100px] mx-auto px-6 py-12">
-          <div className="flex flex-col md:flex-row justify-between gap-10">
-            <div>
-              <div className="flex items-center gap-2.5 mb-4">
-                <StructaLogo size={24} />
-                <span className="text-[14px] font-semibold text-white" style={{ fontFamily: D }}>Structa</span>
-              </div>
-              <p className="text-[13px] max-w-[220px] leading-relaxed" style={{ color: MUTED }}>
-                The AI operations layer for modern e-commerce teams.
-              </p>
+      <footer style={{ background: BASE, borderTop: `1px solid rgba(255,255,255,0.1)` }}>
+        {/* Links row */}
+        <div style={{ borderBottom: `1px solid ${BORDER}` }}>
+          <div className="max-w-[1100px] mx-auto px-6 h-14 flex items-center justify-between gap-6 flex-wrap">
+            <div className="flex items-center gap-7 flex-wrap">
+              {['How it works', 'Platforms', 'Pricing', 'About', 'Contact', 'Privacy', 'Terms'].map(l => (
+                <a key={l} href="#" className="transition-colors hover:text-white" style={{ color: SECONDARY, fontFamily: M, fontSize: 11, letterSpacing: '0.05em' }}>{l}</a>
+              ))}
             </div>
-            <div className="flex gap-16">
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.12em] mb-4" style={{ fontFamily: M, color: MUTED }}>Product</p>
-                {['How it works', 'Platforms', 'Pricing'].map(l => (
-                  <a key={l} href="#" className="block text-[13px] mb-2.5 transition-colors hover:text-white" style={{ color: SECONDARY }}>{l}</a>
-                ))}
-              </div>
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.12em] mb-4" style={{ fontFamily: M, color: MUTED }}>Company</p>
-                {['About', 'Contact', 'Privacy', 'Terms'].map(l => (
-                  <a key={l} href="#" className="block text-[13px] mb-2.5 transition-colors hover:text-white" style={{ color: SECONDARY }}>{l}</a>
-                ))}
-              </div>
+            <div className="flex items-center gap-2.5">
+              <StructaLogo size={18} />
+              <span style={{ fontFamily: M, fontSize: 10, color: MUTED, letterSpacing: '0.08em' }}>AI CATALOG OPERATIONS</span>
             </div>
           </div>
-          <div className="mt-12 pt-6 flex items-center justify-between" style={{ borderTop: `1px solid ${BORDER}` }}>
-            <p className="text-[11px]" style={{ fontFamily: M, color: MUTED, letterSpacing: '0.05em' }}>
+        </div>
+
+        {/* Giant wordmark */}
+        <div style={{ padding: '16px 16px 0', overflow: 'hidden' }}>
+          <div style={{
+            fontFamily: D,
+            fontWeight: 800,
+            fontSize: 'clamp(80px, 17vw, 240px)',
+            letterSpacing: '-0.055em',
+            lineHeight: 0.88,
+            color: 'transparent',
+            WebkitTextStroke: `1px rgba(255,255,255,0.07)`,
+            userSelect: 'none',
+          }}>
+            STRUCTA
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div style={{ borderTop: `1px solid ${BORDER}`, padding: '12px 24px' }}>
+          <div className="max-w-[1100px] mx-auto flex items-center justify-between">
+            <p style={{ fontFamily: M, fontSize: 11, color: MUTED, letterSpacing: '0.05em' }}>
               &copy; {new Date().getFullYear()} STRUCTA. ALL RIGHTS RESERVED.
             </p>
           </div>
