@@ -1,10 +1,21 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import Image from 'next/image'
+
+// Design tokens
+const ACCENT = '#C5F135'
+const BASE = '#080808'
+const SURFACE = '#111111'
+const BORDER = 'rgba(255,255,255,0.07)'
+const MUTED = 'rgba(255,255,255,0.18)'
+const SECONDARY = 'rgba(255,255,255,0.45)'
+const D = 'var(--font-display)'
+const M = 'var(--font-mono)'
 
 const PLATFORMS = [
-  'Centrepoint', 'Namshi', '6th Street', 'Trendyol', 'FirstCry',
-  'Amazon', 'Noon', 'Shopify',
+  'Amazon', 'Shopify', 'TikTok Shop', 'Noon', 'Namshi',
+  'Centrepoint', '6th Street', 'Trendyol', 'Walmart',
 ]
 
 const STATS = [
@@ -13,43 +24,56 @@ const STATS = [
   { value: '80hrs', label: 'Saved per catalog cycle' },
 ]
 
-const LISTING_FEATURES = [
+const PAIN_POINTS = [
+  'Listing formats that don\'t transfer between platforms',
+  'Compliance rules that change without warning',
+  'Merchandising teams buried in operational busywork',
+  'Returns driven by inaccurate or inconsistent product data',
+]
+
+const ALL_FEATURES = [
   {
-    title: 'Accurate attributes from product images.',
-    body: 'Structa reads your photos to infer size guides, materials, occasions, and colours. No manual entry.',
+    title: 'Transform product data into compliant listings.',
+    body: 'Connect your catalog and Structa automatically generates correctly formatted, platform-compliant listings for every marketplace you sell on.',
   },
   {
-    title: 'One master sheet. Every platform.',
-    body: 'Upload once. Structa maps to every marketplace template automatically and produces a ready-to-submit feed.',
+    title: 'Sync updates across every channel.',
+    body: 'Change once, update everywhere. No re-uploads, no spreadsheets. Every channel stays in sync automatically as your catalog evolves.',
   },
   {
-    title: 'Catch listings before they cause returns.',
-    body: 'Every SKU scored by return rate, support tickets, and customer language. Problems surfaced early, with the exact correction.',
+    title: 'Fix listing errors before they become returns.',
+    body: 'Structa scores every SKU by return risk, flags inaccurate data, and proposes the exact correction before it costs you.',
+  },
+  {
+    title: 'Give your team back to strategy.',
+    body: 'Stop your best people from doing data entry. Structa handles the operational work so merchandising teams focus on decisions that grow revenue.',
   },
 ]
 
-const BUYING_FEATURES = [
-  {
-    title: 'Review a diff. Click approve.',
-    body: 'AI proposes the exact listing change, backed by customer evidence. See before and after, then ship it live in one click.',
-  },
-  {
-    title: 'Every change is logged with rollback.',
-    body: 'Full audit trail on every edit. Revert anything, instantly. Know exactly what changed and when.',
-  },
-  {
-    title: 'Listing performance informs purchase orders.',
-    body: 'What sells stays in stock. What drives returns gets fixed or cut. Structa closes the loop between listings and buying.',
-  },
-]
+function SectionLabel({ n, text, centered = false }: { n: string; text: string; centered?: boolean }) {
+  if (centered) {
+    return (
+      <div className="flex items-center justify-center gap-3 mb-12" style={{ fontFamily: M }}>
+        <div style={{ width: 24, height: 1, background: ACCENT }} />
+        <span style={{ fontSize: 11, letterSpacing: '0.12em', color: MUTED }}>{n} — {text}</span>
+        <div style={{ width: 24, height: 1, background: ACCENT }} />
+      </div>
+    )
+  }
+  return (
+    <div className="flex items-center gap-3 mb-12" style={{ fontFamily: M }}>
+      <div style={{ width: 24, height: 1, background: ACCENT }} />
+      <span style={{ fontSize: 11, letterSpacing: '0.12em', color: MUTED }}>{n} — {text}</span>
+    </div>
+  )
+}
 
-function StructaLogo({ size = 32, light = false }: { size?: number; light?: boolean }) {
+function StructaLogo({ size = 32 }: { size?: number }) {
   return (
     <div
-      className="bg-gradient-to-br from-[#1D7A6D] to-[#2A9D8F] rounded-lg flex items-center justify-center flex-shrink-0"
-      style={{ width: size, height: size }}
+      style={{ width: size, height: size, background: ACCENT, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
     >
-      <svg className="text-white" style={{ width: size * 0.5, height: size * 0.5 }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+      <svg style={{ width: size * 0.5, height: size * 0.5, color: BASE }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M4 7v10c0 2 1 3 3 3h10c2 0 3-1 3-3V7c0-2-1-3-3-3H7c-2 0-3 1-3 3z" />
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6M12 9v6" />
       </svg>
@@ -57,62 +81,91 @@ function StructaLogo({ size = 32, light = false }: { size?: number; light?: bool
   )
 }
 
-function PlaceholderScreen({ index, dark = false }: { index: number; dark?: boolean }) {
-  const screens = [
-    { label: 'Listing Generator', color: '#1D7A6D' },
-    { label: 'Feed Export', color: '#0e6b5f' },
-    { label: 'Issue Detection', color: '#1D7A6D' },
-    { label: 'Fix Review', color: '#166359' },
-    { label: 'Impact Dashboard', color: '#1D7A6D' },
-    { label: 'Buying Intelligence', color: '#0e6b5f' },
-  ]
-  const s = screens[index % screens.length]
-  const bg = dark ? '#111' : '#f8faf9'
-  const cardBg = dark ? '#1a1a1a' : '#fff'
-  const borderColor = dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'
-  const barBg = dark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)'
-  const lineBg = dark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.08)'
+const MOCKUP_BAR = (
+  <div className="flex items-center gap-2 px-3 py-2.5 border-b" style={{ background: SURFACE, borderColor: BORDER }}>
+    <div className="w-2 h-2 rounded-full bg-[#ff5f57]" />
+    <div className="w-2 h-2 rounded-full bg-[#febc2e]" />
+    <div className="w-2 h-2 rounded-full bg-[#28c840]" />
+    <div className="ml-2 flex-1 h-3 rounded max-w-[140px]" style={{ background: 'rgba(255,255,255,0.06)' }} />
+  </div>
+)
 
+function FeedGeneratorScreen() {
   return (
-    <div className="w-full h-full rounded-2xl flex flex-col overflow-hidden" style={{ background: bg, border: `1px solid ${borderColor}`, boxShadow: dark ? '0 32px 80px rgba(0,0,0,0.5)' : '0 24px 60px rgba(0,0,0,0.08)' }}>
-      <div className="flex items-center gap-1.5 px-4 py-3 border-b" style={{ background: barBg, borderColor }}>
-        <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-        <div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-        <div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-        <div className="ml-4 flex-1 h-4 rounded-md max-w-[180px]" style={{ background: lineBg }} />
-      </div>
-      <div className="flex-1 p-5 flex flex-col gap-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg flex items-center justify-center text-white text-[10px] font-bold" style={{ background: s.color }}>S</div>
-            <div className="h-2.5 rounded w-24" style={{ background: lineBg }} />
+    <div className="w-full h-full rounded-2xl flex flex-col overflow-hidden" style={{ background: '#0C0C0C', border: `1px solid ${BORDER}`, boxShadow: '0 32px 80px rgba(0,0,0,0.5)' }}>
+      {MOCKUP_BAR}
+      <div className="flex-1 p-4 flex gap-4 min-h-0">
+        <div className="flex flex-col gap-1.5 w-[100px] flex-shrink-0">
+          <div className="flex items-center gap-2 py-1.5">
+            <div className="w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold" style={{ background: ACCENT, color: BASE, fontFamily: M }}>S</div>
+            <span className="text-[10px] font-semibold text-white" style={{ fontFamily: D }}>Structa</span>
           </div>
-          <div className="h-6 rounded-md px-3 flex items-center text-white text-[10px] font-medium" style={{ background: s.color }}>Export</div>
+          <div className="py-1.5 px-2 rounded text-[10px] font-medium" style={{ background: ACCENT + '22', color: ACCENT, fontFamily: M }}>⊞ Feed Generator</div>
+          <div className="py-1.5 px-2 rounded text-[10px]" style={{ color: MUTED, fontFamily: M }}>⟳ Fixes</div>
+          <div className="py-1.5 px-2 rounded text-[10px]" style={{ color: MUTED, fontFamily: M }}>◈ Amazon Listings</div>
         </div>
-        <div className="grid grid-cols-3 gap-2.5">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="rounded-xl p-3" style={{ background: cardBg, border: `1px solid ${borderColor}` }}>
-              <div className="h-4 rounded w-10 mb-2" style={{ background: s.color + '30' }} />
-              <div className="h-2 rounded mb-1" style={{ background: lineBg }} />
-              <div className="h-2 rounded w-3/4" style={{ background: lineBg }} />
+        <div className="flex-1 min-w-0">
+          <h3 className="text-[12px] font-semibold text-white mb-1" style={{ fontFamily: D }}>Feed Generator</h3>
+          <p className="text-[10px] mb-3" style={{ color: SECONDARY, lineHeight: 1.5 }}>Upload your master sheet and platform template. Pipeline produces a ready-to-submit feed.</p>
+          <div className="text-[9px] uppercase tracking-wider mb-2" style={{ color: MUTED, fontFamily: M }}>Platform</div>
+          <div className="grid grid-cols-3 gap-1.5 mb-3">
+            {['Centrepoint', 'Namshi', '6th Street', 'Trendyol', 'Amazon'].map((p) => (
+              <div key={p} className="py-1.5 px-2 rounded text-[10px] border text-center" style={{ borderColor: p === 'Centrepoint' ? ACCENT : BORDER, background: p === 'Centrepoint' ? ACCENT + '18' : 'transparent', color: p === 'Centrepoint' ? ACCENT : SECONDARY, fontFamily: M }}>{p}</div>
+            ))}
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="rounded-lg p-3 border border-dashed" style={{ borderColor: BORDER, background: 'rgba(255,255,255,0.02)' }}>
+              <div className="text-[10px] font-semibold text-white mb-0.5">Master Sheet</div>
+              <div className="text-[9px] mb-2" style={{ color: MUTED }}>Your product data (XLSX)</div>
+              <div className="inline-block py-1 px-2 rounded text-[9px] font-bold" style={{ background: ACCENT, color: BASE, fontFamily: M }}>Choose File</div>
             </div>
+            <div className="rounded-lg p-3 border border-dashed" style={{ borderColor: BORDER, background: 'rgba(255,255,255,0.02)' }}>
+              <div className="text-[10px] font-semibold text-white mb-0.5">Platform Template</div>
+              <div className="text-[9px] mb-2" style={{ color: MUTED }}>Marketplace template (XLSX)</div>
+              <div className="inline-block py-1 px-2 rounded text-[9px] font-bold" style={{ background: ACCENT, color: BASE, fontFamily: M }}>Choose File</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function FixesScreen() {
+  const fixes = [
+    { tag: 'Sizing', tagBg: '#fff8ec', tagColor: '#c47a00', sku: '2015-1501-20554', title: 'Fix sizing expectations for Emma-MOLEKINHA Junior Girls Sneakers', rate: '30.0%', reduction: '-12%' },
+    { tag: 'Missing Info', tagBg: '#eff3fd', tagColor: '#3a6fd4', sku: 'FORMAL-001-42', title: 'Enhance product description for Classic Formal Leather Shoes', rate: '20.0%', reduction: '-8%' },
+    { tag: 'Missing Info', tagBg: '#eff3fd', tagColor: '#3a6fd4', sku: 'LOAFER-NAVY-40', title: 'Improve color description for Casual Loafers - Navy Blue', rate: '18.0%', reduction: '-6%' },
+  ]
+  return (
+    <div className="w-full h-full rounded-2xl flex flex-col overflow-hidden" style={{ background: '#0C0C0C', border: `1px solid ${BORDER}`, boxShadow: '0 32px 80px rgba(0,0,0,0.5)' }}>
+      {MOCKUP_BAR}
+      <div className="flex-1 p-4 overflow-auto">
+        <div className="flex items-start justify-between gap-4 mb-3">
+          <div>
+            <h3 className="text-[12px] font-semibold text-white mb-0.5" style={{ fontFamily: D }}>Fixes</h3>
+            <p className="text-[10px]" style={{ color: MUTED }}>AI-recommended PDP improvements to reduce returns</p>
+          </div>
+          <div className="py-1.5 px-3 rounded text-[10px] font-bold flex-shrink-0" style={{ background: ACCENT, color: BASE, fontFamily: M }}>Run Analysis</div>
+        </div>
+        <div className="flex gap-2 mb-2">
+          {['All (3)', 'sizing (1)', 'missing info (1)'].map((label, i) => (
+            <span key={label} className="py-1 px-2 rounded-full text-[9px] border" style={{ borderColor: i === 0 ? ACCENT : BORDER, background: i === 0 ? ACCENT + '22' : 'transparent', color: i === 0 ? ACCENT : MUTED, fontFamily: M }}>{label}</span>
           ))}
         </div>
-        <div className="flex-1 rounded-xl p-3 flex flex-col gap-0" style={{ background: cardBg, border: `1px solid ${borderColor}` }}>
-          <div className="flex items-center gap-2 py-2 border-b text-[10px] font-semibold" style={{ borderColor, color: dark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)' }}>
-            <span className="flex-1">SKU</span><span className="w-16">Return rate</span><span className="w-12">Status</span>
-          </div>
-          {[
-            { sku: 'EMMA-001', rate: '38%', status: 'Fix', high: true },
-            { sku: 'FORMAL-042', rate: '20%', status: 'Fix', high: false },
-            { sku: 'LOAFER-48', rate: '20%', status: 'Fix', high: false },
-            { sku: 'BOOT-019', rate: '9%', status: 'OK', high: false },
-            { sku: 'SNKR-77', rate: '5%', status: 'OK', high: false },
-          ].map((row, i) => (
-            <div key={i} className="flex items-center gap-2 py-2 border-b" style={{ borderColor }}>
-              <span className="flex-1 text-[11px] font-mono" style={{ color: dark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.7)' }}>{row.sku}</span>
-              <span className="w-16 text-[11px]" style={{ color: row.high ? '#ef4444' : (dark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)') }}>{row.rate}</span>
-              <span className="w-12 h-5 rounded-full flex items-center justify-center text-[9px] font-semibold text-white" style={{ background: row.status === 'Fix' ? s.color : '#9ca3af' }}>{row.status}</span>
+        <div className="flex flex-col gap-2">
+          {fixes.map((f) => (
+            <div key={f.sku} className="rounded-lg p-3 flex items-start gap-2 border" style={{ background: SURFACE, borderColor: BORDER }}>
+              <div className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${BORDER}` }}>📦</div>
+              <div className="min-w-0 flex-1">
+                <span className="inline-block text-[8px] font-semibold uppercase px-1.5 py-0.5 rounded mb-1" style={{ background: f.tagBg, color: f.tagColor }}>{f.tag}</span>
+                <span className="text-[9px] ml-1" style={{ color: MUTED }}>{f.sku}</span>
+                <div className="text-[11px] font-medium text-white leading-tight mt-0.5">{f.title.slice(0, 52)}…</div>
+                <div className="flex gap-3 mt-1.5 text-[10px]" style={{ color: SECONDARY }}>
+                  <span>Return rate <strong style={{ color: '#ef4444' }}>{f.rate}</strong></span>
+                  <span>Est. reduction <strong style={{ color: ACCENT }}>{f.reduction}</strong></span>
+                </div>
+              </div>
             </div>
           ))}
         </div>
@@ -121,107 +174,199 @@ function PlaceholderScreen({ index, dark = false }: { index: number; dark?: bool
   )
 }
 
-function FeatureSection({
-  label,
-  headline,
-  subheadline,
-  features,
-  screenOffset = 0,
-  dark = false,
-}: {
-  label: string
-  headline: string
-  subheadline: string
-  features: { title: string; body: string }[]
-  screenOffset?: number
-  dark?: boolean
-}) {
+function FixDetailScreen() {
+  return (
+    <div className="w-full h-full rounded-2xl flex flex-col overflow-hidden" style={{ background: '#0C0C0C', border: `1px solid ${BORDER}`, boxShadow: '0 32px 80px rgba(0,0,0,0.5)' }}>
+      {MOCKUP_BAR}
+      <div className="flex-1 p-4 overflow-auto flex gap-4 min-h-0">
+        <div className="flex-1 min-w-0">
+          <div className="text-[10px] mb-2" style={{ color: ACCENT, fontFamily: M }}>← Back to Fixes</div>
+          <h3 className="text-[11px] font-semibold text-white mb-2 leading-tight" style={{ fontFamily: D }}>Fix sizing expectations for Emma-MOLEKINHA Junior Girls Sneakers</h3>
+          <div className="flex gap-2 mb-2 flex-wrap">
+            <span className="text-[9px]" style={{ color: MUTED }}>SKU: 2015-1501-20554</span>
+            <span className="text-[8px] px-1.5 py-0.5 rounded" style={{ background: '#fff8ec', color: '#c47a00' }}>sizing</span>
+            <span className="text-[10px] font-bold" style={{ color: '#ef4444' }}>30.0% return rate</span>
+          </div>
+          <div className="rounded-lg p-2.5 mb-2 border" style={{ background: SURFACE, borderColor: BORDER }}>
+            <div className="text-[9px] uppercase tracking-wider mb-1" style={{ color: MUTED, fontFamily: M }}>Diagnosis</div>
+            <p className="text-[10px] leading-relaxed" style={{ color: SECONDARY }}><strong className="text-white">High return rate (30%) driven by sizing.</strong> Customers report the shoes run small. Add clear sizing guidance to title and description.</p>
+          </div>
+          <div className="rounded-lg p-2.5 mb-2 border" style={{ background: SURFACE, borderColor: BORDER }}>
+            <div className="text-[9px] uppercase tracking-wider mb-1" style={{ color: MUTED, fontFamily: M }}>Proposed Changes</div>
+            <div className="grid grid-cols-2 gap-2">
+              <div><div className="text-[8px] mb-0.5" style={{ color: '#ef4444' }}>Before</div><div className="text-[10px] p-1.5 rounded" style={{ background: 'rgba(239,68,68,0.1)', color: MUTED, textDecoration: 'line-through' }}>Emma-MOLEKINHA Junior Girls Sneakers</div></div>
+              <div><div className="text-[8px] mb-0.5" style={{ color: ACCENT }}>After</div><div className="text-[10px] p-1.5 rounded border" style={{ background: ACCENT + '12', borderColor: ACCENT + '44', color: ACCENT }}>…Sneakers (Runs Small – Size Up Recommended)</div></div>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <div className="flex-1 py-2 px-2.5 rounded text-[10px] font-bold text-center" style={{ background: ACCENT, color: BASE, fontFamily: M }}>Approve & Apply</div>
+            <div className="py-2 px-2.5 rounded text-[10px] border" style={{ borderColor: BORDER, color: SECONDARY, fontFamily: M }}>Snooze</div>
+          </div>
+        </div>
+        <div className="w-[100px] flex-shrink-0 border-l pl-3" style={{ borderColor: BORDER }}>
+          <div className="text-[9px] font-semibold text-white mb-2">Evidence</div>
+          <div className="text-[8px] uppercase tracking-wider mb-1.5" style={{ color: MUTED, fontFamily: M }}>Themes</div>
+          <div className="flex flex-wrap gap-1 mb-2">
+            {['runs small', 'too small', 'too tight'].map((t) => <span key={t} className="px-1.5 py-0.5 rounded text-[9px] border" style={{ borderColor: BORDER, color: SECONDARY }}>{t}</span>)}
+          </div>
+          <div className="text-[8px] uppercase tracking-wider mb-1" style={{ color: MUTED, fontFamily: M }}>Return breakdown</div>
+          <div className="space-y-1">
+            {[{ label: 'runs small', w: '80%' }, { label: 'too tight', w: '60%' }].map((r) => (
+              <div key={r.label} className="flex items-center gap-2">
+                <span className="text-[9px] w-14 truncate" style={{ color: SECONDARY }}>{r.label}</span>
+                <div className="flex-1 h-1 rounded overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)' }}><div className="h-full rounded" style={{ width: r.w, background: '#ef4444' }} /></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function AmazonListingsScreen() {
+  const rows = [
+    { sku: 'PUM-RSX-001-EU42-BLK', product: 'PUMA RS-X³ Puzzle Sneake...', chips: ['Black/White', 'EU 42', '$129.99'], status: ['Done', 'AI'] },
+    { sku: 'ADI-UB22-EU43-WHT', product: 'Adidas Ultraboost 22...', chips: ['White', 'EU 43', '$189.99'], status: ['Done', 'AI'] },
+    { sku: 'NKE-AF1-EU41-BLK', product: 'Nike Air Force 1 \'07...', chips: ['Black', 'EU 41', '$109.99'], status: ['Done', 'AI'] },
+  ]
+  return (
+    <div className="w-full h-full rounded-2xl flex flex-col overflow-hidden" style={{ background: '#0C0C0C', border: `1px solid ${BORDER}`, boxShadow: '0 32px 80px rgba(0,0,0,0.5)' }}>
+      {MOCKUP_BAR}
+      <div className="flex-1 p-4 overflow-auto min-h-0">
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] font-semibold text-white" style={{ fontFamily: D }}>amazon_test_fixture.xlsx</span>
+            <span className="px-1.5 py-0.5 rounded text-[9px] font-bold" style={{ background: ACCENT + '22', color: ACCENT, border: `1px solid ${ACCENT}44`, fontFamily: M }}>Done</span>
+          </div>
+          <div className="py-1 px-2 rounded text-[9px] font-bold" style={{ background: ACCENT, color: BASE, fontFamily: M }}>✦ Enrich with AI</div>
+        </div>
+        <div className="grid grid-cols-4 gap-2 mb-3">
+          {[{ label: 'Total', val: '8' }, { label: 'Pending', val: '0', faint: true }, { label: 'Valid', val: '8', green: true }, { label: 'Errors', val: '0', faint: true }].map((s) => (
+            <div key={s.label} className="rounded-lg p-2 border text-center" style={{ background: SURFACE, borderColor: BORDER }}>
+              <div className="text-[8px] uppercase tracking-wider mb-0.5" style={{ color: MUTED, fontFamily: M }}>{s.label}</div>
+              <div className="text-[16px] font-bold" style={{ color: s.green ? ACCENT : s.faint ? MUTED : '#fff', fontFamily: D }}>{s.val}</div>
+            </div>
+          ))}
+        </div>
+        <div className="rounded-lg border overflow-hidden" style={{ borderColor: BORDER }}>
+          <div className="grid grid-cols-12 gap-2 px-3 py-2 text-[9px] uppercase tracking-wider border-b" style={{ background: SURFACE, borderColor: BORDER, color: MUTED, fontFamily: M }}>
+            <span className="col-span-1">#</span><span className="col-span-3">SKU</span><span className="col-span-3">Product</span><span className="col-span-3">Details</span><span className="col-span-2">Status</span>
+          </div>
+          {rows.map((r, i) => (
+            <div key={r.sku} className="grid grid-cols-12 gap-2 px-3 py-2 border-b items-center text-[10px]" style={{ borderColor: BORDER }}>
+              <span className="col-span-1" style={{ color: MUTED }}>{i + 1}</span>
+              <span className="col-span-3" style={{ color: ACCENT, fontFamily: M }}>{r.sku}</span>
+              <span className="col-span-3 truncate" style={{ color: SECONDARY }}>{r.product}</span>
+              <span className="col-span-3 flex gap-1 flex-wrap">
+                {r.chips.map((c) => <span key={c} className="px-1.5 py-0.5 rounded border text-[9px]" style={{ borderColor: BORDER, color: SECONDARY }}>{c}</span>)}
+              </span>
+              <span className="col-span-2 flex gap-1">
+                <span className="px-1.5 py-0.5 rounded text-[9px] font-bold" style={{ background: ACCENT + '22', color: ACCENT, fontFamily: M }}>Done</span>
+                <span className="px-1.5 py-0.5 rounded text-[9px] font-bold" style={{ background: 'rgba(59,130,246,0.2)', color: '#60a5fa', fontFamily: M }}>AI</span>
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ProductVisual({ index }: { index: number }) {
+  const screens = [FeedGeneratorScreen, FixesScreen, FixDetailScreen, AmazonListingsScreen]
+  const Screen = screens[index] ?? FeedGeneratorScreen
+  return <Screen />
+}
+
+function ScrollFeatureSection() {
   const [active, setActive] = useState(0)
-  const sectionRef = useRef<HTMLDivElement>(null)
+  const featureRefs = useRef<(HTMLDivElement | null)[]>([])
 
   useEffect(() => {
-    const el = sectionRef.current
-    if (!el) return
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) setActive(0)
-      },
-      { threshold: 0.3 }
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
+    const observers: IntersectionObserver[] = []
+    // Use a generous rootMargin so the "active" zone is the middle ~50% of viewport — section changes as you scroll into it naturally
+    const rootMargin = '-25% 0px -25% 0px'
+    featureRefs.current.forEach((ref, index) => {
+      if (!ref) return
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) setActive(index)
+        },
+        { rootMargin, threshold: 0.2 }
+      )
+      observer.observe(ref)
+      observers.push(observer)
+    })
+    return () => observers.forEach(o => o.disconnect())
   }, [])
 
-  const bg = dark ? '#0a0a0a' : '#fff'
-  const textPrimary = dark ? '#fff' : '#0f0f0f'
-  const textMuted = dark ? 'rgba(255,255,255,0.35)' : '#9ca3af'
-  const textBody = dark ? 'rgba(255,255,255,0.55)' : '#6b7280'
-  const borderColor = dark ? 'rgba(255,255,255,0.06)' : '#f0f0f0'
-  const activeBorder = '#1D7A6D'
-
   return (
-    <section ref={sectionRef} style={{ background: bg, borderTop: `1px solid ${borderColor}` }}>
-      <div className="max-w-[1100px] mx-auto px-6 py-28">
+    <section id="solution" style={{ background: '#0D0D0D', borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
+      <div className="max-w-[1100px] mx-auto px-6 pt-28 pb-28">
+        <SectionLabel n="02" text="HOW IT WORKS" />
         <div className="mb-16">
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] mb-4" style={{ color: '#2A9D8F' }}>{label}</p>
-          <h2 className="text-[clamp(28px,4vw,48px)] font-bold tracking-[-0.035em] leading-[1.08] mb-4" style={{ color: textPrimary }}>
-            {headline}
+          <h2 className="text-[clamp(28px,4vw,52px)] font-bold leading-[1.06] mb-5 text-white"
+            style={{ fontFamily: D, letterSpacing: '-0.04em', fontWeight: 800 }}>
+            One AI layer. Every marketplace.<br />Zero manual work.
           </h2>
-          <p className="text-[17px] leading-[1.7] max-w-[500px]" style={{ color: textBody }}>{subheadline}</p>
+          <p className="text-[16px] leading-[1.75] max-w-[500px]" style={{ color: SECONDARY }}>
+            Structa sits between your product catalog and every channel you sell on — standardizing, optimizing, and syncing listings automatically.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-start">
-          <div className="flex flex-col gap-0">
-            {features.map((f, i) => (
-              <button
+          <div className="flex flex-col">
+            {ALL_FEATURES.map((f, i) => (
+              <div
                 key={i}
+                ref={(el) => { featureRefs.current[i] = el }}
                 onClick={() => setActive(i)}
-                className="text-left py-6 border-b transition-all duration-200"
-                style={{ borderColor }}
+                className="py-8 border-b cursor-pointer"
+                style={{ borderColor: BORDER }}
               >
-                <div className="flex items-start gap-4">
-                  <div
-                    className="w-0.5 self-stretch rounded-full flex-shrink-0 transition-all duration-300 mt-1"
-                    style={{ background: active === i ? activeBorder : 'transparent', minHeight: 20 }}
-                  />
+                <div className="flex items-start gap-5">
+                  <span style={{ fontFamily: M, fontSize: 11, color: active === i ? ACCENT : MUTED, flexShrink: 0, marginTop: 3, letterSpacing: '0.05em' }}>
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
                   <div>
-                    <h3
-                      className="text-[16px] font-semibold mb-2 leading-snug transition-colors duration-200"
-                      style={{ color: active === i ? textPrimary : textMuted }}
-                    >
+                    <h3 className="text-[15px] font-semibold mb-2 leading-snug transition-colors duration-500 ease-out"
+                      style={{ color: active === i ? '#fff' : 'rgba(255,255,255,0.28)', fontFamily: D }}>
                       {f.title}
                     </h3>
-                    <p
-                      className="text-[14px] leading-[1.7] transition-all duration-300"
+                    <p className="text-[14px] leading-[1.75] transition-all duration-600 ease-out"
                       style={{
-                        color: textBody,
-                        maxHeight: active === i ? 120 : 0,
+                        color: SECONDARY,
+                        maxHeight: active === i ? 200 : 0,
                         opacity: active === i ? 1 : 0,
                         overflow: 'hidden',
-                      }}
-                    >
+                      }}>
                       {f.body}
                     </p>
                   </div>
                 </div>
-              </button>
+              </div>
             ))}
           </div>
 
-          <div className="relative" style={{ height: 440 }}>
-            {features.map((_, i) => (
-              <div
-                key={i}
-                className="absolute inset-0 transition-all duration-500"
-                style={{
-                  opacity: active === i ? 1 : 0,
-                  transform: `translateY(${active === i ? 0 : 12}px) scale(${active === i ? 1 : 0.98})`,
-                  pointerEvents: active === i ? 'auto' : 'none',
-                }}
-              >
-                <PlaceholderScreen index={screenOffset + i} dark={dark} />
+          <div className="hidden md:block">
+            <div className="sticky top-[100px]" style={{ height: 440 }}>
+              <div className="relative h-full">
+                {ALL_FEATURES.map((_, i) => (
+                  <div
+                    key={i}
+                    className="absolute inset-0 transition-all duration-700 ease-out"
+                    style={{
+                      opacity: active === i ? 1 : 0,
+                      transform: `translateY(${active === i ? 0 : 20}px) scale(${active === i ? 1 : 0.96})`,
+                      pointerEvents: active === i ? 'auto' : 'none',
+                    }}
+                  >
+                    <ProductVisual index={i} />
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </div>
@@ -246,99 +391,173 @@ export default function LandingPage() {
   }, [])
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" style={{ background: BASE }}>
 
-      {/* ─── Navbar ─── */}
+      {/* Nav */}
       <nav
         className="fixed top-0 w-full z-50 transition-all duration-300"
         style={{
-          background: heroVisible ? 'rgba(5,5,5,0)' : 'rgba(255,255,255,0.94)',
-          borderBottom: heroVisible ? '1px solid transparent' : '1px solid #e5e7eb',
+          background: heroVisible ? 'transparent' : 'rgba(8,8,8,0.96)',
+          borderBottom: heroVisible ? '1px solid transparent' : `1px solid ${BORDER}`,
           backdropFilter: heroVisible ? 'none' : 'blur(20px)',
         }}
       >
         <div className="max-w-[1200px] mx-auto px-6 h-[64px] flex items-center justify-between">
           <div className="flex items-center gap-10">
             <a href="/" className="flex items-center gap-2.5">
-              <StructaLogo size={28} />
-              <span
-                className="text-[15px] font-semibold tracking-tight transition-colors duration-300"
-                style={{ color: heroVisible ? '#fff' : '#0f0f0f' }}
-              >
+              <StructaLogo size={26} />
+              <span className="text-[15px] font-semibold text-white" style={{ fontFamily: D }}>
                 Structa
               </span>
             </a>
             <div className="hidden md:flex items-center gap-7">
-              {['Listings', 'Returns', 'Platforms'].map(l => (
+              {[
+                { label: 'How it works', href: '#solution' },
+                { label: 'Platforms', href: '#platforms' },
+              ].map(l => (
                 <a
-                  key={l}
-                  href={`#${l.toLowerCase()}`}
-                  className="text-[13px] transition-colors duration-300"
-                  style={{ color: heroVisible ? 'rgba(255,255,255,0.45)' : '#6b7280' }}
-                  onMouseEnter={e => (e.currentTarget.style.color = heroVisible ? '#fff' : '#0f0f0f')}
-                  onMouseLeave={e => (e.currentTarget.style.color = heroVisible ? 'rgba(255,255,255,0.45)' : '#6b7280')}
+                  key={l.label}
+                  href={l.href}
+                  className="text-[12px] transition-colors duration-200"
+                  style={{ color: SECONDARY, fontFamily: M, letterSpacing: '0.04em' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+                  onMouseLeave={e => (e.currentTarget.style.color = SECONDARY)}
                 >
-                  {l}
+                  {l.label}
                 </a>
               ))}
             </div>
           </div>
           <a
             href="#cta"
-            className="text-[13px] font-medium px-5 py-2.5 rounded-full transition-all duration-300"
+            className="text-[11px] font-bold px-5 py-2.5 transition-opacity hover:opacity-85"
             style={{
-              background: heroVisible ? '#1D7A6D' : '#0f0f0f',
-              color: '#fff',
+              background: ACCENT,
+              color: BASE,
+              fontFamily: M,
+              letterSpacing: '0.08em',
+              borderRadius: 4,
             }}
           >
-            Request access
+            JOIN WAITLIST
           </a>
         </div>
       </nav>
 
-      {/* ─── Hero ─── */}
+      {/* Hero */}
       <section
         ref={heroRef}
-        className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden"
-        style={{ background: '#050505' }}
+        className="relative min-h-screen flex flex-col justify-center overflow-hidden"
+        style={{ background: BASE }}
       >
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] rounded-full blur-[140px]" style={{ background: 'radial-gradient(ellipse, rgba(29,122,109,0.18) 0%, transparent 70%)' }} />
-        </div>
+        {/* Dot grid */}
+        <div style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none',
+          backgroundImage: 'radial-gradient(rgba(255,255,255,0.032) 1px, transparent 1px)',
+          backgroundSize: '36px 36px',
+        }} />
+        {/* Lime glow */}
+        <div style={{
+          position: 'absolute', bottom: '5%', left: '5%',
+          width: 900, height: 700, borderRadius: '50%',
+          background: 'radial-gradient(ellipse, rgba(197,241,53,0.055) 0%, transparent 65%)',
+          pointerEvents: 'none',
+        }} />
 
-        <div className="relative max-w-[860px] mx-auto text-center">
-          <h1 className="text-[clamp(52px,8vw,96px)] font-bold leading-[0.92] tracking-[-0.04em] text-white mb-8 animate-fade-up">
-            Precision listing management<br />
-            <span style={{ color: 'rgba(255,255,255,0.3)' }}>for modern retail teams.</span>
+        <div className="relative max-w-[1100px] mx-auto w-full px-6" style={{ paddingTop: 180, paddingBottom: 120 }}>
+          {/* Top label */}
+          <div className="flex items-center gap-3 mb-12" style={{ fontFamily: M }}>
+            <div style={{ width: 24, height: 1, background: ACCENT }} />
+            <span style={{ fontSize: 11, letterSpacing: '0.12em', color: MUTED }}>
+              AI CATALOG OPERATIONS — EARLY ACCESS
+            </span>
+          </div>
+
+          {/* Headline */}
+          <h1
+            className="animate-fade-up mb-8"
+            style={{
+              fontFamily: D,
+              fontSize: 'clamp(46px, 7.5vw, 96px)',
+              fontWeight: 800,
+              lineHeight: 1.03,
+              letterSpacing: '-0.04em',
+              color: '#fff',
+              maxWidth: 940,
+            }}
+          >
+            Your team shouldn&apos;t be{' '}
+            <span style={{ color: ACCENT }}>managing spreadsheets.</span>{' '}
+            They should be making decisions.
           </h1>
 
-          <p className="text-[18px] sm:text-[20px] leading-[1.65] mb-12 animate-fade-up max-w-[540px] mx-auto" style={{ color: 'rgba(255,255,255,0.45)', animationDelay: '0.1s' }}>
-            Structa generates accurate product listings, identifies what is driving returns, and ships the fix.
+          {/* Subtext */}
+          <p
+            className="animate-fade-up mb-10"
+            style={{ fontSize: 18, lineHeight: 1.7, color: SECONDARY, maxWidth: 520, animationDelay: '0.1s' }}
+          >
+            Structa is the AI operations layer for e-commerce teams — automating listings, compliance, and catalog management across every marketplace you sell on.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-[420px] mx-auto animate-fade-up" style={{ animationDelay: '0.2s' }}>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Work email"
-              className="w-full sm:flex-1 h-[50px] px-5 rounded-full text-[14px] focus:outline-none transition-all"
-              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff' }}
-            />
-            <button
-              className="w-full sm:w-auto h-[50px] px-8 text-[14px] font-medium rounded-full whitespace-nowrap transition-all"
-              style={{ background: '#1D7A6D', color: '#fff' }}
-            >
-              Request access
-            </button>
+          {/* CTA */}
+          <div className="animate-fade-up flex flex-col sm:flex-row items-start gap-3" style={{ animationDelay: '0.2s' }}>
+            <div className="flex items-center overflow-hidden" style={{ border: `1px solid rgba(255,255,255,0.1)`, background: 'rgba(255,255,255,0.04)', borderRadius: 6 }}>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Work email"
+                className="h-[52px] px-5 text-[14px] focus:outline-none bg-transparent text-white placeholder:text-[rgba(255,255,255,0.25)]"
+                style={{ minWidth: 240 }}
+              />
+              <button
+                className="h-[52px] px-7 text-[12px] font-bold whitespace-nowrap transition-opacity hover:opacity-90"
+                style={{ background: ACCENT, color: BASE, fontFamily: M, letterSpacing: '0.07em' }}
+              >
+                JOIN WAITLIST
+              </button>
+            </div>
           </div>
-          <p className="mt-5 text-[12px]" style={{ color: 'rgba(255,255,255,0.2)', animationDelay: '0.4s' }}>
-            No credit card required
+          <p className="mt-4 text-[11px]" style={{ color: MUTED, fontFamily: M, letterSpacing: '0.06em' }}>
+            NO CREDIT CARD REQUIRED
           </p>
+
+          <div className="mt-16 animate-fade-up" style={{ animationDelay: '0.5s' }}>
+            <p className="text-[10px] uppercase tracking-[0.2em] mb-6" style={{ color: MUTED, fontFamily: M }}>
+              Trusted by teams at
+            </p>
+            <div className="flex items-center justify-center gap-5">
+              {[
+                { src: '/logos/beira-rio.png', alt: 'Beira Rio', href: 'https://beirario.com.br', h: 22 },
+                { src: '/logos/snackible.png', alt: 'Snackible', href: 'https://snackible.com', h: 30 },
+                { src: '/logos/geoomnii.png', alt: 'Geoomnii', href: 'https://geopartnering.com', h: 20 },
+              ].map((logo) => (
+                <a
+                  key={logo.alt}
+                  href={logo.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center hover:opacity-90 transition-opacity duration-200"
+                  style={{
+                    background: 'rgba(255,255,255,0.06)',
+                    border: `1px solid rgba(255,255,255,0.08)`,
+                    borderRadius: 8,
+                    padding: '10px 20px',
+                  }}
+                >
+                  <img
+                    src={logo.src}
+                    alt={logo.alt}
+                    style={{ height: logo.h, width: 'auto', objectFit: 'contain' }}
+                  />
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
 
-        {/* scroll hint */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2" style={{ color: 'rgba(255,255,255,0.2)' }}>
+        {/* Scroll indicator */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2" style={{ color: MUTED }}>
           <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
             <rect x="1" y="1" width="14" height="22" rx="7" stroke="currentColor" strokeWidth="1.5" />
             <circle cx="8" cy="7" r="2" fill="currentColor" className="animate-bounce" />
@@ -346,106 +565,105 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ─── Stats bar ─── */}
-      <section style={{ background: '#0a0a0a', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <div className="max-w-[900px] mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-3 gap-10">
-          {STATS.map((s) => (
-            <div key={s.label} className="text-center">
-              <div className="text-[56px] font-bold tracking-[-0.04em] text-white leading-none mb-2">{s.value}</div>
-              <div className="text-[13px]" style={{ color: 'rgba(255,255,255,0.35)' }}>{s.label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ─── Platform bar ─── */}
-      <section style={{ background: '#0a0a0a', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <div className="max-w-[1000px] mx-auto px-6 py-12">
-          <p className="text-center text-[10px] uppercase tracking-[0.25em] font-medium mb-9" style={{ color: 'rgba(255,255,255,0.2)' }}>
-            Built for teams selling on
-          </p>
-          <div className="flex items-center justify-center gap-10 sm:gap-14 flex-wrap">
-            {PLATFORMS.map((name) => (
-              <span key={name} className="text-[12px] font-bold tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.18)' }}>
-                {name}
-              </span>
+      {/* Stats */}
+      <section style={{ background: '#0D0D0D', borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
+        <div className="max-w-[900px] mx-auto px-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3">
+            {STATS.map((s, i) => (
+              <div
+                key={s.label}
+                className="py-12"
+                style={{
+                  paddingLeft: i > 0 ? 48 : 0,
+                  paddingRight: i < STATS.length - 1 ? 48 : 0,
+                  borderLeft: i > 0 ? `1px solid ${BORDER}` : 'none',
+                }}
+              >
+                <div className="text-[54px] font-bold leading-none mb-2.5 text-white" style={{ fontFamily: D, letterSpacing: '-0.04em' }}>
+                  {s.value}
+                </div>
+                <div className="text-[11px] tracking-[0.12em] uppercase" style={{ fontFamily: M, color: MUTED }}>
+                  {s.label}
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─── Descriptor bridge ─── */}
-      <section style={{ background: '#fff', borderBottom: '1px solid #f0f0f0' }}>
-        <div className="max-w-[720px] mx-auto px-6 py-24 text-center">
-          <h2 className="text-[clamp(24px,3.5vw,40px)] font-bold tracking-[-0.03em] leading-[1.15] text-[#0f0f0f]">
-            Where catalog operations teams fix product listings, reduce returns, and make smarter buying decisions.
-          </h2>
+      {/* Problem */}
+      <section style={{ background: '#0D0D0D', borderBottom: `1px solid ${BORDER}` }}>
+        <div className="max-w-[1100px] mx-auto px-6 py-28">
+          <SectionLabel n="01" text="THE PROBLEM" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+            <div>
+              <h2 className="text-[clamp(24px,3.5vw,46px)] font-bold leading-[1.1] text-white mb-6"
+                style={{ fontFamily: D, letterSpacing: '-0.035em', fontWeight: 800 }}>
+                Selling on Amazon, Shopify, and TikTok Shop shouldn&apos;t require three different workflows.
+              </h2>
+              <p className="text-[16px] leading-[1.75]" style={{ color: SECONDARY }}>
+                Every platform has its own listing format, compliance rules, and performance requirements. Most teams patch this together with spreadsheets, manual uploads, and tribal knowledge. That means errors, missed optimizations, and hours of work that never scale.
+              </p>
+            </div>
+            <div className="flex flex-col">
+              {PAIN_POINTS.map((point, i) => (
+                <div key={point} className="flex items-start gap-5 py-5 border-b" style={{ borderColor: BORDER }}>
+                  <span style={{ fontFamily: M, fontSize: 11, color: ACCENT, flexShrink: 0, marginTop: 2, letterSpacing: '0.05em' }}>
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <span className="text-[14px] leading-[1.7]" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                    {point}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ─── Listing feature section ─── */}
-      <div id="listings">
-        <FeatureSection
-          label="Product Listings"
-          headline="Accurate at scale."
-          subheadline="From image to published listing. Structa handles attribute extraction, template mapping, and quality control automatically."
-          features={LISTING_FEATURES}
-          screenOffset={0}
-          dark={false}
-        />
-      </div>
+      {/* Solution / Features */}
+      <ScrollFeatureSection />
 
-      {/* ─── Returns feature section ─── */}
-      <div id="returns">
-        <FeatureSection
-          label="Returns and Buying"
-          headline="Fix listings. Inform buying."
-          subheadline="Every return is a signal. Structa reads them, proposes corrections, and feeds that intelligence into your purchase decisions."
-          features={BUYING_FEATURES}
-          screenOffset={3}
-          dark={true}
-        />
-      </div>
-
-      {/* ─── Testimonial ─── */}
-      <section style={{ background: '#fff', borderTop: '1px solid #f0f0f0' }}>
-        <div className="max-w-[1100px] mx-auto px-6 py-28">
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-center mb-14" style={{ color: '#2A9D8F' }}>
-            Hear from Structa customers
-          </p>
-          <div className="max-w-[700px] mx-auto">
-            <div className="rounded-2xl p-10" style={{ background: '#f9fafb', border: '1px solid #f0f0f0' }}>
-              <p className="text-[20px] sm:text-[22px] font-medium leading-[1.55] text-[#374151] mb-8">
-                "We saved over 80 hours on our last catalog cycle. Six marketplaces compiled in an afternoon, and the listings came out more accurate than anything we produced manually."
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#e8f5f3] flex items-center justify-center text-[#1D7A6D] font-bold text-[15px]">A</div>
-                <div>
-                  <div className="text-[14px] font-semibold text-[#0f0f0f]">Aman</div>
-                  <div className="text-[13px] text-[#9ca3af]">Head of Operations, Geo Partnering LLC</div>
-                </div>
+      {/* Testimonial */}
+      <section style={{ background: '#0D0D0D', borderBottom: `1px solid ${BORDER}` }}>
+        <div className="max-w-[900px] mx-auto px-6 py-28">
+          <SectionLabel n="04" text="EARLY PARTNERS" />
+          <blockquote
+            className="mb-10 text-white"
+            style={{ fontFamily: D, fontSize: 'clamp(20px,2.5vw,28px)', fontWeight: 500, lineHeight: 1.5, letterSpacing: '-0.02em' }}
+          >
+            &ldquo;We saved over 80 hours on our last catalog cycle. Six marketplaces compiled in an afternoon, and the listings came out more accurate than anything we produced manually.&rdquo;
+          </blockquote>
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-[15px]"
+              style={{ background: ACCENT, color: BASE, fontFamily: D }}>A</div>
+            <div>
+              <div className="text-[14px] font-semibold text-white" style={{ fontFamily: D }}>Aman</div>
+              <div className="text-[11px] tracking-[0.08em]" style={{ fontFamily: M, color: MUTED }}>
+                HEAD OF OPERATIONS, GEO PARTNERING LLC
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ─── Platforms ─── */}
-      <section id="platforms" style={{ background: '#fafafa', borderTop: '1px solid #f0f0f0' }}>
-        <div className="max-w-[800px] mx-auto px-6 py-28 text-center">
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] mb-4" style={{ color: '#2A9D8F' }}>Platforms</p>
-          <h2 className="text-[clamp(28px,4vw,44px)] font-bold tracking-[-0.035em] leading-[1.1] text-[#0f0f0f] mb-5">
+      {/* Platforms */}
+      <section id="platforms" style={{ background: BASE, borderBottom: `1px solid ${BORDER}` }}>
+        <div className="max-w-[900px] mx-auto px-6 py-28 text-center">
+          <SectionLabel n="05" text="PLATFORMS" centered />
+          <h2 className="text-[clamp(28px,4vw,48px)] font-bold leading-[1.1] text-white mb-5"
+            style={{ fontFamily: D, letterSpacing: '-0.04em', fontWeight: 800 }}>
             Every marketplace. One workflow.
           </h2>
-          <p className="text-[16px] text-[#6b7280] max-w-[480px] mx-auto leading-relaxed mb-12">
-            Platform-specific field mappings, banner rows, and category-conditional attributes built in. Or bring any custom template.
+          <p className="text-[16px] mb-14 max-w-[460px] mx-auto leading-relaxed" style={{ color: SECONDARY }}>
+            Platform-specific field mappings, compliance rules, and category-conditional attributes built in.
           </p>
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex flex-wrap justify-center gap-2.5">
             {PLATFORMS.map((p) => (
               <span
                 key={p}
-                className="px-5 py-2.5 rounded-full text-[13px] font-medium cursor-default transition-all"
-                style={{ border: '1px solid #e5e7eb', background: '#fff', color: '#374151' }}
+                className="px-5 py-2.5 text-[12px] font-medium"
+                style={{ border: `1px solid ${BORDER}`, background: SURFACE, color: SECONDARY, fontFamily: M, letterSpacing: '0.04em', borderRadius: 4 }}
               >
                 {p}
               </span>
@@ -454,67 +672,79 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ─── Bottom CTA ─── */}
-      <section id="cta" style={{ background: '#050505' }}>
-        <div className="max-w-[660px] mx-auto px-6 py-36 text-center">
-          <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ position: 'absolute' }}>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full blur-[120px]" style={{ background: 'radial-gradient(ellipse, rgba(29,122,109,0.15) 0%, transparent 70%)' }} />
-          </div>
-          <h2 className="text-[clamp(32px,5vw,58px)] font-bold tracking-[-0.04em] leading-[1.05] text-white mb-6 relative">
-            See it with your own catalog.
+      {/* Bottom CTA */}
+      <section id="cta" className="relative" style={{ background: '#09110A' }}>
+        <div style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none',
+          backgroundImage: 'radial-gradient(rgba(197,241,53,0.03) 1px, transparent 1px)',
+          backgroundSize: '36px 36px',
+        }} />
+        <div style={{
+          position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+          width: 700, height: 500, borderRadius: '50%',
+          background: 'radial-gradient(ellipse, rgba(197,241,53,0.07) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+        <div className="max-w-[700px] mx-auto px-6 py-36 text-center relative">
+          <SectionLabel n="06" text="EARLY ACCESS — LIMITED SPOTS" centered />
+          <h2 className="font-bold leading-[1.04] text-white mb-6"
+            style={{ fontFamily: D, fontSize: 'clamp(32px,5vw,62px)', letterSpacing: '-0.04em', fontWeight: 800 }}>
+            Be the first to run a fully automated catalog.
           </h2>
-          <p className="text-[17px] leading-[1.7] mb-12 relative" style={{ color: 'rgba(255,255,255,0.4)' }}>
-            No integrations required to start. Upload a master sheet and see your first compiled feed in minutes.
+          <p className="text-[17px] leading-[1.7] mb-12" style={{ color: SECONDARY }}>
+            We&apos;re onboarding a small group of early partners. Join the waitlist and we&apos;ll reach out personally. No spam, just a real conversation about your catalog.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 relative">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <a
               href="#"
-              className="h-[50px] px-10 inline-flex items-center text-[14px] font-medium rounded-full transition-all"
-              style={{ background: '#1D7A6D', color: '#fff' }}
+              className="h-[52px] px-10 inline-flex items-center text-[12px] font-bold transition-opacity hover:opacity-90"
+              style={{ background: ACCENT, color: BASE, fontFamily: M, letterSpacing: '0.08em', borderRadius: 4 }}
             >
-              Request access
+              REQUEST EARLY ACCESS
             </a>
             <a
               href="#"
-              className="h-[50px] px-10 inline-flex items-center text-[14px] font-medium rounded-full transition-all"
-              style={{ border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.5)' }}
+              className="h-[52px] px-10 inline-flex items-center text-[13px] transition-all hover:text-white"
+              style={{ border: `1px solid ${BORDER}`, color: SECONDARY, fontFamily: M, letterSpacing: '0.04em', borderRadius: 4 }}
             >
-              Book a walkthrough
+              Book a walkthrough →
             </a>
           </div>
         </div>
       </section>
 
-      {/* ─── Footer ─── */}
-      <footer style={{ background: '#050505', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+      {/* Footer */}
+      <footer style={{ background: BASE, borderTop: `1px solid ${BORDER}` }}>
         <div className="max-w-[1100px] mx-auto px-6 py-12">
           <div className="flex flex-col md:flex-row justify-between gap-10">
             <div>
               <div className="flex items-center gap-2.5 mb-4">
-                <StructaLogo size={26} />
-                <span className="text-[14px] font-semibold text-white">Structa</span>
+                <StructaLogo size={24} />
+                <span className="text-[14px] font-semibold text-white" style={{ fontFamily: D }}>Structa</span>
               </div>
-              <p className="text-[13px] max-w-[220px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.3)' }}>
-                Product listing management for modern retail teams.
+              <p className="text-[13px] max-w-[220px] leading-relaxed" style={{ color: MUTED }}>
+                The AI operations layer for modern e-commerce teams.
               </p>
             </div>
             <div className="flex gap-16">
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-widest mb-4" style={{ color: 'rgba(255,255,255,0.25)' }}>Product</p>
-                {['Listings', 'Returns', 'Platforms', 'Pricing'].map(l => (
-                  <a key={l} href="#" className="block text-[13px] mb-2.5 transition-colors" style={{ color: 'rgba(255,255,255,0.4)' }}>{l}</a>
+                <p className="text-[10px] font-bold uppercase tracking-[0.12em] mb-4" style={{ fontFamily: M, color: MUTED }}>Product</p>
+                {['How it works', 'Platforms', 'Pricing'].map(l => (
+                  <a key={l} href="#" className="block text-[13px] mb-2.5 transition-colors hover:text-white" style={{ color: SECONDARY }}>{l}</a>
                 ))}
               </div>
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-widest mb-4" style={{ color: 'rgba(255,255,255,0.25)' }}>Company</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.12em] mb-4" style={{ fontFamily: M, color: MUTED }}>Company</p>
                 {['About', 'Contact', 'Privacy', 'Terms'].map(l => (
-                  <a key={l} href="#" className="block text-[13px] mb-2.5 transition-colors" style={{ color: 'rgba(255,255,255,0.4)' }}>{l}</a>
+                  <a key={l} href="#" className="block text-[13px] mb-2.5 transition-colors hover:text-white" style={{ color: SECONDARY }}>{l}</a>
                 ))}
               </div>
             </div>
           </div>
-          <div className="mt-12 pt-6 flex items-center justify-between" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-            <p className="text-[12px]" style={{ color: 'rgba(255,255,255,0.2)' }}>© {new Date().getFullYear()} Structa. All rights reserved.</p>
+          <div className="mt-12 pt-6 flex items-center justify-between" style={{ borderTop: `1px solid ${BORDER}` }}>
+            <p className="text-[11px]" style={{ fontFamily: M, color: MUTED, letterSpacing: '0.05em' }}>
+              &copy; {new Date().getFullYear()} STRUCTA. ALL RIGHTS RESERVED.
+            </p>
           </div>
         </div>
       </footer>
