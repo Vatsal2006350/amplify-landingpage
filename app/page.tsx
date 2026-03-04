@@ -542,8 +542,8 @@ export default function LandingPage() {
               maxWidth: 940,
             }}
           >
-            Ai Ecommerce manager that automates your product cataalog across &apos;{' '}
-            <span style={{ color: ACCENT }}>every marketplace.</span>{' '}
+            AI ecommerce manager that automates your product catalog across{' '}
+            <span style={{ color: ACCENT }}>every marketplace.</span>
           </h1>
 
           {/* Subtext */}
