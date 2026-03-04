@@ -8,8 +8,8 @@ const ACCENT = '#C5F135'
 const BASE = '#080808'
 const SURFACE = '#111111'
 const BORDER = 'rgba(255,255,255,0.07)'
-const MUTED = 'rgba(255,255,255,0.18)'
-const SECONDARY = 'rgba(255,255,255,0.45)'
+const MUTED = 'rgba(255,255,255,0.55)'
+const SECONDARY = 'rgba(255,255,255,0.75)'
 const D = 'var(--font-display)'
 const M = 'var(--font-mono)'
 
@@ -27,26 +27,26 @@ const STATS = [
 const PAIN_POINTS = [
   'Listing formats that don\'t transfer between platforms',
   'Compliance rules that change without warning',
-  'Merchandising teams buried in operational busywork',
-  'Returns driven by inaccurate or inconsistent product data',
+  'Teams buried in operational busywork',
+  'Returns from inaccurate or inconsistent product data',
 ]
 
 const ALL_FEATURES = [
   {
     title: 'Transform product data into compliant listings.',
-    body: 'Connect your catalog and Structa automatically generates correctly formatted, platform-compliant listings for every marketplace you sell on.',
+    body: 'Connect your catalog. Structa generates platform-compliant listings for every marketplace.',
   },
   {
     title: 'Sync updates across every channel.',
-    body: 'Change once, update everywhere. No re-uploads, no spreadsheets. Every channel stays in sync automatically as your catalog evolves.',
+    body: 'Change once, update everywhere. No re-uploads or spreadsheets.',
   },
   {
     title: 'Fix listing errors before they become returns.',
-    body: 'Structa scores every SKU by return risk, flags inaccurate data, and proposes the exact correction before it costs you.',
+    body: 'Scores SKUs by return risk, flags bad data, and proposes corrections.',
   },
   {
     title: 'Give your team back to strategy.',
-    body: 'Stop your best people from doing data entry. Structa handles the operational work so merchandising teams focus on decisions that grow revenue.',
+    body: 'Structa handles operational work so merchandising focuses on growth.',
   },
 ]
 
@@ -85,14 +85,14 @@ function PlatformMarquee() {
   const items = [...PLATFORMS, ...PLATFORMS, ...PLATFORMS]
   const duped = [...items, ...items]
   return (
-    <div style={{ overflow: 'hidden', background: BASE, borderBottom: `1px solid ${BORDER}`, position: 'relative' }}>
+    <div id="platforms" style={{ overflow: 'hidden', background: BASE, borderBottom: `1px solid ${BORDER}`, position: 'relative' }}>
       {/* Fade edges */}
       <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to right, ${BASE}, transparent)`, zIndex: 1, pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to left, ${BASE}, transparent)`, zIndex: 1, pointerEvents: 'none' }} />
       <div style={{ display: 'flex', alignItems: 'center', animation: 'marquee 32s linear infinite', width: 'max-content' }}>
         {duped.map((name, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 0, flexShrink: 0 }}>
-            <span style={{ fontFamily: M, fontSize: 11, letterSpacing: '0.14em', color: 'rgba(255,255,255,0.18)', whiteSpace: 'nowrap', textTransform: 'uppercase', padding: '18px 28px' }}>
+            <span style={{ fontFamily: M, fontSize: 11, letterSpacing: '0.14em', color: MUTED, whiteSpace: 'nowrap', textTransform: 'uppercase', padding: '18px 28px' }}>
               {name}
             </span>
             <div style={{ width: 3, height: 3, borderRadius: '50%', background: ACCENT, opacity: 0.35, flexShrink: 0 }} />
@@ -333,7 +333,7 @@ function ScrollFeatureSection() {
             One AI layer. Every marketplace.<br />Zero manual work.
           </h2>
           <p className="text-[16px] leading-[1.75] max-w-[500px]" style={{ color: SECONDARY }}>
-            Structa sits between your product catalog and every channel you sell on — standardizing, optimizing, and syncing listings automatically.
+            Sits between your catalog and every channel — standardizing, optimizing, and syncing listings automatically.
           </p>
         </div>
 
@@ -353,7 +353,7 @@ function ScrollFeatureSection() {
                   </span>
                   <div>
                     <h3 className="text-[15px] font-semibold mb-2 leading-snug transition-colors duration-500 ease-out"
-                      style={{ color: active === i ? '#fff' : 'rgba(255,255,255,0.28)', fontFamily: D }}>
+                      style={{ color: active === i ? '#fff' : 'rgba(255,255,255,0.65)', fontFamily: D }}>
                       {f.title}
                     </h3>
                     <p className="text-[14px] leading-[1.75] transition-all duration-600 ease-out"
@@ -468,8 +468,8 @@ export default function LandingPage() {
             </a>
             <div className="hidden md:flex items-center gap-7">
               {[
-                { label: 'How it works', href: '#solution' },
                 { label: 'Platforms', href: '#platforms' },
+                { label: 'How it works', href: '#solution' },
               ].map(l => (
                 <a
                   key={l.label}
@@ -551,7 +551,7 @@ export default function LandingPage() {
             className="animate-fade-up mb-10"
             style={{ fontSize: 18, lineHeight: 1.7, color: SECONDARY, maxWidth: 520, animationDelay: '0.1s' }}
           >
-            Structa is the AI operations layer for e-commerce teams — automating listings, compliance, and catalog management across every marketplace you sell on.
+            Automates listings, compliance, and catalog management across every marketplace.
           </p>
 
           {/* CTA */}
@@ -573,7 +573,7 @@ export default function LandingPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Work email"
                   disabled={status === 'loading'}
-                  className="h-[52px] px-5 text-[14px] focus:outline-none bg-transparent text-white placeholder:text-[rgba(255,255,255,0.25)] disabled:opacity-50"
+                  className="h-[52px] px-5 text-[14px] focus:outline-none bg-transparent text-white placeholder:text-[rgba(255,255,255,0.5)] disabled:opacity-50"
                   style={{ minWidth: 240 }}
                 />
                 <button
@@ -677,7 +677,7 @@ export default function LandingPage() {
                 Selling on Amazon, Shopify, and TikTok Shop shouldn&apos;t require three different workflows.
               </h2>
               <p className="text-[16px] leading-[1.75]" style={{ color: SECONDARY }}>
-                Every platform has its own listing format, compliance rules, and performance requirements. Most teams patch this together with spreadsheets, manual uploads, and tribal knowledge. That means errors, missed optimizations, and hours of work that never scale.
+                Each platform has its own format and rules. Teams patch it together with spreadsheets and manual uploads — leading to errors and hours that don&apos;t scale.
               </p>
             </div>
             <div className="flex flex-col">
@@ -686,7 +686,7 @@ export default function LandingPage() {
                   <span style={{ fontFamily: M, fontSize: 11, color: ACCENT, flexShrink: 0, marginTop: 2, letterSpacing: '0.05em' }}>
                     {String(i + 1).padStart(2, '0')}
                   </span>
-                  <span className="text-[14px] leading-[1.7]" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                  <span className="text-[14px] leading-[1.7]" style={{ color: SECONDARY }}>
                     {point}
                   </span>
                 </div>
@@ -707,7 +707,7 @@ export default function LandingPage() {
             className="mb-10 text-white"
             style={{ fontFamily: D, fontSize: 'clamp(20px,2.5vw,28px)', fontWeight: 500, lineHeight: 1.5, letterSpacing: '-0.02em' }}
           >
-            &ldquo;We saved over 80 hours on our last catalog cycle. Six marketplaces compiled in an afternoon, and the listings came out more accurate than anything we produced manually.&rdquo;
+            &ldquo;80+ hours saved on our last catalog cycle. Six marketplaces compiled in an afternoon — listings more accurate than manual work.&rdquo;
           </blockquote>
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-[15px]"
@@ -751,7 +751,7 @@ export default function LandingPage() {
                 Be the first to run a fully automated catalog.
               </h2>
               <p className="text-[16px] leading-[1.75]" style={{ color: SECONDARY }}>
-                We&apos;re onboarding a small group of early partners. Join the waitlist and we&apos;ll reach out personally. No spam — just a real conversation about your catalog.
+                Join the waitlist. We&apos;ll reach out personally — no spam.
               </p>
             </div>
             <div className="flex flex-col md:pt-16">
@@ -772,7 +772,7 @@ export default function LandingPage() {
                     onChange={(e) => setCtaEmail(e.target.value)}
                     placeholder="Work email"
                     disabled={ctaStatus === 'loading'}
-                    className="w-full h-[54px] px-5 text-[14px] focus:outline-none bg-transparent text-white placeholder:text-[rgba(255,255,255,0.25)] disabled:opacity-50"
+                    className="w-full h-[54px] px-5 text-[14px] focus:outline-none bg-transparent text-white placeholder:text-[rgba(255,255,255,0.5)] disabled:opacity-50"
                   />
                   <div style={{ height: 1, background: BORDER }} />
                   <button
