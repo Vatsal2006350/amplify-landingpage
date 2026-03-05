@@ -1,9 +1,11 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 
 // Design tokens
+const APP_URL = 'https://structa-rouge.vercel.app'
+
 const ACCENT = '#C5F135'
 const BASE = '#080808'
 const SURFACE = '#111111'
@@ -29,6 +31,30 @@ const PAIN_POINTS = [
   'Compliance rules that change without warning',
   'Teams buried in operational busywork',
   'Returns from inaccurate or inconsistent product data',
+]
+
+const TESTIMONIALS = [
+  {
+    quote: "80+ hours saved on our last catalog cycle. Six marketplaces compiled in an afternoon — listings more accurate than manual work.",
+    name: "Aman",
+    role: "Head of Operations",
+    company: "Geo Partnering LLC",
+    initial: "A",
+  },
+  {
+    quote: "Managing listings across multiple platforms used to eat our entire week. Structa handles it now — automatically.",
+    name: "Operations Team",
+    role: "E-Commerce",
+    company: "Snackible",
+    initial: "S",
+  },
+  {
+    quote: "The compliance rules for each marketplace are different and constantly change. Structa tracks them so we don't have to.",
+    name: "Catalog Team",
+    role: "Marketplace Operations",
+    company: "Beira Rio",
+    initial: "B",
+  },
 ]
 
 const ALL_FEATURES = [
@@ -301,31 +327,12 @@ function ProductVisual({ index }: { index: number }) {
   return <Screen />
 }
 
-function ScrollFeatureSection() {
+function FeatureSection() {
   const [active, setActive] = useState(0)
-  const featureRefs = useRef<(HTMLDivElement | null)[]>([])
-
-  useEffect(() => {
-    const observers: IntersectionObserver[] = []
-    // Use a generous rootMargin so the "active" zone is the middle ~50% of viewport — section changes as you scroll into it naturally
-    const rootMargin = '-25% 0px -25% 0px'
-    featureRefs.current.forEach((ref, index) => {
-      if (!ref) return
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) setActive(index)
-        },
-        { rootMargin, threshold: 0.2 }
-      )
-      observer.observe(ref)
-      observers.push(observer)
-    })
-    return () => observers.forEach(o => o.disconnect())
-  }, [])
 
   return (
     <section id="solution" style={{ background: '#0D0D0D', borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
-      <div className="max-w-[1100px] mx-auto px-6 pt-28 pb-28">
+      <div className="max-w-[1100px] mx-auto px-6 py-28">
         <SectionLabel n="02" text="HOW IT WORKS" />
         <div className="mb-16">
           <h2 className="text-[clamp(28px,4vw,52px)] font-bold leading-[1.06] mb-5 text-white"
@@ -342,29 +349,34 @@ function ScrollFeatureSection() {
             {ALL_FEATURES.map((f, i) => (
               <div
                 key={i}
-                ref={(el) => { featureRefs.current[i] = el }}
                 onClick={() => setActive(i)}
-                className="py-8 border-b cursor-pointer"
-                style={{ borderColor: BORDER }}
+                className="py-7 border-b cursor-pointer transition-all duration-300"
+                style={{
+                  borderColor: active === i ? ACCENT + '44' : BORDER,
+                  paddingLeft: active === i ? 16 : 0,
+                }}
               >
                 <div className="flex items-start gap-5">
-                  <span style={{ fontFamily: M, fontSize: 11, color: active === i ? ACCENT : MUTED, flexShrink: 0, marginTop: 3, letterSpacing: '0.05em' }}>
+                  <span style={{ fontFamily: M, fontSize: 11, color: active === i ? ACCENT : MUTED, flexShrink: 0, marginTop: 3, letterSpacing: '0.05em', transition: 'color 0.3s ease' }}>
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <div>
-                    <h3 className="text-[15px] font-semibold mb-2 leading-snug transition-colors duration-500 ease-out"
-                      style={{ color: active === i ? '#fff' : 'rgba(255,255,255,0.65)', fontFamily: D }}>
+                    <h3 className="text-[15px] font-semibold mb-2 leading-snug transition-colors duration-300 ease-out"
+                      style={{ color: active === i ? '#fff' : 'rgba(255,255,255,0.45)', fontFamily: D }}>
                       {f.title}
                     </h3>
-                    <p className="text-[14px] leading-[1.75] transition-all duration-600 ease-out"
+                    <div
+                      className="transition-all duration-400 ease-out"
                       style={{
-                        color: SECONDARY,
                         maxHeight: active === i ? 200 : 0,
                         opacity: active === i ? 1 : 0,
                         overflow: 'hidden',
-                      }}>
-                      {f.body}
-                    </p>
+                      }}
+                    >
+                      <p className="text-[14px] leading-[1.75]" style={{ color: SECONDARY }}>
+                        {f.body}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -372,15 +384,15 @@ function ScrollFeatureSection() {
           </div>
 
           <div className="hidden md:block">
-            <div className="sticky top-[100px]" style={{ height: 440 }}>
+            <div style={{ height: 440 }}>
               <div className="relative h-full">
                 {ALL_FEATURES.map((_, i) => (
                   <div
                     key={i}
-                    className="absolute inset-0 transition-all duration-700 ease-out"
+                    className="absolute inset-0 transition-all duration-500 ease-out"
                     style={{
                       opacity: active === i ? 1 : 0,
-                      transform: `translateY(${active === i ? 0 : 20}px) scale(${active === i ? 1 : 0.96})`,
+                      transform: `translateY(${active === i ? 0 : 12}px) scale(${active === i ? 1 : 0.97})`,
                       pointerEvents: active === i ? 'auto' : 'none',
                     }}
                   >
@@ -403,8 +415,15 @@ export default function LandingPage() {
   const [ctaStatus, setCtaStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState('')
   const [ctaMessage, setCtaMessage] = useState('')
-  const [heroVisible, setHeroVisible] = useState(true)
   const heroRef = useRef<HTMLDivElement>(null)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 50)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   async function handleSubmit(
     emailValue: string,
@@ -435,38 +454,38 @@ export default function LandingPage() {
     }
   }
 
-  useEffect(() => {
-    const el = heroRef.current
-    if (!el) return
-    const observer = new IntersectionObserver(
-      ([entry]) => setHeroVisible(entry.isIntersecting),
-      { threshold: 0.1 }
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
 
   return (
     <div className="min-h-screen" style={{ background: BASE }}>
 
-      {/* Nav */}
-      <nav
-        className="fixed top-0 w-full z-50 transition-all duration-300"
-        style={{
-          background: heroVisible ? 'transparent' : 'rgba(8,8,8,0.96)',
-          borderBottom: heroVisible ? '1px solid transparent' : `1px solid ${BORDER}`,
-          backdropFilter: heroVisible ? 'none' : 'blur(20px)',
-        }}
+      {/* Nav — floating pill */}
+      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-500 ease-out"
+        style={{ padding: scrolled ? '12px 16px' : '16px 16px' }}
       >
-        <div className="max-w-[1200px] mx-auto px-6 h-[64px] flex items-center justify-between">
-          <div className="flex items-center gap-10">
-            <a href="/" className="flex items-center gap-2.5">
-              <StructaLogo size={26} />
-              <span className="text-[15px] font-semibold text-white" style={{ fontFamily: D }}>
+        <nav
+          className="flex items-center justify-between transition-all duration-500 ease-out"
+          style={{
+            width: scrolled ? 'min(680px, calc(100% - 32px))' : 'min(1200px, calc(100% - 32px))',
+            height: scrolled ? 52 : 56,
+            padding: scrolled ? '0 6px 0 20px' : '0 8px 0 24px',
+            background: scrolled ? 'rgba(18,18,18,0.85)' : 'rgba(8,8,8,0.8)',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+            borderRadius: scrolled ? 9999 : 16,
+            border: `1px solid ${scrolled ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.06)'}`,
+            boxShadow: scrolled
+              ? '0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.04) inset'
+              : '0 4px 20px rgba(0,0,0,0.2)',
+          }}
+        >
+          <div className="flex items-center gap-8">
+            <a href="/" className="flex items-center gap-2">
+              <StructaLogo size={scrolled ? 22 : 24} />
+              <span className="text-[14px] font-semibold text-white transition-all duration-500" style={{ fontFamily: D }}>
                 Structa
               </span>
             </a>
-            <div className="hidden md:flex items-center gap-7">
+            <div className="hidden md:flex items-center gap-6">
               {[
                 { label: 'Platforms', href: '#platforms' },
                 { label: 'How it works', href: '#solution' },
@@ -475,7 +494,7 @@ export default function LandingPage() {
                   key={l.label}
                   href={l.href}
                   className="text-[12px] transition-colors duration-200"
-                  style={{ color: SECONDARY, fontFamily: M, letterSpacing: '0.04em' }}
+                  style={{ color: SECONDARY, fontFamily: M, letterSpacing: '0.03em' }}
                   onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
                   onMouseLeave={e => (e.currentTarget.style.color = SECONDARY)}
                 >
@@ -484,21 +503,33 @@ export default function LandingPage() {
               ))}
             </div>
           </div>
-          <a
-            href="#cta"
-            className="text-[11px] font-bold px-5 py-2.5 transition-opacity hover:opacity-85"
-            style={{
-              background: ACCENT,
-              color: BASE,
-              fontFamily: M,
-              letterSpacing: '0.08em',
-              borderRadius: 4,
-            }}
-          >
-            JOIN WAITLIST
-          </a>
-        </div>
-      </nav>
+          <div className="flex items-center gap-3">
+            <a
+              href={`${APP_URL}/auth/login`}
+              className="hidden sm:inline-block text-[12px] transition-colors duration-200"
+              style={{ color: SECONDARY, fontFamily: M, letterSpacing: '0.03em' }}
+              onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+              onMouseLeave={e => (e.currentTarget.style.color = SECONDARY)}
+            >
+              Sign in
+            </a>
+            <a
+              href={`${APP_URL}/auth/login`}
+              className="text-[11px] font-bold transition-all duration-500 hover:opacity-85"
+              style={{
+                background: ACCENT,
+                color: BASE,
+                fontFamily: M,
+                letterSpacing: '0.06em',
+                borderRadius: 9999,
+                padding: scrolled ? '8px 18px' : '9px 20px',
+              }}
+            >
+              GET STARTED
+            </a>
+          </div>
+        </nav>
+      </div>
 
       {/* Hero */}
       <section
@@ -522,7 +553,7 @@ export default function LandingPage() {
 
         <div className="relative max-w-[1100px] mx-auto w-full px-6" style={{ paddingTop: 180, paddingBottom: 120 }}>
           {/* Top label */}
-          <div className="flex items-center gap-3 mb-12" style={{ fontFamily: M }}>
+          <div className="flex items-center gap-3 mb-8" style={{ fontFamily: M }}>
             <div style={{ width: 24, height: 1, background: ACCENT }} />
             <span style={{ fontSize: 11, letterSpacing: '0.12em', color: MUTED }}>
               AI CATALOG OPERATIONS — EARLY ACCESS
@@ -542,7 +573,7 @@ export default function LandingPage() {
               maxWidth: 940,
             }}
           >
-            The AI operations manage for e-commerce teams.
+            The AI operations manager for e-commerce teams.
           </h1>
 
           {/* Subtext */}
@@ -592,39 +623,6 @@ export default function LandingPage() {
           <p className="mt-4 text-[11px]" style={{ color: MUTED, fontFamily: M, letterSpacing: '0.06em' }}>
             NO CREDIT CARD REQUIRED
           </p>
-
-          <div className="mt-16 animate-fade-up" style={{ animationDelay: '0.5s' }}>
-            <p className="text-[10px] uppercase tracking-[0.2em] mb-6" style={{ color: MUTED, fontFamily: M }}>
-              Trusted by teams at
-            </p>
-            <div className="flex items-center justify-center gap-5">
-              {[
-                { src: '/logos/beira-rio.png', alt: 'Beira Rio', href: 'https://beirario.com.br', h: 22 },
-                { src: '/logos/snackible.png', alt: 'Snackible', href: 'https://snackible.com', h: 30 },
-                { src: '/logos/geoomnii.png', alt: 'Geoomnii', href: 'https://geopartnering.com', h: 20 },
-              ].map((logo) => (
-                <a
-                  key={logo.alt}
-                  href={logo.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center hover:opacity-90 transition-opacity duration-200"
-                  style={{
-                    background: 'rgba(255,255,255,0.06)',
-                    border: `1px solid rgba(255,255,255,0.08)`,
-                    borderRadius: 8,
-                    padding: '10px 20px',
-                  }}
-                >
-                  <img
-                    src={logo.src}
-                    alt={logo.alt}
-                    style={{ height: logo.h, width: 'auto', objectFit: 'contain' }}
-                  />
-                </a>
-              ))}
-            </div>
-          </div>
         </div>
 
         {/* Scroll indicator */}
@@ -633,6 +631,69 @@ export default function LandingPage() {
             <rect x="1" y="1" width="14" height="22" rx="7" stroke="currentColor" strokeWidth="1.5" />
             <circle cx="8" cy="7" r="2" fill="currentColor" className="animate-bounce" />
           </svg>
+        </div>
+      </section>
+
+      {/* Testimonials + Logo bar */}
+      <section style={{ background: '#0D0D0D', borderBottom: `1px solid ${BORDER}` }}>
+        <div className="max-w-[1100px] mx-auto px-6 py-20">
+          {/* Testimonial cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16">
+            {TESTIMONIALS.map((t, i) => (
+              <div
+                key={i}
+                className="rounded-xl p-6 flex flex-col gap-5"
+                style={{ background: SURFACE, border: `1px solid ${BORDER}` }}
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-[14px] flex-shrink-0"
+                    style={{ background: ACCENT + '22', color: ACCENT, fontFamily: D, border: `1px solid ${ACCENT}33` }}
+                  >
+                    {t.initial}
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[13px] font-semibold text-white truncate" style={{ fontFamily: D }}>{t.name}</div>
+                    <div className="text-[11px] truncate" style={{ color: MUTED, fontFamily: M }}>{t.company}</div>
+                  </div>
+                </div>
+                <p className="text-[14px] leading-[1.75] flex-1" style={{ color: SECONDARY }}>
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                <div className="text-[10px] uppercase tracking-wider pt-3" style={{ color: MUTED, fontFamily: M, borderTop: `1px solid ${BORDER}` }}>
+                  {t.role}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Logo bar */}
+          <div className="flex items-center justify-center gap-10 flex-wrap pt-6" style={{ borderTop: `1px solid ${BORDER}` }}>
+            <span style={{ fontSize: 11, color: MUTED, fontFamily: M, letterSpacing: '0.12em', flexShrink: 0 }}>TRUSTED BY</span>
+            <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.1)', flexShrink: 0 }} />
+            {[
+              { src: '/logos/beira-rio.png', alt: 'Beira Rio', h: 22, href: 'https://www.calcadosbeirario.com.br' },
+              { src: '/logos/snackible.png', alt: 'Snackible', h: 28, href: 'https://snackible.com' },
+              { src: '/logos/geoomnii.png', alt: 'Geoomnii', h: 20, href: 'https://www.instagram.com/geoomnii/' },
+            ].map((logo) => (
+              <a
+                key={logo.alt}
+                href={logo.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-opacity duration-200"
+                style={{ opacity: 0.85 }}
+                onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+                onMouseLeave={e => (e.currentTarget.style.opacity = '0.85')}
+              >
+                <img
+                  src={logo.src}
+                  alt={logo.alt}
+                  style={{ height: logo.h, width: 'auto', objectFit: 'contain', filter: 'brightness(1.3)' }}
+                />
+              </a>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -696,30 +757,7 @@ export default function LandingPage() {
       </section>
 
       {/* Solution / Features */}
-      <ScrollFeatureSection />
-
-      {/* Testimonial */}
-      <section style={{ background: '#0D0D0D', borderBottom: `1px solid ${BORDER}` }}>
-        <div className="max-w-[900px] mx-auto px-6 py-28">
-          <SectionLabel n="04" text="EARLY PARTNERS" />
-          <blockquote
-            className="mb-10 text-white"
-            style={{ fontFamily: D, fontSize: 'clamp(20px,2.5vw,28px)', fontWeight: 500, lineHeight: 1.5, letterSpacing: '-0.02em' }}
-          >
-            &ldquo;80+ hours saved on our last catalog cycle. Six marketplaces compiled in an afternoon — listings more accurate than manual work.&rdquo;
-          </blockquote>
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-[15px]"
-              style={{ background: ACCENT, color: BASE, fontFamily: D }}>A</div>
-            <div>
-              <div className="text-[14px] font-semibold text-white" style={{ fontFamily: D }}>Aman</div>
-              <div className="text-[11px] tracking-[0.08em]" style={{ fontFamily: M, color: MUTED }}>
-                HEAD OF OPERATIONS, GEO PARTNERING LLC
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <FeatureSection />
 
       {/* Bottom CTA */}
       <section id="cta" className="relative overflow-hidden" style={{ background: '#09110A', borderTop: `1px solid ${BORDER}` }}>
@@ -788,8 +826,8 @@ export default function LandingPage() {
                 <p className="text-[12px] mb-3" style={{ color: '#ef4444', fontFamily: M }}>{ctaMessage}</p>
               )}
               <div className="flex items-center gap-5">
-                <a href="#" className="text-[12px] transition-colors hover:text-white" style={{ color: SECONDARY, fontFamily: M, letterSpacing: '0.04em' }}>
-                  Book a walkthrough →
+                <a href={`${APP_URL}/auth/login`} className="text-[12px] transition-colors hover:text-white" style={{ color: SECONDARY, fontFamily: M, letterSpacing: '0.04em' }}>
+                  Try Structa now →
                 </a>
                 <span style={{ color: MUTED, fontSize: 11, fontFamily: M, letterSpacing: '0.04em' }}>No credit card required</span>
               </div>
