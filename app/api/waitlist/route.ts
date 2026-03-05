@@ -1,40 +1,9 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-
-function getSupabase() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  if (!url || !key) {
-    throw new Error(`Missing env: URL=${!!url}, KEY=${!!key}`)
-  }
-  return createClient(url, key)
-}
 
 export const dynamic = 'force-dynamic'
-export const fetchCache = 'force-no-store'
 
-export async function GET() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  try {
-    const res = await fetch(`${url}/rest/v1/waitlist?select=count&limit=0`, {
-      headers: {
-        apikey: key || '',
-        Authorization: `Bearer ${key}`,
-      },
-    })
-    return NextResponse.json({
-      envCheck: { url: !!url, key: !!key, keyPrefix: key?.substring(0, 20) },
-      supabaseStatus: res.status,
-      supabaseOk: res.ok,
-    })
-  } catch (e) {
-    return NextResponse.json({
-      envCheck: { url: !!url, key: !!key, keyPrefix: key?.substring(0, 20) },
-      fetchError: e instanceof Error ? e.message : 'unknown',
-    })
-  }
-}
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export async function POST(req: Request) {
   try {
@@ -49,22 +18,36 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })
     }
 
-    const supabase = getSupabase()
-    const { error } = await supabase
-      .from('waitlist')
-      .insert({ email: trimmed })
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/waitlist`, {
+      method: 'POST',
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal',
+      },
+      body: JSON.stringify({ email: trimmed }),
+      cache: 'no-store',
+    })
 
-    if (error) {
-      if (error.code === '23505') {
-        return NextResponse.json({ message: "You're already on the list!" }, { status: 200 })
-      }
-      console.error('Supabase insert error:', error)
-      return NextResponse.json({ error: `Insert failed: ${error.message}` }, { status: 500 })
+    if (res.ok) {
+      return NextResponse.json({ message: "You're on the waitlist!" })
     }
 
-    return NextResponse.json({ message: "You're on the waitlist!" }, { status: 200 })
+    if (res.status === 409) {
+      return NextResponse.json({ message: "You're already on the list!" })
+    }
+
+    const body = await res.json().catch(() => null)
+    const msg = body?.message || ''
+    if (msg.includes('duplicate') || msg.includes('unique') || (body?.code === '23505')) {
+      return NextResponse.json({ message: "You're already on the list!" })
+    }
+
+    console.error('Supabase error:', res.status, body)
+    return NextResponse.json({ error: 'Something went wrong' }, { status: 500 })
   } catch (e) {
-    const msg = e instanceof Error ? e.message : 'Unknown error'
-    return NextResponse.json({ error: msg }, { status: 500 })
+    console.error('Waitlist error:', e)
+    return NextResponse.json({ error: 'Something went wrong' }, { status: 500 })
   }
 }
