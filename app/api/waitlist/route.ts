@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
     if (!supabaseUrl || !supabaseKey) {
-      return NextResponse.json({ error: 'Server config error' }, { status: 500 })
+      return NextResponse.json({ error: 'Something went wrong' }, { status: 500 })
     }
 
     const { email } = await req.json()
@@ -22,9 +22,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })
     }
 
-    const endpoint = `${supabaseUrl}/rest/v1/waitlist`
-
-    const res = await fetch(endpoint, {
+    const res = await fetch(`${supabaseUrl}/rest/v1/waitlist`, {
       method: 'POST',
       headers: {
         'apikey': supabaseKey,
@@ -40,20 +38,17 @@ export async function POST(req: Request) {
     }
 
     const body = await res.text()
-    let parsed: { message?: string; code?: string } | null = null
+    let parsed: { code?: string } | null = null
     try { parsed = JSON.parse(body) } catch {}
 
     if (res.status === 409 || parsed?.code === '23505') {
       return NextResponse.json({ message: "You're already on the list!" })
     }
 
-    return NextResponse.json(
-      { error: `Supabase ${res.status}: ${body.slice(0, 200)}` },
-      { status: 500 },
-    )
-  } catch (e: unknown) {
-    const err = e as Error & { cause?: Error }
-    const detail = err.cause?.message || err.message || 'Unknown'
-    return NextResponse.json({ error: `Fetch error: ${detail}` }, { status: 500 })
+    console.error('Supabase error:', res.status, body)
+    return NextResponse.json({ error: 'Something went wrong' }, { status: 500 })
+  } catch (e) {
+    console.error('Waitlist error:', e)
+    return NextResponse.json({ error: 'Something went wrong' }, { status: 500 })
   }
 }
