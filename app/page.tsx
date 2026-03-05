@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import Image from 'next/image'
 
 // Design tokens
 const APP_URL = 'https://structa-rouge.vercel.app'
@@ -111,66 +110,80 @@ function PlatformMarquee() {
   const items = [...PLATFORMS, ...PLATFORMS, ...PLATFORMS]
   const duped = [...items, ...items]
   return (
-    <div id="platforms" style={{ overflow: 'hidden', background: BASE, borderBottom: `1px solid ${BORDER}`, position: 'relative' }}>
-      {/* Fade edges */}
-      <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to right, ${BASE}, transparent)`, zIndex: 1, pointerEvents: 'none' }} />
-      <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to left, ${BASE}, transparent)`, zIndex: 1, pointerEvents: 'none' }} />
-      <div style={{ display: 'flex', alignItems: 'center', animation: 'marquee 32s linear infinite', width: 'max-content' }}>
-        {duped.map((name, i) => (
-          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 0, flexShrink: 0 }}>
-            <span style={{ fontFamily: M, fontSize: 11, letterSpacing: '0.14em', color: MUTED, whiteSpace: 'nowrap', textTransform: 'uppercase', padding: '18px 28px' }}>
-              {name}
-            </span>
-            <div style={{ width: 3, height: 3, borderRadius: '50%', background: ACCENT, opacity: 0.35, flexShrink: 0 }} />
-          </div>
-        ))}
+    <div id="platforms" style={{ background: L_BG, borderBottom: `1px solid ${L_BORDER}` }}>
+      <div className="text-center pt-10 pb-5">
+        <span style={{ fontSize: 11, letterSpacing: '0.12em', color: L_MUTED, fontFamily: M }}>
+          WORKS WITH EVERY PLATFORM YOU SELL ON
+        </span>
+      </div>
+      <div style={{ overflow: 'hidden', position: 'relative' }}>
+        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to right, ${L_BG}, transparent)`, zIndex: 1, pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to left, ${L_BG}, transparent)`, zIndex: 1, pointerEvents: 'none' }} />
+        <div style={{ display: 'flex', alignItems: 'center', animation: 'marquee 32s linear infinite', width: 'max-content' }}>
+          {duped.map((name, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 0, flexShrink: 0 }}>
+              <span style={{ fontFamily: M, fontSize: 11, letterSpacing: '0.14em', color: L_MUTED, whiteSpace: 'nowrap', textTransform: 'uppercase', padding: '18px 28px' }}>
+                {name}
+              </span>
+              <div style={{ width: 3, height: 3, borderRadius: '50%', background: L_ACCENT, opacity: 0.4, flexShrink: 0 }} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )
 }
 
+const L_BG = '#ffffff'
+const L_SURFACE = '#f7f7f8'
+const L_BORDER = 'rgba(0,0,0,0.08)'
+const L_TEXT = '#111111'
+const L_SECONDARY = '#555555'
+const L_MUTED = '#999999'
+const L_ACCENT = '#1a7a2e'
+
 const MOCKUP_BAR = (
-  <div className="flex items-center gap-2 px-3 py-2.5 border-b" style={{ background: SURFACE, borderColor: BORDER }}>
+  <div className="flex items-center gap-2 px-3 py-2.5 border-b" style={{ background: L_SURFACE, borderColor: L_BORDER }}>
     <div className="w-2 h-2 rounded-full bg-[#ff5f57]" />
     <div className="w-2 h-2 rounded-full bg-[#febc2e]" />
     <div className="w-2 h-2 rounded-full bg-[#28c840]" />
-    <div className="ml-2 flex-1 h-3 rounded max-w-[140px]" style={{ background: 'rgba(255,255,255,0.06)' }} />
+    <div className="ml-2 flex-1 h-3 rounded max-w-[140px]" style={{ background: 'rgba(0,0,0,0.05)' }} />
   </div>
 )
 
 function FeedGeneratorScreen() {
   return (
-    <div className="w-full h-full rounded-2xl flex flex-col overflow-hidden" style={{ background: '#0C0C0C', border: `1px solid ${BORDER}`, boxShadow: '0 32px 80px rgba(0,0,0,0.5)' }}>
+    <div className="w-full h-full rounded-2xl flex flex-col overflow-hidden" style={{ background: L_BG, border: `1px solid ${L_BORDER}`, boxShadow: '0 8px 40px rgba(0,0,0,0.08)' }}>
       {MOCKUP_BAR}
       <div className="flex-1 p-4 flex gap-4 min-h-0">
         <div className="flex flex-col gap-1.5 w-[100px] flex-shrink-0">
           <div className="flex items-center gap-2 py-1.5">
-            <div className="w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold" style={{ background: ACCENT, color: BASE, fontFamily: M }}>S</div>
-            <span className="text-[10px] font-semibold text-white" style={{ fontFamily: D }}>Structa</span>
+            <div className="w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold" style={{ background: L_ACCENT, color: '#fff', fontFamily: M }}>S</div>
+            <span className="text-[10px] font-semibold" style={{ fontFamily: D, color: L_TEXT }}>Structa</span>
           </div>
-          <div className="py-1.5 px-2 rounded text-[10px] font-medium" style={{ background: ACCENT + '22', color: ACCENT, fontFamily: M }}>⊞ Feed Generator</div>
-          <div className="py-1.5 px-2 rounded text-[10px]" style={{ color: MUTED, fontFamily: M }}>⟳ Fixes</div>
-          <div className="py-1.5 px-2 rounded text-[10px]" style={{ color: MUTED, fontFamily: M }}>◈ Amazon Listings</div>
+          <div className="py-1.5 px-2 rounded text-[10px] font-medium" style={{ background: L_ACCENT + '14', color: L_ACCENT, fontFamily: M }}>⊞ Feed Generator</div>
+          <div className="py-1.5 px-2 rounded text-[10px]" style={{ color: L_MUTED, fontFamily: M }}>⟳ Fixes</div>
+          <div className="py-1.5 px-2 rounded text-[10px]" style={{ color: L_MUTED, fontFamily: M }}>◈ Amazon Listings</div>
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-[12px] font-semibold text-white mb-1" style={{ fontFamily: D }}>Feed Generator</h3>
-          <p className="text-[10px] mb-3" style={{ color: SECONDARY, lineHeight: 1.5 }}>Upload your master sheet and platform template. Pipeline produces a ready-to-submit feed.</p>
-          <div className="text-[9px] uppercase tracking-wider mb-2" style={{ color: MUTED, fontFamily: M }}>Platform</div>
+          <h3 className="text-[12px] font-semibold mb-1" style={{ fontFamily: D, color: L_TEXT }}>Feed Generator</h3>
+          <p className="text-[10px] mb-3" style={{ color: L_SECONDARY, lineHeight: 1.5 }}>Upload your master sheet and platform template. Pipeline produces a ready-to-submit feed.</p>
+          <div className="text-[9px] uppercase tracking-wider mb-2" style={{ color: L_MUTED, fontFamily: M }}>Platform</div>
           <div className="grid grid-cols-3 gap-1.5 mb-3">
             {['Centrepoint', 'Namshi', '6th Street', 'Trendyol', 'Amazon'].map((p) => (
-              <div key={p} className="py-1.5 px-2 rounded text-[10px] border text-center" style={{ borderColor: p === 'Centrepoint' ? ACCENT : BORDER, background: p === 'Centrepoint' ? ACCENT + '18' : 'transparent', color: p === 'Centrepoint' ? ACCENT : SECONDARY, fontFamily: M }}>{p}</div>
+              <div key={p} className="py-1.5 px-2 rounded text-[10px] border text-center" style={{ borderColor: p === 'Centrepoint' ? L_ACCENT : L_BORDER, background: p === 'Centrepoint' ? L_ACCENT + '12' : 'transparent', color: p === 'Centrepoint' ? L_ACCENT : L_SECONDARY, fontFamily: M }}>{p}</div>
             ))}
           </div>
           <div className="grid grid-cols-2 gap-2">
-            <div className="rounded-lg p-3 border border-dashed" style={{ borderColor: BORDER, background: 'rgba(255,255,255,0.02)' }}>
-              <div className="text-[10px] font-semibold text-white mb-0.5">Master Sheet</div>
-              <div className="text-[9px] mb-2" style={{ color: MUTED }}>Your product data (XLSX)</div>
-              <div className="inline-block py-1 px-2 rounded text-[9px] font-bold" style={{ background: ACCENT, color: BASE, fontFamily: M }}>Choose File</div>
+            <div className="rounded-lg p-3 border border-dashed" style={{ borderColor: L_BORDER, background: L_SURFACE }}>
+              <div className="text-[10px] font-semibold mb-0.5" style={{ color: L_TEXT }}>Master Sheet</div>
+              <div className="text-[9px] mb-2" style={{ color: L_MUTED }}>Your product data (XLSX)</div>
+              <div className="inline-block py-1 px-2 rounded text-[9px] font-bold" style={{ background: L_ACCENT, color: '#fff', fontFamily: M }}>Choose File</div>
             </div>
-            <div className="rounded-lg p-3 border border-dashed" style={{ borderColor: BORDER, background: 'rgba(255,255,255,0.02)' }}>
-              <div className="text-[10px] font-semibold text-white mb-0.5">Platform Template</div>
-              <div className="text-[9px] mb-2" style={{ color: MUTED }}>Marketplace template (XLSX)</div>
-              <div className="inline-block py-1 px-2 rounded text-[9px] font-bold" style={{ background: ACCENT, color: BASE, fontFamily: M }}>Choose File</div>
+            <div className="rounded-lg p-3 border border-dashed" style={{ borderColor: L_BORDER, background: L_SURFACE }}>
+              <div className="text-[10px] font-semibold mb-0.5" style={{ color: L_TEXT }}>Platform Template</div>
+              <div className="text-[9px] mb-2" style={{ color: L_MUTED }}>Marketplace template (XLSX)</div>
+              <div className="inline-block py-1 px-2 rounded text-[9px] font-bold" style={{ background: L_ACCENT, color: '#fff', fontFamily: M }}>Choose File</div>
             </div>
           </div>
         </div>
@@ -186,32 +199,32 @@ function FixesScreen() {
     { tag: 'Missing Info', tagBg: '#eff3fd', tagColor: '#3a6fd4', sku: 'LOAFER-NAVY-40', title: 'Improve color description for Casual Loafers - Navy Blue', rate: '18.0%', reduction: '-6%' },
   ]
   return (
-    <div className="w-full h-full rounded-2xl flex flex-col overflow-hidden" style={{ background: '#0C0C0C', border: `1px solid ${BORDER}`, boxShadow: '0 32px 80px rgba(0,0,0,0.5)' }}>
+    <div className="w-full h-full rounded-2xl flex flex-col overflow-hidden" style={{ background: L_BG, border: `1px solid ${L_BORDER}`, boxShadow: '0 8px 40px rgba(0,0,0,0.08)' }}>
       {MOCKUP_BAR}
       <div className="flex-1 p-4 overflow-auto">
         <div className="flex items-start justify-between gap-4 mb-3">
           <div>
-            <h3 className="text-[12px] font-semibold text-white mb-0.5" style={{ fontFamily: D }}>Fixes</h3>
-            <p className="text-[10px]" style={{ color: MUTED }}>AI-recommended PDP improvements to reduce returns</p>
+            <h3 className="text-[12px] font-semibold mb-0.5" style={{ fontFamily: D, color: L_TEXT }}>Fixes</h3>
+            <p className="text-[10px]" style={{ color: L_MUTED }}>AI-recommended PDP improvements to reduce returns</p>
           </div>
-          <div className="py-1.5 px-3 rounded text-[10px] font-bold flex-shrink-0" style={{ background: ACCENT, color: BASE, fontFamily: M }}>Run Analysis</div>
+          <div className="py-1.5 px-3 rounded text-[10px] font-bold flex-shrink-0" style={{ background: L_ACCENT, color: '#fff', fontFamily: M }}>Run Analysis</div>
         </div>
         <div className="flex gap-2 mb-2">
           {['All (3)', 'sizing (1)', 'missing info (1)'].map((label, i) => (
-            <span key={label} className="py-1 px-2 rounded-full text-[9px] border" style={{ borderColor: i === 0 ? ACCENT : BORDER, background: i === 0 ? ACCENT + '22' : 'transparent', color: i === 0 ? ACCENT : MUTED, fontFamily: M }}>{label}</span>
+            <span key={label} className="py-1 px-2 rounded-full text-[9px] border" style={{ borderColor: i === 0 ? L_ACCENT : L_BORDER, background: i === 0 ? L_ACCENT + '14' : 'transparent', color: i === 0 ? L_ACCENT : L_MUTED, fontFamily: M }}>{label}</span>
           ))}
         </div>
         <div className="flex flex-col gap-2">
           {fixes.map((f) => (
-            <div key={f.sku} className="rounded-lg p-3 flex items-start gap-2 border" style={{ background: SURFACE, borderColor: BORDER }}>
-              <div className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid ${BORDER}` }}>📦</div>
+            <div key={f.sku} className="rounded-lg p-3 flex items-start gap-2 border" style={{ background: L_SURFACE, borderColor: L_BORDER }}>
+              <div className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(0,0,0,0.04)', border: `1px solid ${L_BORDER}` }}>📦</div>
               <div className="min-w-0 flex-1">
                 <span className="inline-block text-[8px] font-semibold uppercase px-1.5 py-0.5 rounded mb-1" style={{ background: f.tagBg, color: f.tagColor }}>{f.tag}</span>
-                <span className="text-[9px] ml-1" style={{ color: MUTED }}>{f.sku}</span>
-                <div className="text-[11px] font-medium text-white leading-tight mt-0.5">{f.title.slice(0, 52)}…</div>
-                <div className="flex gap-3 mt-1.5 text-[10px]" style={{ color: SECONDARY }}>
+                <span className="text-[9px] ml-1" style={{ color: L_MUTED }}>{f.sku}</span>
+                <div className="text-[11px] font-medium leading-tight mt-0.5" style={{ color: L_TEXT }}>{f.title.slice(0, 52)}…</div>
+                <div className="flex gap-3 mt-1.5 text-[10px]" style={{ color: L_SECONDARY }}>
                   <span>Return rate <strong style={{ color: '#ef4444' }}>{f.rate}</strong></span>
-                  <span>Est. reduction <strong style={{ color: ACCENT }}>{f.reduction}</strong></span>
+                  <span>Est. reduction <strong style={{ color: L_ACCENT }}>{f.reduction}</strong></span>
                 </div>
               </div>
             </div>
@@ -224,45 +237,45 @@ function FixesScreen() {
 
 function FixDetailScreen() {
   return (
-    <div className="w-full h-full rounded-2xl flex flex-col overflow-hidden" style={{ background: '#0C0C0C', border: `1px solid ${BORDER}`, boxShadow: '0 32px 80px rgba(0,0,0,0.5)' }}>
+    <div className="w-full h-full rounded-2xl flex flex-col overflow-hidden" style={{ background: L_BG, border: `1px solid ${L_BORDER}`, boxShadow: '0 8px 40px rgba(0,0,0,0.08)' }}>
       {MOCKUP_BAR}
       <div className="flex-1 p-4 overflow-auto flex gap-4 min-h-0">
         <div className="flex-1 min-w-0">
-          <div className="text-[10px] mb-2" style={{ color: ACCENT, fontFamily: M }}>← Back to Fixes</div>
-          <h3 className="text-[11px] font-semibold text-white mb-2 leading-tight" style={{ fontFamily: D }}>Fix sizing expectations for Emma-MOLEKINHA Junior Girls Sneakers</h3>
+          <div className="text-[10px] mb-2" style={{ color: L_ACCENT, fontFamily: M }}>← Back to Fixes</div>
+          <h3 className="text-[11px] font-semibold mb-2 leading-tight" style={{ fontFamily: D, color: L_TEXT }}>Fix sizing expectations for Emma-MOLEKINHA Junior Girls Sneakers</h3>
           <div className="flex gap-2 mb-2 flex-wrap">
-            <span className="text-[9px]" style={{ color: MUTED }}>SKU: 2015-1501-20554</span>
+            <span className="text-[9px]" style={{ color: L_MUTED }}>SKU: 2015-1501-20554</span>
             <span className="text-[8px] px-1.5 py-0.5 rounded" style={{ background: '#fff8ec', color: '#c47a00' }}>sizing</span>
             <span className="text-[10px] font-bold" style={{ color: '#ef4444' }}>30.0% return rate</span>
           </div>
-          <div className="rounded-lg p-2.5 mb-2 border" style={{ background: SURFACE, borderColor: BORDER }}>
-            <div className="text-[9px] uppercase tracking-wider mb-1" style={{ color: MUTED, fontFamily: M }}>Diagnosis</div>
-            <p className="text-[10px] leading-relaxed" style={{ color: SECONDARY }}><strong className="text-white">High return rate (30%) driven by sizing.</strong> Customers report the shoes run small. Add clear sizing guidance to title and description.</p>
+          <div className="rounded-lg p-2.5 mb-2 border" style={{ background: L_SURFACE, borderColor: L_BORDER }}>
+            <div className="text-[9px] uppercase tracking-wider mb-1" style={{ color: L_MUTED, fontFamily: M }}>Diagnosis</div>
+            <p className="text-[10px] leading-relaxed" style={{ color: L_SECONDARY }}><strong style={{ color: L_TEXT }}>High return rate (30%) driven by sizing.</strong> Customers report the shoes run small. Add clear sizing guidance to title and description.</p>
           </div>
-          <div className="rounded-lg p-2.5 mb-2 border" style={{ background: SURFACE, borderColor: BORDER }}>
-            <div className="text-[9px] uppercase tracking-wider mb-1" style={{ color: MUTED, fontFamily: M }}>Proposed Changes</div>
+          <div className="rounded-lg p-2.5 mb-2 border" style={{ background: L_SURFACE, borderColor: L_BORDER }}>
+            <div className="text-[9px] uppercase tracking-wider mb-1" style={{ color: L_MUTED, fontFamily: M }}>Proposed Changes</div>
             <div className="grid grid-cols-2 gap-2">
-              <div><div className="text-[8px] mb-0.5" style={{ color: '#ef4444' }}>Before</div><div className="text-[10px] p-1.5 rounded" style={{ background: 'rgba(239,68,68,0.1)', color: MUTED, textDecoration: 'line-through' }}>Emma-MOLEKINHA Junior Girls Sneakers</div></div>
-              <div><div className="text-[8px] mb-0.5" style={{ color: ACCENT }}>After</div><div className="text-[10px] p-1.5 rounded border" style={{ background: ACCENT + '12', borderColor: ACCENT + '44', color: ACCENT }}>…Sneakers (Runs Small – Size Up Recommended)</div></div>
+              <div><div className="text-[8px] mb-0.5" style={{ color: '#ef4444' }}>Before</div><div className="text-[10px] p-1.5 rounded" style={{ background: 'rgba(239,68,68,0.08)', color: L_MUTED, textDecoration: 'line-through' }}>Emma-MOLEKINHA Junior Girls Sneakers</div></div>
+              <div><div className="text-[8px] mb-0.5" style={{ color: L_ACCENT }}>After</div><div className="text-[10px] p-1.5 rounded border" style={{ background: L_ACCENT + '0d', borderColor: L_ACCENT + '33', color: L_ACCENT }}>…Sneakers (Runs Small – Size Up Recommended)</div></div>
             </div>
           </div>
           <div className="flex gap-2">
-            <div className="flex-1 py-2 px-2.5 rounded text-[10px] font-bold text-center" style={{ background: ACCENT, color: BASE, fontFamily: M }}>Approve & Apply</div>
-            <div className="py-2 px-2.5 rounded text-[10px] border" style={{ borderColor: BORDER, color: SECONDARY, fontFamily: M }}>Snooze</div>
+            <div className="flex-1 py-2 px-2.5 rounded text-[10px] font-bold text-center" style={{ background: L_ACCENT, color: '#fff', fontFamily: M }}>Approve & Apply</div>
+            <div className="py-2 px-2.5 rounded text-[10px] border" style={{ borderColor: L_BORDER, color: L_SECONDARY, fontFamily: M }}>Snooze</div>
           </div>
         </div>
-        <div className="w-[100px] flex-shrink-0 border-l pl-3" style={{ borderColor: BORDER }}>
-          <div className="text-[9px] font-semibold text-white mb-2">Evidence</div>
-          <div className="text-[8px] uppercase tracking-wider mb-1.5" style={{ color: MUTED, fontFamily: M }}>Themes</div>
+        <div className="w-[100px] flex-shrink-0 border-l pl-3" style={{ borderColor: L_BORDER }}>
+          <div className="text-[9px] font-semibold mb-2" style={{ color: L_TEXT }}>Evidence</div>
+          <div className="text-[8px] uppercase tracking-wider mb-1.5" style={{ color: L_MUTED, fontFamily: M }}>Themes</div>
           <div className="flex flex-wrap gap-1 mb-2">
-            {['runs small', 'too small', 'too tight'].map((t) => <span key={t} className="px-1.5 py-0.5 rounded text-[9px] border" style={{ borderColor: BORDER, color: SECONDARY }}>{t}</span>)}
+            {['runs small', 'too small', 'too tight'].map((t) => <span key={t} className="px-1.5 py-0.5 rounded text-[9px] border" style={{ borderColor: L_BORDER, color: L_SECONDARY }}>{t}</span>)}
           </div>
-          <div className="text-[8px] uppercase tracking-wider mb-1" style={{ color: MUTED, fontFamily: M }}>Return breakdown</div>
+          <div className="text-[8px] uppercase tracking-wider mb-1" style={{ color: L_MUTED, fontFamily: M }}>Return breakdown</div>
           <div className="space-y-1">
             {[{ label: 'runs small', w: '80%' }, { label: 'too tight', w: '60%' }].map((r) => (
               <div key={r.label} className="flex items-center gap-2">
-                <span className="text-[9px] w-14 truncate" style={{ color: SECONDARY }}>{r.label}</span>
-                <div className="flex-1 h-1 rounded overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)' }}><div className="h-full rounded" style={{ width: r.w, background: '#ef4444' }} /></div>
+                <span className="text-[9px] w-14 truncate" style={{ color: L_SECONDARY }}>{r.label}</span>
+                <div className="flex-1 h-1 rounded overflow-hidden" style={{ background: 'rgba(0,0,0,0.06)' }}><div className="h-full rounded" style={{ width: r.w, background: '#ef4444' }} /></div>
               </div>
             ))}
           </div>
@@ -279,39 +292,39 @@ function AmazonListingsScreen() {
     { sku: 'NKE-AF1-EU41-BLK', product: 'Nike Air Force 1 \'07...', chips: ['Black', 'EU 41', '$109.99'], status: ['Done', 'AI'] },
   ]
   return (
-    <div className="w-full h-full rounded-2xl flex flex-col overflow-hidden" style={{ background: '#0C0C0C', border: `1px solid ${BORDER}`, boxShadow: '0 32px 80px rgba(0,0,0,0.5)' }}>
+    <div className="w-full h-full rounded-2xl flex flex-col overflow-hidden" style={{ background: L_BG, border: `1px solid ${L_BORDER}`, boxShadow: '0 8px 40px rgba(0,0,0,0.08)' }}>
       {MOCKUP_BAR}
       <div className="flex-1 p-4 overflow-auto min-h-0">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-semibold text-white" style={{ fontFamily: D }}>amazon_test_fixture.xlsx</span>
-            <span className="px-1.5 py-0.5 rounded text-[9px] font-bold" style={{ background: ACCENT + '22', color: ACCENT, border: `1px solid ${ACCENT}44`, fontFamily: M }}>Done</span>
+            <span className="text-[11px] font-semibold" style={{ fontFamily: D, color: L_TEXT }}>amazon_test_fixture.xlsx</span>
+            <span className="px-1.5 py-0.5 rounded text-[9px] font-bold" style={{ background: L_ACCENT + '14', color: L_ACCENT, border: `1px solid ${L_ACCENT}33`, fontFamily: M }}>Done</span>
           </div>
-          <div className="py-1 px-2 rounded text-[9px] font-bold" style={{ background: ACCENT, color: BASE, fontFamily: M }}>✦ Enrich with AI</div>
+          <div className="py-1 px-2 rounded text-[9px] font-bold" style={{ background: L_ACCENT, color: '#fff', fontFamily: M }}>✦ Enrich with AI</div>
         </div>
         <div className="grid grid-cols-4 gap-2 mb-3">
           {[{ label: 'Total', val: '8' }, { label: 'Pending', val: '0', faint: true }, { label: 'Valid', val: '8', green: true }, { label: 'Errors', val: '0', faint: true }].map((s) => (
-            <div key={s.label} className="rounded-lg p-2 border text-center" style={{ background: SURFACE, borderColor: BORDER }}>
-              <div className="text-[8px] uppercase tracking-wider mb-0.5" style={{ color: MUTED, fontFamily: M }}>{s.label}</div>
-              <div className="text-[16px] font-bold" style={{ color: s.green ? ACCENT : s.faint ? MUTED : '#fff', fontFamily: D }}>{s.val}</div>
+            <div key={s.label} className="rounded-lg p-2 border text-center" style={{ background: L_SURFACE, borderColor: L_BORDER }}>
+              <div className="text-[8px] uppercase tracking-wider mb-0.5" style={{ color: L_MUTED, fontFamily: M }}>{s.label}</div>
+              <div className="text-[16px] font-bold" style={{ color: s.green ? L_ACCENT : s.faint ? L_MUTED : L_TEXT, fontFamily: D }}>{s.val}</div>
             </div>
           ))}
         </div>
-        <div className="rounded-lg border overflow-hidden" style={{ borderColor: BORDER }}>
-          <div className="grid grid-cols-12 gap-2 px-3 py-2 text-[9px] uppercase tracking-wider border-b" style={{ background: SURFACE, borderColor: BORDER, color: MUTED, fontFamily: M }}>
+        <div className="rounded-lg border overflow-hidden" style={{ borderColor: L_BORDER }}>
+          <div className="grid grid-cols-12 gap-2 px-3 py-2 text-[9px] uppercase tracking-wider border-b" style={{ background: L_SURFACE, borderColor: L_BORDER, color: L_MUTED, fontFamily: M }}>
             <span className="col-span-1">#</span><span className="col-span-3">SKU</span><span className="col-span-3">Product</span><span className="col-span-3">Details</span><span className="col-span-2">Status</span>
           </div>
           {rows.map((r, i) => (
-            <div key={r.sku} className="grid grid-cols-12 gap-2 px-3 py-2 border-b items-center text-[10px]" style={{ borderColor: BORDER }}>
-              <span className="col-span-1" style={{ color: MUTED }}>{i + 1}</span>
-              <span className="col-span-3" style={{ color: ACCENT, fontFamily: M }}>{r.sku}</span>
-              <span className="col-span-3 truncate" style={{ color: SECONDARY }}>{r.product}</span>
+            <div key={r.sku} className="grid grid-cols-12 gap-2 px-3 py-2 border-b items-center text-[10px]" style={{ borderColor: L_BORDER }}>
+              <span className="col-span-1" style={{ color: L_MUTED }}>{i + 1}</span>
+              <span className="col-span-3" style={{ color: L_ACCENT, fontFamily: M }}>{r.sku}</span>
+              <span className="col-span-3 truncate" style={{ color: L_SECONDARY }}>{r.product}</span>
               <span className="col-span-3 flex gap-1 flex-wrap">
-                {r.chips.map((c) => <span key={c} className="px-1.5 py-0.5 rounded border text-[9px]" style={{ borderColor: BORDER, color: SECONDARY }}>{c}</span>)}
+                {r.chips.map((c) => <span key={c} className="px-1.5 py-0.5 rounded border text-[9px]" style={{ borderColor: L_BORDER, color: L_SECONDARY }}>{c}</span>)}
               </span>
               <span className="col-span-2 flex gap-1">
-                <span className="px-1.5 py-0.5 rounded text-[9px] font-bold" style={{ background: ACCENT + '22', color: ACCENT, fontFamily: M }}>Done</span>
-                <span className="px-1.5 py-0.5 rounded text-[9px] font-bold" style={{ background: 'rgba(59,130,246,0.2)', color: '#60a5fa', fontFamily: M }}>AI</span>
+                <span className="px-1.5 py-0.5 rounded text-[9px] font-bold" style={{ background: L_ACCENT + '14', color: L_ACCENT, fontFamily: M }}>Done</span>
+                <span className="px-1.5 py-0.5 rounded text-[9px] font-bold" style={{ background: 'rgba(59,130,246,0.1)', color: '#3b82f6', fontFamily: M }}>AI</span>
               </span>
             </div>
           ))}
@@ -331,15 +344,18 @@ function FeatureSection() {
   const [active, setActive] = useState(0)
 
   return (
-    <section id="solution" style={{ background: '#0D0D0D', borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
+    <section id="solution" style={{ background: L_BG }}>
       <div className="max-w-[1100px] mx-auto px-6 py-28">
-        <SectionLabel n="02" text="HOW IT WORKS" />
+        <div className="flex items-center gap-3 mb-12" style={{ fontFamily: M }}>
+          <div style={{ width: 24, height: 1, background: L_ACCENT }} />
+          <span style={{ fontSize: 11, letterSpacing: '0.12em', color: L_MUTED }}>02 — HOW IT WORKS</span>
+        </div>
         <div className="mb-16">
-          <h2 className="text-[clamp(28px,4vw,52px)] font-bold leading-[1.06] mb-5 text-white"
-            style={{ fontFamily: D, letterSpacing: '-0.04em', fontWeight: 800 }}>
+          <h2 className="text-[clamp(28px,4vw,52px)] font-bold leading-[1.06] mb-5"
+            style={{ fontFamily: D, letterSpacing: '-0.04em', fontWeight: 800, color: L_TEXT }}>
             One AI layer. Every marketplace.<br />Zero manual work.
           </h2>
-          <p className="text-[16px] leading-[1.75] max-w-[500px]" style={{ color: SECONDARY }}>
+          <p className="text-[16px] leading-[1.75] max-w-[500px]" style={{ color: L_SECONDARY }}>
             Sits between your catalog and every channel — standardizing, optimizing, and syncing listings automatically.
           </p>
         </div>
@@ -352,17 +368,17 @@ function FeatureSection() {
                 onClick={() => setActive(i)}
                 className="py-7 border-b cursor-pointer transition-all duration-300"
                 style={{
-                  borderColor: active === i ? ACCENT + '44' : BORDER,
+                  borderColor: active === i ? L_ACCENT + '44' : L_BORDER,
                   paddingLeft: active === i ? 16 : 0,
                 }}
               >
                 <div className="flex items-start gap-5">
-                  <span style={{ fontFamily: M, fontSize: 11, color: active === i ? ACCENT : MUTED, flexShrink: 0, marginTop: 3, letterSpacing: '0.05em', transition: 'color 0.3s ease' }}>
+                  <span style={{ fontFamily: M, fontSize: 11, color: active === i ? L_ACCENT : L_MUTED, flexShrink: 0, marginTop: 3, letterSpacing: '0.05em', transition: 'color 0.3s ease' }}>
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <div>
                     <h3 className="text-[15px] font-semibold mb-2 leading-snug transition-colors duration-300 ease-out"
-                      style={{ color: active === i ? '#fff' : 'rgba(255,255,255,0.45)', fontFamily: D }}>
+                      style={{ color: active === i ? L_TEXT : 'rgba(0,0,0,0.35)', fontFamily: D }}>
                       {f.title}
                     </h3>
                     <div
@@ -373,7 +389,7 @@ function FeatureSection() {
                         overflow: 'hidden',
                       }}
                     >
-                      <p className="text-[14px] leading-[1.75]" style={{ color: SECONDARY }}>
+                      <p className="text-[14px] leading-[1.75]" style={{ color: L_SECONDARY }}>
                         {f.body}
                       </p>
                     </div>
@@ -487,8 +503,8 @@ export default function LandingPage() {
             </a>
             <div className="hidden md:flex items-center gap-6">
               {[
-                { label: 'Platforms', href: '#platforms' },
                 { label: 'How it works', href: '#solution' },
+                { label: 'Pricing', href: '#pricing' },
               ].map(l => (
                 <a
                   key={l.label}
@@ -504,15 +520,6 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <a
-              href={`${APP_URL}/auth/login`}
-              className="hidden sm:inline-block text-[12px] transition-colors duration-200"
-              style={{ color: SECONDARY, fontFamily: M, letterSpacing: '0.03em' }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
-              onMouseLeave={e => (e.currentTarget.style.color = SECONDARY)}
-            >
-              Sign in
-            </a>
             <a
               href={`${APP_URL}/auth/login`}
               className="text-[11px] font-bold transition-all duration-500 hover:opacity-85"
@@ -635,7 +642,7 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonials + Logo bar */}
-      <section style={{ background: '#0D0D0D', borderBottom: `1px solid ${BORDER}` }}>
+      <section style={{ background: L_BG }}>
         <div className="max-w-[1100px] mx-auto px-6 py-20">
           {/* Testimonial cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16">
@@ -643,24 +650,24 @@ export default function LandingPage() {
               <div
                 key={i}
                 className="rounded-xl p-6 flex flex-col gap-5"
-                style={{ background: SURFACE, border: `1px solid ${BORDER}` }}
+                style={{ background: L_SURFACE, border: `1px solid ${L_BORDER}` }}
               >
                 <div className="flex items-center gap-3">
                   <div
                     className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-[14px] flex-shrink-0"
-                    style={{ background: ACCENT + '22', color: ACCENT, fontFamily: D, border: `1px solid ${ACCENT}33` }}
+                    style={{ background: L_ACCENT + '14', color: L_ACCENT, fontFamily: D, border: `1px solid ${L_ACCENT}33` }}
                   >
                     {t.initial}
                   </div>
                   <div className="min-w-0">
-                    <div className="text-[13px] font-semibold text-white truncate" style={{ fontFamily: D }}>{t.name}</div>
-                    <div className="text-[11px] truncate" style={{ color: MUTED, fontFamily: M }}>{t.company}</div>
+                    <div className="text-[13px] font-semibold truncate" style={{ fontFamily: D, color: L_TEXT }}>{t.name}</div>
+                    <div className="text-[11px] truncate" style={{ color: L_MUTED, fontFamily: M }}>{t.company}</div>
                   </div>
                 </div>
-                <p className="text-[14px] leading-[1.75] flex-1" style={{ color: SECONDARY }}>
+                <p className="text-[14px] leading-[1.75] flex-1" style={{ color: L_SECONDARY }}>
                   &ldquo;{t.quote}&rdquo;
                 </p>
-                <div className="text-[10px] uppercase tracking-wider pt-3" style={{ color: MUTED, fontFamily: M, borderTop: `1px solid ${BORDER}` }}>
+                <div className="text-[10px] uppercase tracking-wider pt-3" style={{ color: L_MUTED, fontFamily: M, borderTop: `1px solid ${L_BORDER}` }}>
                   {t.role}
                 </div>
               </div>
@@ -668,37 +675,40 @@ export default function LandingPage() {
           </div>
 
           {/* Logo bar */}
-          <div className="flex items-center justify-center gap-10 flex-wrap pt-6" style={{ borderTop: `1px solid ${BORDER}` }}>
-            <span style={{ fontSize: 11, color: MUTED, fontFamily: M, letterSpacing: '0.12em', flexShrink: 0 }}>TRUSTED BY</span>
-            <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.1)', flexShrink: 0 }} />
-            {[
-              { src: '/logos/beira-rio.png', alt: 'Beira Rio', h: 22, href: 'https://www.calcadosbeirario.com.br' },
-              { src: '/logos/snackible.png', alt: 'Snackible', h: 28, href: 'https://snackible.com' },
-              { src: '/logos/geoomnii.png', alt: 'Geoomnii', h: 20, href: 'https://www.instagram.com/geoomnii/' },
-            ].map((logo) => (
-              <a
-                key={logo.alt}
-                href={logo.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="transition-opacity duration-200"
-                style={{ opacity: 0.85 }}
-                onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
-                onMouseLeave={e => (e.currentTarget.style.opacity = '0.85')}
-              >
-                <img
-                  src={logo.src}
-                  alt={logo.alt}
-                  style={{ height: logo.h, width: 'auto', objectFit: 'contain', filter: 'brightness(1.3)' }}
-                />
-              </a>
-            ))}
+          <div className="pt-8" style={{ borderTop: `1px solid ${L_BORDER}` }}>
+            <div className="text-center mb-6">
+              <span style={{ fontSize: 11, color: L_MUTED, fontFamily: M, letterSpacing: '0.12em' }}>TRUSTED BY</span>
+            </div>
+            <div className="flex items-center justify-center gap-12 flex-wrap">
+              {[
+                { src: '/logos/beira-rio.png', alt: 'Beira Rio', h: 40, href: 'https://www.calcadosbeirario.com.br' },
+                { src: '/logos/snackible.png', alt: 'Snackible', h: 44, href: 'https://snackible.com' },
+                { src: '/logos/geoomnii.png', alt: 'Geoomnii', h: 36, href: 'https://www.instagram.com/geoomnii/' },
+              ].map((logo) => (
+                <a
+                  key={logo.alt}
+                  href={logo.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-opacity duration-200"
+                  style={{ opacity: 0.7 }}
+                  onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+                  onMouseLeave={e => (e.currentTarget.style.opacity = '0.7')}
+                >
+                  <img
+                    src={logo.src}
+                    alt={logo.alt}
+                    style={{ height: logo.h, width: 'auto', objectFit: 'contain', mixBlendMode: 'multiply' }}
+                  />
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* Stats */}
-      <section style={{ background: '#0D0D0D', borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
+      <section style={{ background: L_BG, borderTop: `1px solid ${L_BORDER}`, borderBottom: `1px solid ${L_BORDER}` }}>
         <div className="max-w-[900px] mx-auto px-6">
           <div className="grid grid-cols-1 sm:grid-cols-3">
             {STATS.map((s, i) => (
@@ -708,13 +718,13 @@ export default function LandingPage() {
                 style={{
                   paddingLeft: i > 0 ? 48 : 0,
                   paddingRight: i < STATS.length - 1 ? 48 : 0,
-                  borderLeft: i > 0 ? `1px solid ${BORDER}` : 'none',
+                  borderLeft: i > 0 ? `1px solid ${L_BORDER}` : 'none',
                 }}
               >
-                <div className="text-[54px] font-bold leading-none mb-2.5 text-white" style={{ fontFamily: D, letterSpacing: '-0.04em' }}>
+                <div className="text-[54px] font-bold leading-none mb-2.5" style={{ fontFamily: D, letterSpacing: '-0.04em', color: L_TEXT }}>
                   {s.value}
                 </div>
-                <div className="text-[11px] tracking-[0.12em] uppercase" style={{ fontFamily: M, color: MUTED }}>
+                <div className="text-[11px] tracking-[0.12em] uppercase" style={{ fontFamily: M, color: L_MUTED }}>
                   {s.label}
                 </div>
               </div>
@@ -727,7 +737,7 @@ export default function LandingPage() {
       <PlatformMarquee />
 
       {/* Problem */}
-      <section style={{ background: '#0D0D0D', borderBottom: `1px solid ${BORDER}` }}>
+      <section style={{ background: '#0D0D0D' }}>
         <div className="max-w-[1100px] mx-auto px-6 py-28">
           <SectionLabel n="01" text="THE PROBLEM" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
@@ -759,6 +769,119 @@ export default function LandingPage() {
       {/* Solution / Features */}
       <FeatureSection />
 
+      {/* Pricing */}
+      <section id="pricing" style={{ background: '#0D0D0D', borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
+        <div className="max-w-[1100px] mx-auto px-6 py-28">
+          <SectionLabel n="03" text="PRICING" centered />
+          <h2 className="text-center text-[clamp(28px,4vw,52px)] font-bold leading-[1.06] mb-4 text-white"
+            style={{ fontFamily: D, letterSpacing: '-0.04em', fontWeight: 800 }}>
+            Start free. Scale when ready.
+          </h2>
+          <p className="text-center text-[16px] leading-[1.75] max-w-[480px] mx-auto mb-16" style={{ color: SECONDARY }}>
+            Try everything Structa offers — no commitment, no credit card.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[820px] mx-auto">
+            {/* Free Trial */}
+            <div className="rounded-2xl p-8 flex flex-col" style={{ background: SURFACE, border: `1px solid ${BORDER}` }}>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: ACCENT + '18', border: `1px solid ${ACCENT}33` }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                  </svg>
+                </div>
+                <div>
+                  <div className="text-[13px] font-semibold text-white" style={{ fontFamily: D }}>Starter</div>
+                  <div className="text-[11px]" style={{ color: MUTED, fontFamily: M }}>14-DAY FREE TRIAL</div>
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <span className="text-[42px] font-bold text-white" style={{ fontFamily: D, letterSpacing: '-0.03em' }}>$0</span>
+                <span className="text-[14px] ml-1" style={{ color: MUTED }}>/&thinsp;14 days</span>
+              </div>
+
+              <div className="flex flex-col gap-3.5 mb-8 flex-1">
+                {[
+                  'Full platform access',
+                  'Up to 500 SKUs',
+                  'All marketplace integrations',
+                  'AI-powered listing generation',
+                  'Return risk scoring',
+                ].map(item => (
+                  <div key={item} className="flex items-start gap-3">
+                    <svg className="flex-shrink-0 mt-0.5" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <circle cx="8" cy="8" r="8" fill={ACCENT + '22'} />
+                      <path d="M5 8l2 2 4-4" stroke={ACCENT} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    <span className="text-[14px]" style={{ color: SECONDARY }}>{item}</span>
+                  </div>
+                ))}
+              </div>
+
+              <a
+                href="#cta"
+                className="w-full h-[48px] flex items-center justify-center text-[12px] font-bold rounded-lg transition-opacity hover:opacity-90"
+                style={{ background: ACCENT, color: BASE, fontFamily: M, letterSpacing: '0.06em' }}
+              >
+                GET STARTED
+              </a>
+              <p className="text-center mt-3 text-[11px]" style={{ color: MUTED, fontFamily: M }}>No credit card required</p>
+            </div>
+
+            {/* Enterprise */}
+            <div className="rounded-2xl p-8 flex flex-col relative overflow-hidden" style={{ background: SURFACE, border: `1px solid ${ACCENT}33` }}>
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: `linear-gradient(90deg, transparent, ${ACCENT}66, transparent)` }} />
+
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: ACCENT + '18', border: `1px solid ${ACCENT}33` }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                    <path d="M2 17l10 5 10-5" />
+                    <path d="M2 12l10 5 10-5" />
+                  </svg>
+                </div>
+                <div>
+                  <div className="text-[13px] font-semibold text-white" style={{ fontFamily: D }}>Enterprise</div>
+                  <div className="text-[11px]" style={{ color: MUTED, fontFamily: M }}>CUSTOM PLAN</div>
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <span className="text-[42px] font-bold text-white" style={{ fontFamily: D, letterSpacing: '-0.03em' }}>Custom</span>
+              </div>
+
+              <div className="flex flex-col gap-3.5 mb-8 flex-1">
+                {[
+                  'Unlimited SKUs',
+                  'Dedicated account manager',
+                  'Custom integrations & API',
+                  'Priority support & SLA',
+                  'Team onboarding & training',
+                ].map(item => (
+                  <div key={item} className="flex items-start gap-3">
+                    <svg className="flex-shrink-0 mt-0.5" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <circle cx="8" cy="8" r="8" fill={ACCENT + '22'} />
+                      <path d="M5 8l2 2 4-4" stroke={ACCENT} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    <span className="text-[14px]" style={{ color: SECONDARY }}>{item}</span>
+                  </div>
+                ))}
+              </div>
+
+              <a
+                href="mailto:hello@structa.ai"
+                className="w-full h-[48px] flex items-center justify-center text-[12px] font-bold rounded-lg transition-all hover:opacity-90"
+                style={{ background: 'transparent', color: ACCENT, fontFamily: M, letterSpacing: '0.06em', border: `1px solid ${ACCENT}44` }}
+              >
+                CONTACT US
+              </a>
+              <p className="text-center mt-3 text-[11px]" style={{ color: MUTED, fontFamily: M }}>We&apos;ll build a plan for your team</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Bottom CTA */}
       <section id="cta" className="relative overflow-hidden" style={{ background: '#09110A', borderTop: `1px solid ${BORDER}` }}>
         {/* Lime glow */}
@@ -782,7 +905,7 @@ export default function LandingPage() {
         <div className="max-w-[1100px] mx-auto px-6 py-28 relative">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-start">
             <div>
-              <SectionLabel n="06" text="EARLY ACCESS" />
+              <SectionLabel n="04" text="EARLY ACCESS" />
               <h2 className="font-bold leading-[1.04] text-white mb-6"
                 style={{ fontFamily: D, fontSize: 'clamp(32px,4.5vw,58px)', letterSpacing: '-0.04em', fontWeight: 800 }}>
                 Be the first to run a fully automated catalog.
@@ -836,48 +959,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer style={{ background: BASE, borderTop: `1px solid rgba(255,255,255,0.1)` }}>
-        {/* Links row */}
-        <div style={{ borderBottom: `1px solid ${BORDER}` }}>
-          <div className="max-w-[1100px] mx-auto px-6 h-14 flex items-center justify-between gap-6 flex-wrap">
-            <div className="flex items-center gap-7 flex-wrap">
-              {['How it works', 'Platforms', 'Pricing', 'About', 'Contact', 'Privacy', 'Terms'].map(l => (
-                <a key={l} href="#" className="transition-colors hover:text-white" style={{ color: SECONDARY, fontFamily: M, fontSize: 11, letterSpacing: '0.05em' }}>{l}</a>
-              ))}
-            </div>
-            <div className="flex items-center gap-2.5">
-              <StructaLogo size={18} />
-              <span style={{ fontFamily: M, fontSize: 10, color: MUTED, letterSpacing: '0.08em' }}>AI CATALOG OPERATIONS</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Giant wordmark */}
-        <div style={{ padding: '16px 16px 0', overflow: 'hidden' }}>
-          <div style={{
-            fontFamily: D,
-            fontWeight: 800,
-            fontSize: 'clamp(80px, 17vw, 240px)',
-            letterSpacing: '-0.055em',
-            lineHeight: 0.88,
-            color: 'transparent',
-            WebkitTextStroke: `1px rgba(255,255,255,0.07)`,
-            userSelect: 'none',
-          }}>
-            STRUCTA
-          </div>
-        </div>
-
-        {/* Bottom bar */}
-        <div style={{ borderTop: `1px solid ${BORDER}`, padding: '12px 24px' }}>
-          <div className="max-w-[1100px] mx-auto flex items-center justify-between">
-            <p style={{ fontFamily: M, fontSize: 11, color: MUTED, letterSpacing: '0.05em' }}>
-              &copy; {new Date().getFullYear()} STRUCTA. ALL RIGHTS RESERVED.
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   )
 }
