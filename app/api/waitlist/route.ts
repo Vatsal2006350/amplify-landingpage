@@ -11,6 +11,30 @@ function getSupabase() {
 }
 
 export const dynamic = 'force-dynamic'
+export const fetchCache = 'force-no-store'
+
+export async function GET() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  try {
+    const res = await fetch(`${url}/rest/v1/waitlist?select=count&limit=0`, {
+      headers: {
+        apikey: key || '',
+        Authorization: `Bearer ${key}`,
+      },
+    })
+    return NextResponse.json({
+      envCheck: { url: !!url, key: !!key, keyPrefix: key?.substring(0, 20) },
+      supabaseStatus: res.status,
+      supabaseOk: res.ok,
+    })
+  } catch (e) {
+    return NextResponse.json({
+      envCheck: { url: !!url, key: !!key, keyPrefix: key?.substring(0, 20) },
+      fetchError: e instanceof Error ? e.message : 'unknown',
+    })
+  }
+}
 
 export async function POST(req: Request) {
   try {
