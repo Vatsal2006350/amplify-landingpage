@@ -4,7 +4,9 @@ import { createClient } from '@supabase/supabase-js'
 function getSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY
-  if (!url || !key) throw new Error('Missing Supabase env vars')
+  if (!url || !key) {
+    throw new Error(`Missing env: URL=${!!url}, KEY=${!!key}`)
+  }
   return createClient(url, key)
 }
 
@@ -33,11 +35,12 @@ export async function POST(req: Request) {
         return NextResponse.json({ message: "You're already on the list!" }, { status: 200 })
       }
       console.error('Supabase insert error:', error)
-      return NextResponse.json({ error: 'Something went wrong' }, { status: 500 })
+      return NextResponse.json({ error: `Insert failed: ${error.message}` }, { status: 500 })
     }
 
     return NextResponse.json({ message: "You're on the waitlist!" }, { status: 200 })
-  } catch {
-    return NextResponse.json({ error: 'Something went wrong' }, { status: 500 })
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : 'Unknown error'
+    return NextResponse.json({ error: msg }, { status: 500 })
   }
 }
