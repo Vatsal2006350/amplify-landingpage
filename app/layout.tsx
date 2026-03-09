@@ -21,7 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Structa | Product content for multi-platform retail',
+  title: 'Amplify | Product content for multi-platform retail',
   description: 'Fix product listings that drive returns. Automate marketplace feeds across Centrepoint, Namshi, Amazon, and 20+ platforms.',
 }
 

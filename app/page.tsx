@@ -521,7 +521,7 @@ export default function LandingPage() {
           </div>
           <div className="flex items-center gap-3">
             <a
-              href={`${APP_URL}/auth/login`}
+              href="#cta"
               className="text-[11px] font-bold transition-all duration-500 hover:opacity-85"
               style={{
                 background: ACCENT,
