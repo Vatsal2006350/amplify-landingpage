@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 
 // Design tokens
-const APP_URL = 'https://structa-rouge.vercel.app'
+const APP_URL = 'https://amplify-rouge.vercel.app'
 
 const ACCENT = '#C5F135'
 const BASE = '#080808'
@@ -41,14 +41,14 @@ const TESTIMONIALS = [
     initial: "A",
   },
   {
-    quote: "Managing listings across multiple platforms used to eat our entire week. Structa handles it now — automatically.",
+    quote: "Managing listings across multiple platforms used to eat our entire week. Amplify handles it now — automatically.",
     name: "Operations Team",
     role: "E-Commerce",
     company: "Snackible",
     initial: "S",
   },
   {
-    quote: "The compliance rules for each marketplace are different and constantly change. Structa tracks them so we don't have to.",
+    quote: "The compliance rules for each marketplace are different and constantly change. Amplify tracks them so we don't have to.",
     name: "Catalog Team",
     role: "Marketplace Operations",
     company: "Beira Rio",
@@ -59,7 +59,7 @@ const TESTIMONIALS = [
 const ALL_FEATURES = [
   {
     title: 'Transform product data into compliant listings.',
-    body: 'Connect your catalog. Structa generates platform-compliant listings for every marketplace.',
+    body: 'Connect your catalog. Amplify generates platform-compliant listings for every marketplace.',
   },
   {
     title: 'Sync updates across every channel.',
@@ -71,7 +71,7 @@ const ALL_FEATURES = [
   },
   {
     title: 'Give your team back to strategy.',
-    body: 'Structa handles operational work so merchandising focuses on growth.',
+    body: 'Amplify handles operational work so merchandising focuses on growth.',
   },
 ]
 
@@ -93,7 +93,7 @@ function SectionLabel({ n, text, centered = false }: { n: string; text: string; 
   )
 }
 
-function StructaLogo({ size = 32 }: { size?: number }) {
+function AmplifyLogo({ size = 32 }: { size?: number }) {
   return (
     <div
       style={{ width: size, height: size, background: ACCENT, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
@@ -158,8 +158,8 @@ function FeedGeneratorScreen() {
       <div className="flex-1 p-4 flex gap-4 min-h-0">
         <div className="flex flex-col gap-1.5 w-[100px] flex-shrink-0">
           <div className="flex items-center gap-2 py-1.5">
-            <div className="w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold" style={{ background: L_ACCENT, color: '#fff', fontFamily: M }}>S</div>
-            <span className="text-[10px] font-semibold" style={{ fontFamily: D, color: L_TEXT }}>Structa</span>
+            <div className="w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold" style={{ background: L_ACCENT, color: '#fff', fontFamily: M }}>A</div>
+            <span className="text-[10px] font-semibold" style={{ fontFamily: D, color: L_TEXT }}>Amplify</span>
           </div>
           <div className="py-1.5 px-2 rounded text-[10px] font-medium" style={{ background: L_ACCENT + '14', color: L_ACCENT, fontFamily: M }}>⊞ Feed Generator</div>
           <div className="py-1.5 px-2 rounded text-[10px]" style={{ color: L_MUTED, fontFamily: M }}>⟳ Fixes</div>
@@ -496,9 +496,9 @@ export default function LandingPage() {
         >
           <div className="flex items-center gap-8">
             <a href="/" className="flex items-center gap-2">
-              <StructaLogo size={scrolled ? 22 : 24} />
+              <AmplifyLogo size={scrolled ? 22 : 24} />
               <span className="text-[14px] font-semibold text-white transition-all duration-500" style={{ fontFamily: D }}>
-                Structa
+                Amplify
               </span>
             </a>
             <div className="hidden md:flex items-center gap-6">
@@ -778,7 +778,7 @@ export default function LandingPage() {
             Start free. Scale when ready.
           </h2>
           <p className="text-center text-[16px] leading-[1.75] max-w-[480px] mx-auto mb-16" style={{ color: SECONDARY }}>
-            Try everything Structa offers — no commitment, no credit card.
+            Try everything Amplify offers — no commitment, no credit card.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[820px] mx-auto">
@@ -870,7 +870,7 @@ export default function LandingPage() {
               </div>
 
               <a
-                href="mailto:hello@structa.ai"
+                href="mailto:hello@amplify.ai"
                 className="w-full h-[48px] flex items-center justify-center text-[12px] font-bold rounded-lg transition-all hover:opacity-90"
                 style={{ background: 'transparent', color: ACCENT, fontFamily: M, letterSpacing: '0.06em', border: `1px solid ${ACCENT}44` }}
               >
@@ -950,7 +950,7 @@ export default function LandingPage() {
               )}
               <div className="flex items-center gap-5">
                 <a href={`${APP_URL}/auth/login`} className="text-[12px] transition-colors hover:text-white" style={{ color: SECONDARY, fontFamily: M, letterSpacing: '0.04em' }}>
-                  Try Structa now →
+                  Try Amplify now →
                 </a>
                 <span style={{ color: MUTED, fontSize: 11, fontFamily: M, letterSpacing: '0.04em' }}>No credit card required</span>
               </div>
