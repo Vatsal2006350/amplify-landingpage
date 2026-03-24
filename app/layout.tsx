@@ -21,8 +21,21 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Amplify | Product content for multi-platform retail',
-  description: 'Fix product listings that drive returns. Automate marketplace feeds across Centrepoint, Namshi, Amazon, and 20+ platforms.',
+  title: 'Amplify | AI Operations Manager for E-Commerce',
+  description: 'Sync product catalogs across Uber Eats, Shopify, Amazon, and 20+ marketplaces. Edit once, update everywhere. Reduce returns by 30% with AI-powered listing fixes.',
+  metadataBase: new URL('https://www.use-amplify.com'),
+  openGraph: {
+    title: 'Amplify | AI Operations Manager for E-Commerce',
+    description: 'Sync product catalogs across Uber Eats, Shopify, Amazon, and 20+ marketplaces. Edit once, update everywhere.',
+    url: 'https://www.use-amplify.com',
+    siteName: 'Amplify',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Amplify | AI Operations Manager for E-Commerce',
+    description: 'Sync product catalogs across Uber Eats, Shopify, Amazon, and 20+ marketplaces. Edit once, update everywhere.',
+  },
 }
 
 export default function RootLayout({
