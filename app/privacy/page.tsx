@@ -127,8 +127,8 @@ export default function PrivacyPolicyPage() {
           <h2>10. Contact Us</h2>
           <p>
             If you have questions about this Privacy Policy or our data practices, contact us at:{' '}
-            <a href="mailto:privacy@gofrsh.com" className="text-gray-900 underline hover:text-lime-600 transition-colors">
-              privacy@gofrsh.com
+            <a href="mailto:svatsal64@gmail.com" className="text-gray-900 underline hover:text-lime-600 transition-colors">
+              svatsal64@gmail.com
             </a>
           </p>
         </div>
