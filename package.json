@@ -8,7 +8,9 @@
     "start": "next start"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.80.0",
     "@supabase/supabase-js": "^2.98.0",
+    "cheerio": "^1.2.0",
     "next": "^15.3.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"

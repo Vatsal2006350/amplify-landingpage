@@ -505,6 +505,7 @@ export default function LandingPage() {
               {[
                 { label: 'How it works', href: '#solution' },
                 { label: 'Pricing', href: '#pricing' },
+                { label: 'Free Audit', href: '/audit' },
               ].map(l => (
                 <a
                   key={l.label}
@@ -559,6 +560,19 @@ export default function LandingPage() {
         }} />
 
         <div className="relative max-w-[1100px] mx-auto w-full px-6" style={{ paddingTop: 180, paddingBottom: 120 }}>
+          {/* Audit tool announcement */}
+          <a
+            href="/audit"
+            className="inline-flex items-center gap-3 mb-8 px-4 py-2 rounded-full transition-all duration-300 hover:border-[rgba(197,241,53,0.3)]"
+            style={{ background: 'rgba(197,241,53,0.06)', border: `1px solid rgba(197,241,53,0.15)` }}
+          >
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: ACCENT, color: BASE, fontFamily: M }}>FREE</span>
+            <span className="text-[12px]" style={{ color: SECONDARY, fontFamily: M }}>
+              Free audit tool — paste any store or product URL, get instant quality scores
+            </span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+
           {/* Top label */}
           <div className="flex items-center gap-3 mb-8" style={{ fontFamily: M }}>
             <div style={{ width: 24, height: 1, background: ACCENT }} />

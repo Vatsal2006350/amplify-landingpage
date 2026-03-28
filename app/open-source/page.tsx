@@ -1,0 +1,703 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+
+const ACCENT = '#C5F135'
+const BASE = '#080808'
+const SURFACE = '#111111'
+const BORDER = 'rgba(255,255,255,0.07)'
+const MUTED = 'rgba(255,255,255,0.55)'
+const SECONDARY = 'rgba(255,255,255,0.75)'
+const D = 'var(--font-display)'
+const M = 'var(--font-mono)'
+
+function AmplifyLogo({ size = 32 }: { size?: number }) {
+  return (
+    <div
+      style={{ width: size, height: size, background: ACCENT, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+    >
+      <svg style={{ width: size * 0.5, height: size * 0.5, color: BASE }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4 7v10c0 2 1 3 3 3h10c2 0 3-1 3-3V7c0-2-1-3-3-3H7c-2 0-3 1-3 3z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6M12 9v6" />
+      </svg>
+    </div>
+  )
+}
+
+function SectionLabel({ n, text, centered = false }: { n: string; text: string; centered?: boolean }) {
+  if (centered) {
+    return (
+      <div className="flex items-center justify-center gap-3 mb-12" style={{ fontFamily: M }}>
+        <div style={{ width: 24, height: 1, background: ACCENT }} />
+        <span style={{ fontSize: 11, letterSpacing: '0.12em', color: MUTED }}>{n} — {text}</span>
+        <div style={{ width: 24, height: 1, background: ACCENT }} />
+      </div>
+    )
+  }
+  return (
+    <div className="flex items-center gap-3 mb-12" style={{ fontFamily: M }}>
+      <div style={{ width: 24, height: 1, background: ACCENT }} />
+      <span style={{ fontSize: 11, letterSpacing: '0.12em', color: MUTED }}>{n} — {text}</span>
+    </div>
+  )
+}
+
+const DEMO_RESULT = {
+  url: 'amazon.com/dp/B09V3KXJPB',
+  product: 'Women\'s Classic Leather Loafers - Navy Blue',
+  score: 42,
+  issues: [
+    { type: 'sizing', severity: 'critical', text: 'No size guide or fit info — 34% of returns cite "runs small"' },
+    { type: 'description', severity: 'warning', text: 'Description is 89 chars (target: 300-1000). Missing materials, care instructions' },
+    { type: 'images', severity: 'warning', text: 'Only 2 images. No lifestyle shots, no size reference' },
+  ],
+  returnRisk: {
+    score: 'HIGH',
+    topReasons: [
+      { reason: 'Runs small', pct: 41 },
+      { reason: 'Color mismatch', pct: 28 },
+      { reason: 'Quality concerns', pct: 18 },
+    ],
+  },
+  fix: {
+    field: 'title',
+    before: 'Women\'s Classic Leather Loafers - Navy Blue',
+    after: 'Women\'s Classic Leather Loafers - Navy Blue (Runs Small, Order Half Size Up)',
+  },
+}
+
+function DemoTerminal() {
+  const [step, setStep] = useState(0)
+  const [typing, setTyping] = useState('')
+  const fullCommand = 'npx amplify-audit https://amazon.com/dp/B09V3KXJPB'
+
+  useEffect(() => {
+    if (step === 0) {
+      let i = 0
+      const interval = setInterval(() => {
+        setTyping(fullCommand.slice(0, i + 1))
+        i++
+        if (i >= fullCommand.length) {
+          clearInterval(interval)
+          setTimeout(() => setStep(1), 600)
+        }
+      }, 35)
+      return () => clearInterval(interval)
+    }
+    if (step === 1) {
+      setTimeout(() => setStep(2), 800)
+    }
+    if (step === 2) {
+      setTimeout(() => setStep(3), 600)
+    }
+    if (step === 3) {
+      setTimeout(() => setStep(4), 500)
+    }
+  }, [step])
+
+  return (
+    <div className="w-full rounded-xl overflow-hidden" style={{ background: '#0a0a0a', border: `1px solid ${BORDER}`, boxShadow: '0 24px 80px rgba(0,0,0,0.5)' }}>
+      {/* Title bar */}
+      <div className="flex items-center gap-2 px-4 py-3 border-b" style={{ borderColor: BORDER, background: 'rgba(255,255,255,0.02)' }}>
+        <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
+        <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
+        <div className="w-3 h-3 rounded-full bg-[#28c840]" />
+        <span className="ml-3 text-[11px]" style={{ color: MUTED, fontFamily: M }}>terminal</span>
+      </div>
+
+      {/* Terminal content */}
+      <div className="p-5 space-y-3" style={{ fontFamily: M, fontSize: 13, lineHeight: 1.7 }}>
+        {/* Command line */}
+        <div className="flex items-center gap-2">
+          <span style={{ color: ACCENT }}>$</span>
+          <span style={{ color: '#fff' }}>{typing}</span>
+          {step === 0 && <span className="animate-pulse" style={{ color: ACCENT }}>▊</span>}
+        </div>
+
+        {step >= 1 && (
+          <div className="space-y-1 animate-fade-in" style={{ color: MUTED }}>
+            <div><span style={{ color: ACCENT }}>⟳</span> Fetching product data...</div>
+          </div>
+        )}
+
+        {step >= 2 && (
+          <div className="space-y-1 animate-fade-in" style={{ color: MUTED }}>
+            <div><span style={{ color: ACCENT }}>⟳</span> Running quality analysis...</div>
+            <div><span style={{ color: ACCENT }}>⟳</span> Classifying return risk...</div>
+          </div>
+        )}
+
+        {step >= 3 && (
+          <div className="animate-fade-in space-y-3 mt-4">
+            {/* Score */}
+            <div className="flex items-center gap-3">
+              <span style={{ color: MUTED }}>Quality Score:</span>
+              <span className="text-[18px] font-bold" style={{ color: '#ef4444' }}>{DEMO_RESULT.score}/100</span>
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold" style={{ background: 'rgba(239,68,68,0.15)', color: '#ef4444' }}>NEEDS WORK</span>
+            </div>
+
+            {/* Issues */}
+            <div style={{ borderTop: `1px solid ${BORDER}`, paddingTop: 12 }}>
+              <div className="text-[11px] uppercase tracking-wider mb-2" style={{ color: MUTED }}>Issues Found</div>
+              {DEMO_RESULT.issues.map((issue, i) => (
+                <div key={i} className="flex items-start gap-2 py-1">
+                  <span style={{ color: issue.severity === 'critical' ? '#ef4444' : '#f59e0b', fontSize: 12 }}>
+                    {issue.severity === 'critical' ? '●' : '▲'}
+                  </span>
+                  <span style={{ color: SECONDARY, fontSize: 12 }}>{issue.text}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Return Risk */}
+            <div style={{ borderTop: `1px solid ${BORDER}`, paddingTop: 12 }}>
+              <div className="text-[11px] uppercase tracking-wider mb-2" style={{ color: MUTED }}>Return Risk Analysis</div>
+              {DEMO_RESULT.returnRisk.topReasons.map((r, i) => (
+                <div key={i} className="flex items-center gap-3 py-0.5">
+                  <span className="w-28 text-[12px] truncate" style={{ color: SECONDARY }}>{r.reason}</span>
+                  <div className="flex-1 h-1.5 rounded overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                    <div className="h-full rounded" style={{ width: `${r.pct}%`, background: i === 0 ? '#ef4444' : i === 1 ? '#f59e0b' : MUTED }} />
+                  </div>
+                  <span className="text-[11px] w-8 text-right" style={{ color: MUTED }}>{r.pct}%</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Recommended Fix */}
+            <div style={{ borderTop: `1px solid ${BORDER}`, paddingTop: 12 }}>
+              <div className="text-[11px] uppercase tracking-wider mb-2" style={{ color: MUTED }}>Top Recommendation</div>
+              <div className="rounded-lg p-3" style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${BORDER}` }}>
+                <div className="text-[11px] mb-1" style={{ color: '#ef4444' }}>
+                  <span style={{ textDecoration: 'line-through' }}>{DEMO_RESULT.fix.before}</span>
+                </div>
+                <div className="text-[11px]" style={{ color: ACCENT }}>
+                  {DEMO_RESULT.fix.after}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {step >= 4 && (
+          <div className="animate-fade-in mt-2">
+            <div className="text-[11px]" style={{ color: MUTED }}>
+              <span style={{ color: ACCENT }}>✓</span> Full report saved to <span style={{ color: '#fff' }}>./audit-report.json</span>
+            </div>
+            <div className="text-[11px] mt-1" style={{ color: MUTED }}>
+              Want to auto-fix across all channels? → <span style={{ color: ACCENT }}>amplify.so</span>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function CodeBlock({ code, language = 'bash' }: { code: string; language?: string }) {
+  return (
+    <div className="rounded-lg overflow-hidden" style={{ background: '#0a0a0a', border: `1px solid ${BORDER}` }}>
+      <div className="flex items-center justify-between px-4 py-2 border-b" style={{ borderColor: BORDER }}>
+        <span className="text-[10px] uppercase tracking-wider" style={{ color: MUTED, fontFamily: M }}>{language}</span>
+        <button className="text-[10px] px-2 py-1 rounded" style={{ color: MUTED, fontFamily: M, border: `1px solid ${BORDER}` }}>Copy</button>
+      </div>
+      <pre className="p-4 overflow-x-auto">
+        <code className="text-[13px] leading-relaxed" style={{ fontFamily: M, color: SECONDARY }}>{code}</code>
+      </pre>
+    </div>
+  )
+}
+
+const MODULES = [
+  {
+    name: 'Listing Quality Scorer',
+    desc: 'Programmatic PDP analysis. Title length, description completeness, missing sizing info, tag validation. No API key needed.',
+    loc: '~400 lines',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 12l2 2 4-4" />
+        <circle cx="12" cy="12" r="10" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Return Reason Classifier',
+    desc: '98 semantic keywords across 6 categories: sizing, quality, color mismatch, description gap, missing info. Hybrid keyword + LLM.',
+    loc: '~300 lines',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 3v18h18" />
+        <path d="M7 12l4-4 4 4 4-4" />
+      </svg>
+    ),
+  },
+  {
+    name: 'SKU Health Scorer',
+    desc: 'Weighted composite: return rate (40%), ticket rate (20%), keyword signals (25%), reason concentration via Shannon entropy (15%).',
+    loc: '~150 lines',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2v20M2 12h20" />
+        <circle cx="12" cy="12" r="6" />
+      </svg>
+    ),
+  },
+  {
+    name: 'Recommendation Engine',
+    desc: 'Generates structured JSON diffs: before/after for title, description, tags. Impact estimates with confidence scoring.',
+    loc: '~400 lines',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 3v18M3 12h18" />
+        <path d="M12 8l-4 4h8l-4-4z" />
+      </svg>
+    ),
+  },
+]
+
+const ARCH_LAYERS = [
+  {
+    label: 'OPEN SOURCE',
+    color: ACCENT,
+    items: ['Listing Scorer', 'Return Classifier', 'SKU Scorer', 'Recommendation Engine'],
+  },
+  {
+    label: 'AMPLIFY PLATFORM',
+    color: 'rgba(255,255,255,0.3)',
+    items: ['Multi-Marketplace Sync', 'Continuous Monitoring', 'Auto-Apply Pipeline', 'Impact Measurement'],
+  },
+]
+
+export default function OpenSourcePage() {
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 50)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  return (
+    <div className="min-h-screen" style={{ background: BASE }}>
+
+      {/* Nav */}
+      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-500 ease-out"
+        style={{ padding: scrolled ? '12px 16px' : '16px 16px' }}
+      >
+        <nav
+          className="flex items-center justify-between transition-all duration-500 ease-out"
+          style={{
+            width: scrolled ? 'min(680px, calc(100% - 32px))' : 'min(1200px, calc(100% - 32px))',
+            height: scrolled ? 52 : 56,
+            padding: scrolled ? '0 6px 0 20px' : '0 8px 0 24px',
+            background: scrolled ? 'rgba(18,18,18,0.85)' : 'rgba(8,8,8,0.8)',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+            borderRadius: scrolled ? 9999 : 16,
+            border: `1px solid ${scrolled ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.06)'}`,
+            boxShadow: scrolled
+              ? '0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.04) inset'
+              : '0 4px 20px rgba(0,0,0,0.2)',
+          }}
+        >
+          <div className="flex items-center gap-8">
+            <a href="/" className="flex items-center gap-2">
+              <AmplifyLogo size={scrolled ? 22 : 24} />
+              <span className="text-[14px] font-semibold text-white transition-all duration-500" style={{ fontFamily: D }}>
+                Amplify
+              </span>
+            </a>
+            <div className="hidden md:flex items-center gap-6">
+              {[
+                { label: 'Home', href: '/' },
+                { label: 'Modules', href: '#modules' },
+                { label: 'Architecture', href: '#architecture' },
+              ].map(l => (
+                <a
+                  key={l.label}
+                  href={l.href}
+                  className="text-[12px] transition-colors duration-200"
+                  style={{ color: SECONDARY, fontFamily: M, letterSpacing: '0.03em' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+                  onMouseLeave={e => (e.currentTarget.style.color = SECONDARY as string)}
+                >
+                  {l.label}
+                </a>
+              ))}
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <a
+              href="https://github.com/amplify-ecommerce/audit"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-[11px] font-bold transition-all duration-500 hover:opacity-85"
+              style={{
+                background: '#fff',
+                color: BASE,
+                fontFamily: M,
+                letterSpacing: '0.06em',
+                borderRadius: 9999,
+                padding: scrolled ? '8px 18px' : '9px 20px',
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              GITHUB
+            </a>
+          </div>
+        </nav>
+      </div>
+
+      {/* Hero */}
+      <section className="relative min-h-screen flex flex-col justify-center overflow-hidden" style={{ background: BASE }}>
+        {/* Dot grid */}
+        <div style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none',
+          backgroundImage: 'radial-gradient(rgba(255,255,255,0.032) 1px, transparent 1px)',
+          backgroundSize: '36px 36px',
+        }} />
+        {/* Glow */}
+        <div style={{
+          position: 'absolute', top: '10%', right: '-5%',
+          width: 800, height: 600, borderRadius: '50%',
+          background: 'radial-gradient(ellipse, rgba(197,241,53,0.04) 0%, transparent 65%)',
+          pointerEvents: 'none',
+        }} />
+
+        <div className="relative max-w-[1100px] mx-auto w-full px-6" style={{ paddingTop: 160, paddingBottom: 80 }}>
+          {/* Badge */}
+          <div className="flex items-center gap-3 mb-8">
+            <span
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-bold"
+              style={{ background: ACCENT + '14', color: ACCENT, border: `1px solid ${ACCENT}33`, fontFamily: M, letterSpacing: '0.08em' }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              OPEN SOURCE
+            </span>
+          </div>
+
+          {/* Headline */}
+          <h1
+            className="animate-fade-up mb-6"
+            style={{
+              fontFamily: D,
+              fontSize: 'clamp(38px, 6vw, 76px)',
+              fontWeight: 800,
+              lineHeight: 1.05,
+              letterSpacing: '-0.04em',
+              color: '#fff',
+              maxWidth: 800,
+            }}
+          >
+            Audit any product listing.{' '}
+            <span style={{ color: ACCENT }}>Instantly.</span>
+          </h1>
+
+          {/* Subtext */}
+          <p
+            className="animate-fade-up mb-12"
+            style={{ fontSize: 18, lineHeight: 1.7, color: SECONDARY, maxWidth: 560, animationDelay: '0.1s' }}
+          >
+            Paste a product URL. Get a quality score, return risk assessment, and AI-generated improvements. Free, open source, no account required.
+          </p>
+
+          {/* Install command */}
+          <div className="animate-fade-up flex items-center gap-4 mb-16" style={{ animationDelay: '0.15s' }}>
+            <div
+              className="flex items-center gap-3 px-5 py-3.5 rounded-lg"
+              style={{ background: 'rgba(255,255,255,0.04)', border: `1px solid ${BORDER}` }}
+            >
+              <span style={{ color: ACCENT, fontFamily: M, fontSize: 14 }}>$</span>
+              <code style={{ color: '#fff', fontFamily: M, fontSize: 14 }}>npx amplify-audit {'<product-url>'}</code>
+            </div>
+            <a
+              href="https://github.com/amplify-ecommerce/audit"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-5 py-3.5 rounded-lg text-[13px] font-bold transition-opacity hover:opacity-85"
+              style={{ background: ACCENT, color: BASE, fontFamily: M }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              Star on GitHub
+            </a>
+          </div>
+
+          {/* Demo terminal */}
+          <div className="animate-fade-up max-w-[720px]" style={{ animationDelay: '0.2s' }}>
+            <DemoTerminal />
+          </div>
+        </div>
+      </section>
+
+      {/* What you get */}
+      <section id="modules" style={{ background: '#0D0D0D', borderTop: `1px solid ${BORDER}` }}>
+        <div className="max-w-[1100px] mx-auto px-6 py-28">
+          <SectionLabel n="01" text="WHAT&rsquo;S INCLUDED" />
+          <div className="mb-16">
+            <h2 className="text-[clamp(28px,4vw,48px)] font-bold leading-[1.06] text-white mb-5"
+              style={{ fontFamily: D, letterSpacing: '-0.04em', fontWeight: 800 }}>
+              Four production-grade modules.<br />
+              <span style={{ color: ACCENT }}>Zero vendor lock-in.</span>
+            </h2>
+            <p className="text-[16px] leading-[1.75] max-w-[500px]" style={{ color: SECONDARY }}>
+              Extracted from the Amplify platform. Each module works standalone or composes into a full audit pipeline.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {MODULES.map((mod, i) => (
+              <div
+                key={mod.name}
+                className="rounded-xl p-6 flex flex-col gap-4 transition-all duration-300"
+                style={{ background: SURFACE, border: `1px solid ${BORDER}` }}
+                onMouseEnter={e => (e.currentTarget.style.borderColor = ACCENT + '33')}
+                onMouseLeave={e => (e.currentTarget.style.borderColor = BORDER)}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: ACCENT + '14', border: `1px solid ${ACCENT}22` }}>
+                      {mod.icon}
+                    </div>
+                    <div>
+                      <h3 className="text-[14px] font-semibold text-white" style={{ fontFamily: D }}>{mod.name}</h3>
+                      <span className="text-[10px]" style={{ color: MUTED, fontFamily: M }}>{mod.loc}</span>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-bold px-2 py-1 rounded" style={{ background: ACCENT + '14', color: ACCENT, fontFamily: M }}>
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                </div>
+                <p className="text-[14px] leading-[1.7]" style={{ color: SECONDARY }}>{mod.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Code examples */}
+      <section style={{ background: BASE, borderTop: `1px solid ${BORDER}` }}>
+        <div className="max-w-[1100px] mx-auto px-6 py-28">
+          <SectionLabel n="02" text="USAGE" />
+          <div className="mb-16">
+            <h2 className="text-[clamp(28px,4vw,48px)] font-bold leading-[1.06] text-white mb-5"
+              style={{ fontFamily: D, letterSpacing: '-0.04em', fontWeight: 800 }}>
+              npm install. Import. Ship.
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-3">
+              <div className="text-[12px] font-bold uppercase tracking-wider mb-4" style={{ color: ACCENT, fontFamily: M }}>CLI — Zero config</div>
+              <CodeBlock
+                language="bash"
+                code={`# Audit a single product
+npx amplify-audit https://amazon.com/dp/B09V3KXJPB
+
+# Audit with return data
+npx amplify-audit \\
+  --product ./product.json \\
+  --returns ./returns.csv
+
+# Output as JSON for CI/CD
+npx amplify-audit <url> --format json`}
+              />
+            </div>
+
+            <div className="space-y-3">
+              <div className="text-[12px] font-bold uppercase tracking-wider mb-4" style={{ color: ACCENT, fontFamily: M }}>Library — Full control</div>
+              <CodeBlock
+                language="typescript"
+                code={`import { audit } from 'amplify-audit'
+
+const report = await audit({
+  url: 'https://amazon.com/dp/B09V3KXJPB',
+  // Optional: include return data
+  returns: returnData,
+})
+
+console.log(report.score)        // 42
+console.log(report.issues)       // [{ type, severity, text }]
+console.log(report.returnRisk)   // { score, topReasons }
+console.log(report.fixes)        // [{ field, before, after }]`}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Architecture */}
+      <section id="architecture" style={{ background: '#0D0D0D', borderTop: `1px solid ${BORDER}` }}>
+        <div className="max-w-[1100px] mx-auto px-6 py-28">
+          <SectionLabel n="03" text="ARCHITECTURE" centered />
+          <h2 className="text-center text-[clamp(28px,4vw,48px)] font-bold leading-[1.06] text-white mb-5"
+            style={{ fontFamily: D, letterSpacing: '-0.04em', fontWeight: 800 }}>
+            Open core. Full pipeline behind it.
+          </h2>
+          <p className="text-center text-[16px] leading-[1.75] max-w-[520px] mx-auto mb-16" style={{ color: SECONDARY }}>
+            The audit tools give you the analysis. The Amplify platform gives you continuous monitoring, auto-fix, and multi-channel sync.
+          </p>
+
+          {/* Architecture diagram */}
+          <div className="max-w-[700px] mx-auto space-y-4">
+            {ARCH_LAYERS.map((layer) => (
+              <div key={layer.label} className="rounded-xl p-6" style={{ background: SURFACE, border: `1px solid ${layer.color === ACCENT ? ACCENT + '33' : BORDER}` }}>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-2 h-2 rounded-full" style={{ background: layer.color }} />
+                  <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: layer.color, fontFamily: M }}>{layer.label}</span>
+                  {layer.label === 'OPEN SOURCE' && (
+                    <span className="text-[9px] px-2 py-0.5 rounded-full" style={{ background: ACCENT + '14', color: ACCENT, fontFamily: M }}>FREE</span>
+                  )}
+                  {layer.label === 'AMPLIFY PLATFORM' && (
+                    <span className="text-[9px] px-2 py-0.5 rounded-full" style={{ background: 'rgba(255,255,255,0.06)', color: MUTED, fontFamily: M }}>MANAGED</span>
+                  )}
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                  {layer.items.map((item) => (
+                    <div
+                      key={item}
+                      className="rounded-lg px-3 py-2.5 text-center text-[12px]"
+                      style={{
+                        background: layer.color === ACCENT ? ACCENT + '0a' : 'rgba(255,255,255,0.03)',
+                        border: `1px solid ${layer.color === ACCENT ? ACCENT + '22' : BORDER}`,
+                        color: layer.color === ACCENT ? ACCENT : MUTED,
+                        fontFamily: M,
+                      }}
+                    >
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+
+            {/* Arrow between layers */}
+            <div className="flex justify-center py-2">
+              <div className="flex flex-col items-center gap-1">
+                <div className="w-px h-6" style={{ background: `linear-gradient(to bottom, ${ACCENT}44, rgba(255,255,255,0.1))` }} />
+                <span className="text-[10px]" style={{ color: MUTED, fontFamily: M }}>powers</span>
+                <div className="w-px h-6" style={{ background: `linear-gradient(to bottom, rgba(255,255,255,0.1), transparent)` }} />
+              </div>
+            </div>
+
+            {/* Amplify platform CTA */}
+            <div className="rounded-xl p-6 text-center" style={{ background: 'rgba(197,241,53,0.04)', border: `1px solid ${ACCENT}22` }}>
+              <p className="text-[14px] mb-4" style={{ color: SECONDARY }}>
+                The audit finds the problems. <strong style={{ color: '#fff' }}>Amplify fixes them across every channel, automatically.</strong>
+              </p>
+              <a
+                href="/"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-[12px] font-bold transition-opacity hover:opacity-90"
+                style={{ background: ACCENT, color: BASE, fontFamily: M }}
+              >
+                Try Amplify Platform
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Use cases */}
+      <section style={{ background: BASE, borderTop: `1px solid ${BORDER}` }}>
+        <div className="max-w-[1100px] mx-auto px-6 py-28">
+          <SectionLabel n="04" text="USE CASES" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              {
+                title: 'Shopify Store Audit',
+                desc: 'Run amplify-audit on your entire Shopify catalog. Get a prioritized list of listings that need attention — sorted by return risk.',
+                cmd: 'npx amplify-audit --shopify mystore.myshopify.com',
+              },
+              {
+                title: 'Amazon Listing Check',
+                desc: 'Paste any Amazon product URL and get instant scoring. Compare your listings against category benchmarks.',
+                cmd: 'npx amplify-audit https://amazon.com/dp/...',
+              },
+              {
+                title: 'CI/CD Quality Gate',
+                desc: 'Add listing quality checks to your deployment pipeline. Fail builds when listing scores drop below threshold.',
+                cmd: 'amplify-audit --ci --min-score 70',
+              },
+            ].map((uc) => (
+              <div key={uc.title} className="rounded-xl p-6 flex flex-col gap-4" style={{ background: SURFACE, border: `1px solid ${BORDER}` }}>
+                <h3 className="text-[15px] font-semibold text-white" style={{ fontFamily: D }}>{uc.title}</h3>
+                <p className="text-[14px] leading-[1.7] flex-1" style={{ color: SECONDARY }}>{uc.desc}</p>
+                <div className="rounded-lg px-3 py-2 text-[11px]" style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${BORDER}`, color: ACCENT, fontFamily: M }}>
+                  $ {uc.cmd}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Bottom CTA */}
+      <section className="relative overflow-hidden" style={{ background: '#09110A', borderTop: `1px solid ${BORDER}` }}>
+        <div style={{
+          position: 'absolute', top: '-20%', right: '-10%',
+          width: 700, height: 700, borderRadius: '50%',
+          background: 'radial-gradient(ellipse, rgba(197,241,53,0.06) 0%, transparent 65%)',
+          pointerEvents: 'none',
+        }} />
+
+        <div className="max-w-[1100px] mx-auto px-6 py-28 relative text-center">
+          <h2 className="font-bold leading-[1.06] text-white mb-6"
+            style={{ fontFamily: D, fontSize: 'clamp(32px,4.5vw,58px)', letterSpacing: '-0.04em', fontWeight: 800 }}>
+            Start auditing in 30 seconds.
+          </h2>
+          <p className="text-[16px] leading-[1.75] max-w-[480px] mx-auto mb-10" style={{ color: SECONDARY }}>
+            No account. No API key. Just one command.
+          </p>
+
+          <div className="flex flex-col items-center gap-5">
+            <div
+              className="inline-flex items-center gap-3 px-6 py-4 rounded-lg"
+              style={{ background: 'rgba(255,255,255,0.04)', border: `1px solid ${BORDER}` }}
+            >
+              <span style={{ color: ACCENT, fontFamily: M, fontSize: 16 }}>$</span>
+              <code className="text-[16px]" style={{ color: '#fff', fontFamily: M }}>npx amplify-audit {'<your-product-url>'}</code>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <a
+                href="https://github.com/amplify-ecommerce/audit"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-6 py-3 rounded-lg text-[13px] font-bold transition-opacity hover:opacity-85"
+                style={{ background: '#fff', color: BASE, fontFamily: M }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                View on GitHub
+              </a>
+              <a
+                href="/"
+                className="px-6 py-3 rounded-lg text-[13px] font-bold transition-opacity hover:opacity-85"
+                style={{ color: ACCENT, fontFamily: M, border: `1px solid ${ACCENT}44` }}
+              >
+                Try Amplify Platform
+              </a>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="mt-20 pt-8 flex items-center justify-center gap-6" style={{ borderTop: `1px solid ${BORDER}` }}>
+            <a href="/" className="flex items-center gap-2">
+              <AmplifyLogo size={18} />
+              <span className="text-[12px] font-semibold text-white" style={{ fontFamily: D }}>Amplify</span>
+            </a>
+            <span className="text-[11px]" style={{ color: MUTED, fontFamily: M }}>MIT License</span>
+            <a
+              href="https://github.com/amplify-ecommerce/audit"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[11px] transition-colors hover:text-white"
+              style={{ color: MUTED, fontFamily: M }}
+            >
+              GitHub
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}
