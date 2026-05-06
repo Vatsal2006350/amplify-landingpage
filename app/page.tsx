@@ -1,10 +1,8 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 
 // Design tokens
-const APP_URL = 'https://amplify-rouge.vercel.app'
-
 const ACCENT = '#C5F135'
 const BASE = '#080808'
 const SURFACE = '#111111'
@@ -23,6 +21,12 @@ const STATS = [
   { value: '9+', label: 'Marketplace platforms' },
   { value: '30%', label: 'Avg. return rate reduction' },
   { value: '80hrs', label: 'Saved per catalog cycle' },
+]
+
+const NAV_LINKS = [
+  { label: 'How it works', href: '#solution' },
+  { label: 'Pricing', href: '#pricing' },
+  { label: 'Free Audit', href: '/audit' },
 ]
 
 const PAIN_POINTS = [
@@ -78,7 +82,7 @@ const ALL_FEATURES = [
 function SectionLabel({ n, text, centered = false }: { n: string; text: string; centered?: boolean }) {
   if (centered) {
     return (
-      <div className="flex items-center justify-center gap-3 mb-12" style={{ fontFamily: M }}>
+      <div className="flex items-center justify-center gap-3 mb-8 sm:mb-12" style={{ fontFamily: M }}>
         <div style={{ width: 24, height: 1, background: ACCENT }} />
         <span style={{ fontSize: 11, letterSpacing: '0.12em', color: MUTED }}>{n} — {text}</span>
         <div style={{ width: 24, height: 1, background: ACCENT }} />
@@ -86,7 +90,7 @@ function SectionLabel({ n, text, centered = false }: { n: string; text: string; 
     )
   }
   return (
-    <div className="flex items-center gap-3 mb-12" style={{ fontFamily: M }}>
+    <div className="flex items-center gap-3 mb-8 sm:mb-12" style={{ fontFamily: M }}>
       <div style={{ width: 24, height: 1, background: ACCENT }} />
       <span style={{ fontSize: 11, letterSpacing: '0.12em', color: MUTED }}>{n} — {text}</span>
     </div>
@@ -95,14 +99,11 @@ function SectionLabel({ n, text, centered = false }: { n: string; text: string; 
 
 function AmplifyLogo({ size = 32 }: { size?: number }) {
   return (
-    <div
-      style={{ width: size, height: size, background: ACCENT, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
-    >
-      <svg style={{ width: size * 0.5, height: size * 0.5, color: BASE }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M4 7v10c0 2 1 3 3 3h10c2 0 3-1 3-3V7c0-2-1-3-3-3H7c-2 0-3 1-3 3z" />
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6M12 9v6" />
-      </svg>
-    </div>
+    <img
+      src="/logo.png"
+      alt="Amplify"
+      style={{ width: size, height: size, borderRadius: 6, flexShrink: 0, objectFit: 'cover' }}
+    />
   )
 }
 
@@ -111,14 +112,14 @@ function PlatformMarquee() {
   const duped = [...items, ...items]
   return (
     <div id="platforms" style={{ background: L_BG, borderBottom: `1px solid ${L_BORDER}` }}>
-      <div className="text-center pt-10 pb-5">
+      <div className="text-center pt-8 sm:pt-10 pb-4 sm:pb-5 px-5">
         <span style={{ fontSize: 11, letterSpacing: '0.12em', color: L_MUTED, fontFamily: M }}>
           WORKS WITH EVERY PLATFORM YOU SELL ON
         </span>
       </div>
       <div style={{ overflow: 'hidden', position: 'relative' }}>
-        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to right, ${L_BG}, transparent)`, zIndex: 1, pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 120, background: `linear-gradient(to left, ${L_BG}, transparent)`, zIndex: 1, pointerEvents: 'none' }} />
+        <div className="w-[60px] sm:w-[120px]" style={{ position: 'absolute', left: 0, top: 0, bottom: 0, background: `linear-gradient(to right, ${L_BG}, transparent)`, zIndex: 1, pointerEvents: 'none' }} />
+        <div className="w-[60px] sm:w-[120px]" style={{ position: 'absolute', right: 0, top: 0, bottom: 0, background: `linear-gradient(to left, ${L_BG}, transparent)`, zIndex: 1, pointerEvents: 'none' }} />
         <div style={{ display: 'flex', alignItems: 'center', animation: 'marquee 32s linear infinite', width: 'max-content' }}>
           {duped.map((name, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 0, flexShrink: 0 }}>
@@ -345,22 +346,22 @@ function FeatureSection() {
 
   return (
     <section id="solution" style={{ background: L_BG }}>
-      <div className="max-w-[1100px] mx-auto px-6 py-28">
-        <div className="flex items-center gap-3 mb-12" style={{ fontFamily: M }}>
+      <div className="max-w-[1100px] mx-auto px-5 sm:px-6 py-16 sm:py-28">
+        <div className="flex items-center gap-3 mb-8 sm:mb-12" style={{ fontFamily: M }}>
           <div style={{ width: 24, height: 1, background: L_ACCENT }} />
           <span style={{ fontSize: 11, letterSpacing: '0.12em', color: L_MUTED }}>02 — HOW IT WORKS</span>
         </div>
-        <div className="mb-16">
-          <h2 className="text-[clamp(28px,4vw,52px)] font-bold leading-[1.06] mb-5"
+        <div className="mb-10 sm:mb-16">
+          <h2 className="text-[clamp(24px,4vw,52px)] font-bold leading-[1.08] mb-4 sm:mb-5"
             style={{ fontFamily: D, letterSpacing: '-0.04em', fontWeight: 800, color: L_TEXT }}>
-            One AI layer. Every marketplace.<br />Zero manual work.
+            One AI layer. Every marketplace.<br className="hidden sm:inline" />Zero manual work.
           </h2>
-          <p className="text-[16px] leading-[1.75] max-w-[500px]" style={{ color: L_SECONDARY }}>
+          <p className="text-[15px] sm:text-[16px] leading-[1.75] max-w-[500px]" style={{ color: L_SECONDARY }}>
             Sits between your catalog and every channel — standardizing, optimizing, and syncing listings automatically.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-start">
           <div className="flex flex-col">
             {ALL_FEATURES.map((f, i) => (
               <div
@@ -433,6 +434,7 @@ export default function LandingPage() {
   const [ctaMessage, setCtaMessage] = useState('')
   const heroRef = useRef<HTMLDivElement>(null)
   const [scrolled, setScrolled] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50)
@@ -476,14 +478,14 @@ export default function LandingPage() {
 
       {/* Nav — floating pill */}
       <div className="fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-500 ease-out"
-        style={{ padding: scrolled ? '12px 16px' : '16px 16px' }}
+        style={{ padding: scrolled ? '8px 12px' : '12px 12px' }}
       >
         <nav
-          className="flex items-center justify-between transition-all duration-500 ease-out"
+          className="flex items-center justify-between transition-all duration-500 ease-out w-full"
           style={{
-            width: scrolled ? 'min(680px, calc(100% - 32px))' : 'min(1200px, calc(100% - 32px))',
-            height: scrolled ? 52 : 56,
-            padding: scrolled ? '0 6px 0 20px' : '0 8px 0 24px',
+            maxWidth: scrolled ? 680 : 1200,
+            height: scrolled ? 48 : 52,
+            padding: scrolled ? '0 6px 0 16px' : '0 8px 0 20px',
             background: scrolled ? 'rgba(18,18,18,0.85)' : 'rgba(8,8,8,0.8)',
             backdropFilter: 'blur(24px)',
             WebkitBackdropFilter: 'blur(24px)',
@@ -494,7 +496,7 @@ export default function LandingPage() {
               : '0 4px 20px rgba(0,0,0,0.2)',
           }}
         >
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-4 md:gap-8">
             <a href="/" className="flex items-center gap-2">
               <AmplifyLogo size={scrolled ? 22 : 24} />
               <span className="text-[14px] font-semibold text-white transition-all duration-500" style={{ fontFamily: D }}>
@@ -502,11 +504,7 @@ export default function LandingPage() {
               </span>
             </a>
             <div className="hidden md:flex items-center gap-6">
-              {[
-                { label: 'How it works', href: '#solution' },
-                { label: 'Pricing', href: '#pricing' },
-                { label: 'Free Audit', href: '/audit' },
-              ].map(l => (
+              {NAV_LINKS.map(l => (
                 <a
                   key={l.label}
                   href={l.href}
@@ -520,24 +518,72 @@ export default function LandingPage() {
               ))}
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <a
               href="#cta"
-              className="text-[11px] font-bold transition-all duration-500 hover:opacity-85"
+              className="text-[11px] font-bold transition-all duration-500 hover:opacity-85 hidden sm:inline-flex"
               style={{
                 background: ACCENT,
                 color: BASE,
                 fontFamily: M,
                 letterSpacing: '0.06em',
                 borderRadius: 9999,
-                padding: scrolled ? '8px 18px' : '9px 20px',
+                padding: scrolled ? '8px 16px' : '9px 18px',
               }}
             >
               GET STARTED
             </a>
+            {/* Mobile hamburger */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden flex items-center justify-center"
+              style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(255,255,255,0.06)' }}
+              aria-label="Menu"
+            >
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round">
+                {mobileMenuOpen ? (
+                  <><line x1="4" y1="4" x2="14" y2="14" /><line x1="14" y1="4" x2="4" y2="14" /></>
+                ) : (
+                  <><line x1="3" y1="5" x2="15" y2="5" /><line x1="3" y1="9" x2="15" y2="9" /><line x1="3" y1="13" x2="15" y2="13" /></>
+                )}
+              </svg>
+            </button>
           </div>
         </nav>
       </div>
+
+      {/* Mobile menu overlay */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-40 md:hidden" onClick={() => setMobileMenuOpen(false)}>
+          <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)' }} />
+          <div
+            className="absolute top-[68px] left-3 right-3 rounded-2xl p-5 flex flex-col gap-1"
+            style={{ background: 'rgba(18,18,18,0.95)', border: `1px solid rgba(255,255,255,0.1)`, boxShadow: '0 16px 48px rgba(0,0,0,0.5)' }}
+            onClick={e => e.stopPropagation()}
+          >
+            {NAV_LINKS.map(l => (
+              <a
+                key={l.label}
+                href={l.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-3 px-4 py-3.5 rounded-xl text-[14px] transition-colors"
+                style={{ color: '#fff', fontFamily: M }}
+              >
+                {l.label}
+              </a>
+            ))}
+            <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', margin: '4px 0' }} />
+            <a
+              href="#cta"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-center py-3.5 rounded-xl text-[12px] font-bold mt-1"
+              style={{ background: ACCENT, color: BASE, fontFamily: M, letterSpacing: '0.06em' }}
+            >
+              GET STARTED
+            </a>
+          </div>
+        </div>
+      )}
 
       {/* Hero */}
       <section
@@ -559,22 +605,23 @@ export default function LandingPage() {
           pointerEvents: 'none',
         }} />
 
-        <div className="relative max-w-[1100px] mx-auto w-full px-6" style={{ paddingTop: 180, paddingBottom: 120 }}>
+        <div className="relative max-w-[1100px] mx-auto w-full px-5 sm:px-6 pt-[120px] sm:pt-[150px] md:pt-[180px] pb-[80px] sm:pb-[100px] md:pb-[120px]">
           {/* Audit tool announcement */}
           <a
             href="/audit"
-            className="inline-flex items-center gap-3 mb-8 px-4 py-2 rounded-full transition-all duration-300 hover:border-[rgba(197,241,53,0.3)]"
+            className="inline-flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8 px-3 sm:px-4 py-2 rounded-full transition-all duration-300 hover:border-[rgba(197,241,53,0.3)]"
             style={{ background: 'rgba(197,241,53,0.06)', border: `1px solid rgba(197,241,53,0.15)` }}
           >
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: ACCENT, color: BASE, fontFamily: M }}>FREE</span>
-            <span className="text-[12px]" style={{ color: SECONDARY, fontFamily: M }}>
-              Free audit tool — paste any store or product URL, get instant quality scores
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0" style={{ background: ACCENT, color: BASE, fontFamily: M }}>FREE</span>
+            <span className="text-[11px] sm:text-[12px]" style={{ color: SECONDARY, fontFamily: M }}>
+              <span className="hidden sm:inline">Free audit tool — paste any store or product URL, get instant quality scores</span>
+              <span className="sm:hidden">Free audit tool — instant quality scores</span>
             </span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <svg className="flex-shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
 
           {/* Top label */}
-          <div className="flex items-center gap-3 mb-8" style={{ fontFamily: M }}>
+          <div className="flex items-center gap-3 mb-5 sm:mb-8" style={{ fontFamily: M }}>
             <div style={{ width: 24, height: 1, background: ACCENT }} />
             <span style={{ fontSize: 11, letterSpacing: '0.12em', color: MUTED }}>
               AI CATALOG OPERATIONS — EARLY ACCESS
@@ -583,12 +630,12 @@ export default function LandingPage() {
 
           {/* Headline */}
           <h1
-            className="animate-fade-up mb-8"
+            className="animate-fade-up mb-6 sm:mb-8"
             style={{
               fontFamily: D,
-              fontSize: 'clamp(46px, 7.5vw, 96px)',
+              fontSize: 'clamp(32px, 7.5vw, 96px)',
               fontWeight: 800,
-              lineHeight: 1.03,
+              lineHeight: 1.06,
               letterSpacing: '-0.04em',
               color: '#fff',
               maxWidth: 940,
@@ -599,8 +646,8 @@ export default function LandingPage() {
 
           {/* Subtext */}
           <p
-            className="animate-fade-up mb-10"
-            style={{ fontSize: 18, lineHeight: 1.7, color: SECONDARY, maxWidth: 520, animationDelay: '0.1s' }}
+            className="animate-fade-up mb-8 sm:mb-10 text-[15px] sm:text-[18px]"
+            style={{ lineHeight: 1.7, color: SECONDARY, maxWidth: 520, animationDelay: '0.1s' }}
           >
             Automates listings, compliance, and catalog management across every marketplace.
           </p>
@@ -608,15 +655,15 @@ export default function LandingPage() {
           {/* CTA */}
           <div className="animate-fade-up flex flex-col items-start gap-3" style={{ animationDelay: '0.2s' }}>
             {status === 'success' ? (
-              <div className="flex items-center gap-3 h-[52px] px-6 rounded-md" style={{ background: ACCENT + '18', border: `1px solid ${ACCENT}44` }}>
+              <div className="flex items-center gap-3 h-[48px] sm:h-[52px] px-5 sm:px-6 rounded-md" style={{ background: ACCENT + '18', border: `1px solid ${ACCENT}44` }}>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="10" fill={ACCENT}/><path d="M6 10l3 3 5-5" stroke={BASE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 <span className="text-[13px] font-medium" style={{ color: ACCENT, fontFamily: M }}>{message}</span>
               </div>
             ) : (
               <form
                 onSubmit={(e) => { e.preventDefault(); handleSubmit(email, setStatus, setMessage, () => setEmail('')) }}
-                className="flex items-center overflow-hidden"
-                style={{ border: `1px solid rgba(255,255,255,0.1)`, background: 'rgba(255,255,255,0.04)', borderRadius: 6 }}
+                className="flex flex-col sm:flex-row sm:items-center overflow-hidden w-full sm:w-auto"
+                style={{ border: `1px solid rgba(255,255,255,0.1)`, background: 'rgba(255,255,255,0.04)', borderRadius: 8 }}
               >
                 <input
                   type="email"
@@ -624,13 +671,13 @@ export default function LandingPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Work email"
                   disabled={status === 'loading'}
-                  className="h-[52px] px-5 text-[14px] focus:outline-none bg-transparent text-white placeholder:text-[rgba(255,255,255,0.5)] disabled:opacity-50"
-                  style={{ minWidth: 240 }}
+                  className="h-[48px] sm:h-[52px] px-4 sm:px-5 text-[14px] focus:outline-none bg-transparent text-white placeholder:text-[rgba(255,255,255,0.5)] disabled:opacity-50 w-full sm:w-[240px]"
                 />
+                <div className="sm:hidden" style={{ height: 1, background: 'rgba(255,255,255,0.08)' }} />
                 <button
                   type="submit"
                   disabled={status === 'loading'}
-                  className="h-[52px] px-7 text-[12px] font-bold whitespace-nowrap transition-opacity hover:opacity-90 disabled:opacity-60"
+                  className="h-[48px] sm:h-[52px] px-7 text-[12px] font-bold whitespace-nowrap transition-opacity hover:opacity-90 disabled:opacity-60"
                   style={{ background: ACCENT, color: BASE, fontFamily: M, letterSpacing: '0.07em' }}
                 >
                   {status === 'loading' ? 'JOINING...' : 'JOIN WAITLIST'}
@@ -647,7 +694,7 @@ export default function LandingPage() {
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2" style={{ color: MUTED }}>
+        <div className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-2" style={{ color: MUTED }}>
           <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
             <rect x="1" y="1" width="14" height="22" rx="7" stroke="currentColor" strokeWidth="1.5" />
             <circle cx="8" cy="7" r="2" fill="currentColor" className="animate-bounce" />
@@ -657,13 +704,13 @@ export default function LandingPage() {
 
       {/* Testimonials + Logo bar */}
       <section style={{ background: L_BG }}>
-        <div className="max-w-[1100px] mx-auto px-6 py-20">
+        <div className="max-w-[1100px] mx-auto px-5 sm:px-6 py-14 sm:py-20">
           {/* Testimonial cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 mb-12 sm:mb-16">
             {TESTIMONIALS.map((t, i) => (
               <div
                 key={i}
-                className="rounded-xl p-6 flex flex-col gap-5"
+                className="rounded-xl p-5 sm:p-6 flex flex-col gap-4 sm:gap-5"
                 style={{ background: L_SURFACE, border: `1px solid ${L_BORDER}` }}
               >
                 <div className="flex items-center gap-3">
@@ -689,11 +736,11 @@ export default function LandingPage() {
           </div>
 
           {/* Logo bar */}
-          <div className="pt-8" style={{ borderTop: `1px solid ${L_BORDER}` }}>
-            <div className="text-center mb-6">
+          <div className="pt-6 sm:pt-8" style={{ borderTop: `1px solid ${L_BORDER}` }}>
+            <div className="text-center mb-5 sm:mb-6">
               <span style={{ fontSize: 11, color: L_MUTED, fontFamily: M, letterSpacing: '0.12em' }}>TRUSTED BY</span>
             </div>
-            <div className="flex items-center justify-center gap-12 flex-wrap">
+            <div className="flex items-center justify-center gap-8 sm:gap-12 flex-wrap">
               {[
                 { src: '/logos/beira-rio.png', alt: 'Beira Rio', h: 40, href: 'https://www.calcadosbeirario.com.br' },
                 { src: '/logos/snackible.png', alt: 'Snackible', h: 44, href: 'https://snackible.com' },
@@ -723,22 +770,18 @@ export default function LandingPage() {
 
       {/* Stats */}
       <section style={{ background: L_BG, borderTop: `1px solid ${L_BORDER}`, borderBottom: `1px solid ${L_BORDER}` }}>
-        <div className="max-w-[900px] mx-auto px-6">
-          <div className="grid grid-cols-1 sm:grid-cols-3">
+        <div className="max-w-[900px] mx-auto px-5 sm:px-6">
+          <div className="grid grid-cols-3">
             {STATS.map((s, i) => (
               <div
                 key={s.label}
-                className="py-12"
-                style={{
-                  paddingLeft: i > 0 ? 48 : 0,
-                  paddingRight: i < STATS.length - 1 ? 48 : 0,
-                  borderLeft: i > 0 ? `1px solid ${L_BORDER}` : 'none',
-                }}
+                className={`py-8 sm:py-12 ${i > 0 ? 'pl-3 sm:pl-12' : ''} ${i < STATS.length - 1 ? 'pr-3 sm:pr-12' : ''}`}
+                style={{ borderLeft: i > 0 ? `1px solid ${L_BORDER}` : 'none' }}
               >
-                <div className="text-[54px] font-bold leading-none mb-2.5" style={{ fontFamily: D, letterSpacing: '-0.04em', color: L_TEXT }}>
+                <div className="text-[clamp(28px,8vw,54px)] font-bold leading-none mb-1.5 sm:mb-2.5" style={{ fontFamily: D, letterSpacing: '-0.04em', color: L_TEXT }}>
                   {s.value}
                 </div>
-                <div className="text-[11px] tracking-[0.12em] uppercase" style={{ fontFamily: M, color: L_MUTED }}>
+                <div className="text-[9px] sm:text-[11px] tracking-[0.12em] uppercase" style={{ fontFamily: M, color: L_MUTED }}>
                   {s.label}
                 </div>
               </div>
@@ -752,11 +795,11 @@ export default function LandingPage() {
 
       {/* Problem */}
       <section style={{ background: '#0D0D0D' }}>
-        <div className="max-w-[1100px] mx-auto px-6 py-28">
+        <div className="max-w-[1100px] mx-auto px-5 sm:px-6 py-16 sm:py-28">
           <SectionLabel n="01" text="THE PROBLEM" />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-16 items-start">
             <div>
-              <h2 className="text-[clamp(24px,3.5vw,46px)] font-bold leading-[1.1] text-white mb-6"
+              <h2 className="text-[clamp(24px,3.5vw,46px)] font-bold leading-[1.1] text-white mb-5 sm:mb-6"
                 style={{ fontFamily: D, letterSpacing: '-0.035em', fontWeight: 800 }}>
                 Selling on Amazon, Shopify, and TikTok Shop shouldn&apos;t require three different workflows.
               </h2>
@@ -785,19 +828,19 @@ export default function LandingPage() {
 
       {/* Pricing */}
       <section id="pricing" style={{ background: '#0D0D0D', borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
-        <div className="max-w-[1100px] mx-auto px-6 py-28">
+        <div className="max-w-[1100px] mx-auto px-5 sm:px-6 py-16 sm:py-28">
           <SectionLabel n="03" text="PRICING" centered />
-          <h2 className="text-center text-[clamp(28px,4vw,52px)] font-bold leading-[1.06] mb-4 text-white"
+          <h2 className="text-center text-[clamp(24px,4vw,52px)] font-bold leading-[1.08] mb-4 text-white"
             style={{ fontFamily: D, letterSpacing: '-0.04em', fontWeight: 800 }}>
             Start free. Scale when ready.
           </h2>
-          <p className="text-center text-[16px] leading-[1.75] max-w-[480px] mx-auto mb-16" style={{ color: SECONDARY }}>
+          <p className="text-center text-[15px] sm:text-[16px] leading-[1.75] max-w-[480px] mx-auto mb-10 sm:mb-16" style={{ color: SECONDARY }}>
             Try everything Amplify offers — no commitment, no credit card.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[820px] mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 max-w-[820px] mx-auto">
             {/* Free Trial */}
-            <div className="rounded-2xl p-8 flex flex-col" style={{ background: SURFACE, border: `1px solid ${BORDER}` }}>
+            <div className="rounded-2xl p-6 sm:p-8 flex flex-col" style={{ background: SURFACE, border: `1px solid ${BORDER}` }}>
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: ACCENT + '18', border: `1px solid ${ACCENT}33` }}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -844,7 +887,7 @@ export default function LandingPage() {
             </div>
 
             {/* Enterprise */}
-            <div className="rounded-2xl p-8 flex flex-col relative overflow-hidden" style={{ background: SURFACE, border: `1px solid ${ACCENT}33` }}>
+            <div className="rounded-2xl p-6 sm:p-8 flex flex-col relative overflow-hidden" style={{ background: SURFACE, border: `1px solid ${ACCENT}33` }}>
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: `linear-gradient(90deg, transparent, ${ACCENT}66, transparent)` }} />
 
               <div className="flex items-center gap-3 mb-6">
@@ -916,15 +959,15 @@ export default function LandingPage() {
           pointerEvents: 'none', userSelect: 'none',
         }}>→</div>
 
-        <div className="max-w-[1100px] mx-auto px-6 py-28 relative">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-start">
+        <div className="max-w-[1100px] mx-auto px-5 sm:px-6 py-16 sm:py-28 relative">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-24 items-start">
             <div>
               <SectionLabel n="04" text="EARLY ACCESS" />
-              <h2 className="font-bold leading-[1.04] text-white mb-6"
-                style={{ fontFamily: D, fontSize: 'clamp(32px,4.5vw,58px)', letterSpacing: '-0.04em', fontWeight: 800 }}>
+              <h2 className="font-bold leading-[1.06] text-white mb-5 sm:mb-6"
+                style={{ fontFamily: D, fontSize: 'clamp(28px,4.5vw,58px)', letterSpacing: '-0.04em', fontWeight: 800 }}>
                 Be the first to run a fully automated catalog.
               </h2>
-              <p className="text-[16px] leading-[1.75]" style={{ color: SECONDARY }}>
+              <p className="text-[15px] sm:text-[16px] leading-[1.75]" style={{ color: SECONDARY }}>
                 Join the waitlist. We&apos;ll reach out personally — no spam.
               </p>
             </div>
@@ -962,10 +1005,7 @@ export default function LandingPage() {
               {ctaStatus === 'error' && (
                 <p className="text-[12px] mb-3" style={{ color: '#ef4444', fontFamily: M }}>{ctaMessage}</p>
               )}
-              <div className="flex items-center gap-5">
-                <a href={`${APP_URL}/auth/login`} className="text-[12px] transition-colors hover:text-white" style={{ color: SECONDARY, fontFamily: M, letterSpacing: '0.04em' }}>
-                  Try Amplify now →
-                </a>
+              <div className="flex items-center">
                 <span style={{ color: MUTED, fontSize: 11, fontFamily: M, letterSpacing: '0.04em' }}>No credit card required</span>
               </div>
             </div>

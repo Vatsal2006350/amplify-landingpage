@@ -13,14 +13,11 @@ const M = 'var(--font-mono)'
 
 function AmplifyLogo({ size = 32 }: { size?: number }) {
   return (
-    <div
-      style={{ width: size, height: size, background: ACCENT, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
-    >
-      <svg style={{ width: size * 0.5, height: size * 0.5, color: BASE }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M4 7v10c0 2 1 3 3 3h10c2 0 3-1 3-3V7c0-2-1-3-3-3H7c-2 0-3 1-3 3z" />
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6M12 9v6" />
-      </svg>
-    </div>
+    <img
+      src="/logo.png"
+      alt="Amplify"
+      style={{ width: size, height: size, borderRadius: 6, flexShrink: 0, objectFit: 'cover' }}
+    />
   )
 }
 
@@ -282,14 +279,14 @@ export default function OpenSourcePage() {
 
       {/* Nav */}
       <div className="fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-500 ease-out"
-        style={{ padding: scrolled ? '12px 16px' : '16px 16px' }}
+        style={{ padding: scrolled ? '8px 12px' : '12px 12px' }}
       >
         <nav
-          className="flex items-center justify-between transition-all duration-500 ease-out"
+          className="flex items-center justify-between transition-all duration-500 ease-out w-full"
           style={{
-            width: scrolled ? 'min(680px, calc(100% - 32px))' : 'min(1200px, calc(100% - 32px))',
-            height: scrolled ? 52 : 56,
-            padding: scrolled ? '0 6px 0 20px' : '0 8px 0 24px',
+            maxWidth: scrolled ? 680 : 1200,
+            height: scrolled ? 48 : 52,
+            padding: scrolled ? '0 6px 0 16px' : '0 8px 0 20px',
             background: scrolled ? 'rgba(18,18,18,0.85)' : 'rgba(8,8,8,0.8)',
             backdropFilter: 'blur(24px)',
             WebkitBackdropFilter: 'blur(24px)',
@@ -300,7 +297,7 @@ export default function OpenSourcePage() {
               : '0 4px 20px rgba(0,0,0,0.2)',
           }}
         >
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-4 md:gap-8">
             <a href="/" className="flex items-center gap-2">
               <AmplifyLogo size={scrolled ? 22 : 24} />
               <span className="text-[14px] font-semibold text-white transition-all duration-500" style={{ fontFamily: D }}>
@@ -326,7 +323,7 @@ export default function OpenSourcePage() {
               ))}
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <a
               href="https://github.com/amplify-ecommerce/audit"
               target="_blank"
@@ -338,11 +335,11 @@ export default function OpenSourcePage() {
                 fontFamily: M,
                 letterSpacing: '0.06em',
                 borderRadius: 9999,
-                padding: scrolled ? '8px 18px' : '9px 20px',
+                padding: scrolled ? '7px 14px' : '8px 16px',
               }}
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-              GITHUB
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              <span className="hidden sm:inline">GITHUB</span>
             </a>
           </div>
         </nav>
@@ -364,9 +361,9 @@ export default function OpenSourcePage() {
           pointerEvents: 'none',
         }} />
 
-        <div className="relative max-w-[1100px] mx-auto w-full px-6" style={{ paddingTop: 160, paddingBottom: 80 }}>
+        <div className="relative max-w-[1100px] mx-auto w-full px-5 sm:px-6 pt-[110px] sm:pt-[140px] md:pt-[160px] pb-[60px] sm:pb-[80px]">
           {/* Badge */}
-          <div className="flex items-center gap-3 mb-8">
+          <div className="flex items-center gap-3 mb-6 sm:mb-8">
             <span
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-bold"
               style={{ background: ACCENT + '14', color: ACCENT, border: `1px solid ${ACCENT}33`, fontFamily: M, letterSpacing: '0.08em' }}
@@ -378,12 +375,12 @@ export default function OpenSourcePage() {
 
           {/* Headline */}
           <h1
-            className="animate-fade-up mb-6"
+            className="animate-fade-up mb-5 sm:mb-6"
             style={{
               fontFamily: D,
-              fontSize: 'clamp(38px, 6vw, 76px)',
+              fontSize: 'clamp(30px, 6vw, 76px)',
               fontWeight: 800,
-              lineHeight: 1.05,
+              lineHeight: 1.07,
               letterSpacing: '-0.04em',
               color: '#fff',
               maxWidth: 800,
@@ -395,26 +392,26 @@ export default function OpenSourcePage() {
 
           {/* Subtext */}
           <p
-            className="animate-fade-up mb-12"
-            style={{ fontSize: 18, lineHeight: 1.7, color: SECONDARY, maxWidth: 560, animationDelay: '0.1s' }}
+            className="animate-fade-up mb-8 sm:mb-12 text-[15px] sm:text-[18px]"
+            style={{ lineHeight: 1.7, color: SECONDARY, maxWidth: 560, animationDelay: '0.1s' }}
           >
             Paste a product URL. Get a quality score, return risk assessment, and AI-generated improvements. Free, open source, no account required.
           </p>
 
           {/* Install command */}
-          <div className="animate-fade-up flex items-center gap-4 mb-16" style={{ animationDelay: '0.15s' }}>
+          <div className="animate-fade-up flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 mb-10 sm:mb-16" style={{ animationDelay: '0.15s' }}>
             <div
-              className="flex items-center gap-3 px-5 py-3.5 rounded-lg"
+              className="flex items-center gap-3 px-4 sm:px-5 py-3 sm:py-3.5 rounded-lg overflow-x-auto max-w-full"
               style={{ background: 'rgba(255,255,255,0.04)', border: `1px solid ${BORDER}` }}
             >
-              <span style={{ color: ACCENT, fontFamily: M, fontSize: 14 }}>$</span>
-              <code style={{ color: '#fff', fontFamily: M, fontSize: 14 }}>npx amplify-audit {'<product-url>'}</code>
+              <span style={{ color: ACCENT, fontFamily: M, fontSize: 13 }}>$</span>
+              <code className="text-[12px] sm:text-[14px] whitespace-nowrap" style={{ color: '#fff', fontFamily: M }}>npx amplify-audit {'<product-url>'}</code>
             </div>
             <a
               href="https://github.com/amplify-ecommerce/audit"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-5 py-3.5 rounded-lg text-[13px] font-bold transition-opacity hover:opacity-85"
+              className="flex items-center gap-2 px-4 sm:px-5 py-3 sm:py-3.5 rounded-lg text-[13px] font-bold transition-opacity hover:opacity-85"
               style={{ background: ACCENT, color: BASE, fontFamily: M }}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
@@ -431,12 +428,12 @@ export default function OpenSourcePage() {
 
       {/* What you get */}
       <section id="modules" style={{ background: '#0D0D0D', borderTop: `1px solid ${BORDER}` }}>
-        <div className="max-w-[1100px] mx-auto px-6 py-28">
+        <div className="max-w-[1100px] mx-auto px-5 sm:px-6 py-16 sm:py-28">
           <SectionLabel n="01" text="WHAT&rsquo;S INCLUDED" />
-          <div className="mb-16">
-            <h2 className="text-[clamp(28px,4vw,48px)] font-bold leading-[1.06] text-white mb-5"
+          <div className="mb-10 sm:mb-16">
+            <h2 className="text-[clamp(24px,4vw,48px)] font-bold leading-[1.08] text-white mb-4 sm:mb-5"
               style={{ fontFamily: D, letterSpacing: '-0.04em', fontWeight: 800 }}>
-              Four production-grade modules.<br />
+              Four production-grade modules.<br className="hidden sm:inline" />
               <span style={{ color: ACCENT }}>Zero vendor lock-in.</span>
             </h2>
             <p className="text-[16px] leading-[1.75] max-w-[500px]" style={{ color: SECONDARY }}>
@@ -476,7 +473,7 @@ export default function OpenSourcePage() {
 
       {/* Code examples */}
       <section style={{ background: BASE, borderTop: `1px solid ${BORDER}` }}>
-        <div className="max-w-[1100px] mx-auto px-6 py-28">
+        <div className="max-w-[1100px] mx-auto px-5 sm:px-6 py-16 sm:py-28">
           <SectionLabel n="02" text="USAGE" />
           <div className="mb-16">
             <h2 className="text-[clamp(28px,4vw,48px)] font-bold leading-[1.06] text-white mb-5"
@@ -527,7 +524,7 @@ console.log(report.fixes)        // [{ field, before, after }]`}
 
       {/* Architecture */}
       <section id="architecture" style={{ background: '#0D0D0D', borderTop: `1px solid ${BORDER}` }}>
-        <div className="max-w-[1100px] mx-auto px-6 py-28">
+        <div className="max-w-[1100px] mx-auto px-5 sm:px-6 py-16 sm:py-28">
           <SectionLabel n="03" text="ARCHITECTURE" centered />
           <h2 className="text-center text-[clamp(28px,4vw,48px)] font-bold leading-[1.06] text-white mb-5"
             style={{ fontFamily: D, letterSpacing: '-0.04em', fontWeight: 800 }}>
@@ -599,7 +596,7 @@ console.log(report.fixes)        // [{ field, before, after }]`}
 
       {/* Use cases */}
       <section style={{ background: BASE, borderTop: `1px solid ${BORDER}` }}>
-        <div className="max-w-[1100px] mx-auto px-6 py-28">
+        <div className="max-w-[1100px] mx-auto px-5 sm:px-6 py-16 sm:py-28">
           <SectionLabel n="04" text="USE CASES" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
@@ -640,7 +637,7 @@ console.log(report.fixes)        // [{ field, before, after }]`}
           pointerEvents: 'none',
         }} />
 
-        <div className="max-w-[1100px] mx-auto px-6 py-28 relative text-center">
+        <div className="max-w-[1100px] mx-auto px-5 sm:px-6 py-16 sm:py-28 relative text-center">
           <h2 className="font-bold leading-[1.06] text-white mb-6"
             style={{ fontFamily: D, fontSize: 'clamp(32px,4.5vw,58px)', letterSpacing: '-0.04em', fontWeight: 800 }}>
             Start auditing in 30 seconds.

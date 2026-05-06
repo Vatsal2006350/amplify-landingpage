@@ -38,12 +38,11 @@ interface StoreAudit {
 
 function AmplifyLogo({ size = 32 }: { size?: number }) {
   return (
-    <div style={{ width: size, height: size, background: ACCENT, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-      <svg style={{ width: size * 0.5, height: size * 0.5, color: BASE }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M4 7v10c0 2 1 3 3 3h10c2 0 3-1 3-3V7c0-2-1-3-3-3H7c-2 0-3 1-3 3z" />
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6M12 9v6" />
-      </svg>
-    </div>
+    <img
+      src="/logo.png"
+      alt="Amplify"
+      style={{ width: size, height: size, borderRadius: 6, flexShrink: 0, objectFit: 'cover' }}
+    />
   )
 }
 
@@ -301,11 +300,11 @@ jobs:
     <div className="min-h-screen" style={{ background: BASE }}>
 
       {/* Nav */}
-      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center" style={{ padding: '12px 16px' }}>
-        <nav className="flex items-center justify-between" style={{
-          width: 'min(1200px, calc(100% - 32px))',
-          height: 52,
-          padding: '0 6px 0 20px',
+      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center" style={{ padding: '8px 12px' }}>
+        <nav className="flex items-center justify-between w-full" style={{
+          maxWidth: 1200,
+          height: 48,
+          padding: '0 6px 0 16px',
           background: 'rgba(18,18,18,0.85)',
           backdropFilter: 'blur(24px)',
           WebkitBackdropFilter: 'blur(24px)',
@@ -317,20 +316,15 @@ jobs:
           <a href="/" className="flex items-center gap-2">
             <AmplifyLogo size={22} />
             <span className="text-[14px] font-semibold text-white" style={{ fontFamily: D }}>Amplify</span>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: ACCENT + '14', color: ACCENT, fontFamily: M }}>AUDIT</span>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full hidden sm:inline" style={{ background: ACCENT + '14', color: ACCENT, fontFamily: M }}>AUDIT</span>
           </a>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <a href="https://github.com/Vatsal2006350/amplify-audit" target="_blank" rel="noopener noreferrer"
               className="flex items-center gap-2 text-[11px] font-bold transition-opacity hover:opacity-80" style={{ color: SECONDARY, fontFamily: M }}>
               <GithubIcon size={14} />
               <span className="hidden sm:inline">GitHub</span>
             </a>
-            <a href="https://www.npmjs.com/package/amplify-audit" target="_blank" rel="noopener noreferrer"
-              className="hidden sm:flex items-center gap-1.5 text-[11px] font-bold transition-opacity hover:opacity-80" style={{ color: SECONDARY, fontFamily: M }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M0 7.334v8h6.666v1.332H12v-1.332h12v-8H0zm6.666 6.664H5.334v-4H3.999v4H1.335V8.667h5.331v5.331zm4 0v1.336H8.001V8.667h5.334v5.332h-2.669v-.001zm12.001 0h-1.33v-4h-1.336v4h-1.335v-4h-1.33v4h-2.671V8.667h8.002v5.331zM10.665 10H12v2.667h-1.335V10z"/></svg>
-              npm
-            </a>
-            <a href="/" className="text-[11px] font-bold px-4 py-2 rounded-full" style={{ background: ACCENT, color: BASE, fontFamily: M }}>
+            <a href="/" className="text-[11px] font-bold px-3 sm:px-4 py-2 rounded-full" style={{ background: ACCENT, color: BASE, fontFamily: M }}>
               Get Amplify
             </a>
           </div>
@@ -338,7 +332,7 @@ jobs:
       </div>
 
       {/* Hero + Input */}
-      <div className="pt-24 pb-8 px-6">
+      <div className="pt-20 sm:pt-24 pb-6 sm:pb-8 px-4 sm:px-6">
         <div className="max-w-[700px] mx-auto text-center">
           {status === 'idle' && (
             <>
@@ -347,7 +341,7 @@ jobs:
                 href="https://github.com/Vatsal2006350/amplify-audit"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 mb-6 px-3 py-1.5 rounded-full transition-all duration-200 hover:border-[rgba(255,255,255,0.2)]"
+                className="inline-flex items-center gap-2 mb-5 sm:mb-6 px-3 py-1.5 rounded-full transition-all duration-200 hover:border-[rgba(255,255,255,0.2)]"
                 style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
               >
                 <GithubIcon size={12} />
@@ -355,31 +349,31 @@ jobs:
                 <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ background: ACCENT + '14', color: ACCENT, fontFamily: M }}>MIT</span>
               </a>
 
-              <h1 className="text-[clamp(32px,5vw,56px)] font-bold text-white mb-4 animate-fade-up" style={{ fontFamily: D, letterSpacing: '-0.04em', lineHeight: 1.1 }}>
+              <h1 className="text-[clamp(28px,5vw,56px)] font-bold text-white mb-3 sm:mb-4 animate-fade-up" style={{ fontFamily: D, letterSpacing: '-0.04em', lineHeight: 1.1 }}>
                 Audit any product listing.
               </h1>
-              <p className="text-[16px] mb-8 animate-fade-up" style={{ color: SECONDARY, animationDelay: '0.1s' }}>
+              <p className="text-[15px] sm:text-[16px] mb-6 sm:mb-8 animate-fade-up" style={{ color: SECONDARY, animationDelay: '0.1s' }}>
                 Paste any URL. We detect the platform and scan every product we find.
               </p>
             </>
           )}
 
-          <form onSubmit={(e) => { e.preventDefault(); runAudit() }} className="flex items-center gap-2 animate-fade-up" style={{ animationDelay: '0.15s' }}>
+          <form onSubmit={(e) => { e.preventDefault(); runAudit() }} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 animate-fade-up" style={{ animationDelay: '0.15s' }}>
             <div className="flex-1 relative">
               <input
                 type="text"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                placeholder="allbirds.com, amazon.ae/s?k=nike, amazon.com/dp/..."
+                placeholder="allbirds.com, amazon.ae/s?k=nike..."
                 disabled={status === 'loading'}
-                className="w-full h-[56px] pl-5 pr-4 text-[15px] rounded-lg focus:outline-none bg-transparent text-white placeholder:text-[rgba(255,255,255,0.3)] disabled:opacity-50"
+                className="w-full h-[48px] sm:h-[56px] pl-4 sm:pl-5 pr-4 text-[14px] sm:text-[15px] rounded-lg focus:outline-none bg-transparent text-white placeholder:text-[rgba(255,255,255,0.3)] disabled:opacity-50"
                 style={{ border: `1px solid rgba(255,255,255,0.12)`, background: 'rgba(255,255,255,0.04)' }}
               />
             </div>
             <button
               type="submit"
               disabled={status === 'loading' || !url.trim()}
-              className="h-[56px] px-8 rounded-lg text-[13px] font-bold whitespace-nowrap transition-opacity hover:opacity-90 disabled:opacity-50"
+              className="h-[48px] sm:h-[56px] px-6 sm:px-8 rounded-lg text-[13px] font-bold whitespace-nowrap transition-opacity hover:opacity-90 disabled:opacity-50"
               style={{ background: ACCENT, color: BASE, fontFamily: M }}
             >
               {status === 'loading' ? 'Scanning...' : 'Audit'}
@@ -608,14 +602,6 @@ jobs:
                   <GithubIcon size={16} />
                   Star on GitHub
                 </a>
-                <a
-                  href="https://www.npmjs.com/package/amplify-audit"
-                  target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-5 py-3 rounded-lg text-[12px] font-bold transition-opacity hover:opacity-90"
-                  style={{ background: 'transparent', color: ACCENT, fontFamily: M, border: `1px solid ${ACCENT}44` }}
-                >
-                  View on npm
-                </a>
               </div>
             </div>
 
@@ -679,9 +665,6 @@ jobs:
           </a>
           <a href="https://github.com/Vatsal2006350/amplify-audit" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[11px] transition-opacity hover:opacity-80" style={{ color: MUTED, fontFamily: M }}>
             <GithubIcon size={11} /> GitHub
-          </a>
-          <a href="https://www.npmjs.com/package/amplify-audit" target="_blank" rel="noopener noreferrer" className="text-[11px] transition-opacity hover:opacity-80" style={{ color: MUTED, fontFamily: M }}>
-            npm
           </a>
           <span className="text-[11px]" style={{ color: MUTED, fontFamily: M }}>MIT License</span>
         </div>
