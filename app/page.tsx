@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
+import confetti from 'canvas-confetti'
 
 // Design tokens
 const ACCENT = '#C5F135'
@@ -443,6 +444,46 @@ export default function LandingPage() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  function fireConfetti() {
+    const colors = [ACCENT, '#ffffff', '#a8d423']
+    const end = Date.now() + 800
+
+    // Side bursts
+    confetti({
+      particleCount: 80,
+      spread: 70,
+      startVelocity: 55,
+      origin: { x: 0, y: 0.7 },
+      angle: 60,
+      colors,
+      scalar: 1.1,
+    })
+    confetti({
+      particleCount: 80,
+      spread: 70,
+      startVelocity: 55,
+      origin: { x: 1, y: 0.7 },
+      angle: 120,
+      colors,
+      scalar: 1.1,
+    })
+
+    // Trailing rain from the top center
+    const frame = () => {
+      confetti({
+        particleCount: 4,
+        startVelocity: 25,
+        spread: 80,
+        origin: { x: 0.5, y: 0.2 },
+        colors,
+        gravity: 0.9,
+        scalar: 0.9,
+      })
+      if (Date.now() < end) requestAnimationFrame(frame)
+    }
+    frame()
+  }
+
   async function handleSubmit(
     emailValue: string,
     setStatusFn: (s: 'idle' | 'loading' | 'success' | 'error') => void,
@@ -462,6 +503,7 @@ export default function LandingPage() {
         setStatusFn('success')
         setMessageFn(data.message)
         clearEmailFn()
+        fireConfetti()
       } else {
         setStatusFn('error')
         setMessageFn(data.error || 'Something went wrong')

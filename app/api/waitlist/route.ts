@@ -2,15 +2,11 @@ import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
+const GOOGLE_FORM_ID = '1FAIpQLSdkHxWLWgJrjQhE49gx8xJIndFHxOyWyaXlb0QbRfLxF-Bgew'
+const EMAIL_ENTRY_ID = 'entry.783000384'
+
 export async function POST(req: Request) {
   try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-    if (!supabaseUrl || !supabaseKey) {
-      return NextResponse.json({ error: 'Something went wrong' }, { status: 500 })
-    }
-
     const { email } = await req.json()
 
     if (!email || typeof email !== 'string') {
@@ -22,31 +18,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })
     }
 
-    const res = await fetch(`${supabaseUrl}/rest/v1/waitlist`, {
+    const formData = new URLSearchParams()
+    formData.append(EMAIL_ENTRY_ID, trimmed)
+
+    await fetch(`https://docs.google.com/forms/d/e/${GOOGLE_FORM_ID}/formResponse`, {
       method: 'POST',
-      headers: {
-        'apikey': supabaseKey,
-        'Authorization': `Bearer ${supabaseKey}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=minimal',
-      },
-      body: JSON.stringify({ email: trimmed }),
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formData.toString(),
     })
 
-    if (res.ok) {
-      return NextResponse.json({ message: "You're on the waitlist!" })
-    }
-
-    const body = await res.text()
-    let parsed: { code?: string } | null = null
-    try { parsed = JSON.parse(body) } catch {}
-
-    if (res.status === 409 || parsed?.code === '23505') {
-      return NextResponse.json({ message: "You're already on the list!" })
-    }
-
-    console.error('Supabase error:', res.status, body)
-    return NextResponse.json({ error: 'Something went wrong' }, { status: 500 })
+    return NextResponse.json({ message: "You're on the waitlist!" })
   } catch (e) {
     console.error('Waitlist error:', e)
     return NextResponse.json({ error: 'Something went wrong' }, { status: 500 })
