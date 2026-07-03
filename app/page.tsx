@@ -214,8 +214,6 @@ const ORBIT = [
   { x: '18%', y: '21%' },
 ]
 
-const PMUK_WORKFLOWS = ['Inventory planning', 'Bundle SKUs', 'AI ads', 'Stock movement', 'Catalog QA', 'PO drafts', 'Margin checks', 'Approval logs']
-
 const PRODUCT_FLOW_TABS = [
   {
     id: 'listings',
@@ -1329,75 +1327,110 @@ function IntegrationsSection() {
 
 function CustomerSection() {
   return (
-    <section style={{ background: '#fbfcf8' }}>
+    <section id="customers" className="scroll-mt-[96px]" style={{ background: L_BG, borderTop: `1px solid ${L_BORDER}`, borderBottom: `1px solid ${L_BORDER}` }}>
       <div className="mx-auto max-w-[1160px] px-5 py-14 sm:px-6 sm:py-20">
-        <div className="mb-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+        <div className="mb-9 grid gap-5 lg:grid-cols-[0.92fr_0.58fr] lg:items-end">
           <div>
-            <SectionLabel label="Case study" tone="light" />
-            <h2 className="mt-6 max-w-[720px] text-[clamp(30px,5vw,60px)] font-bold leading-[1.02]" style={{ color: L_TEXT, fontFamily: D }}>
-              PMUK runs inventory, bundles, and ads from one operating layer.
+            <SectionLabel label="Hear from brands who love it" tone="light" />
+            <h2 className="mt-6 max-w-[760px] text-[clamp(34px,5.2vw,64px)] font-bold leading-[1.02]" style={{ color: L_TEXT, fontFamily: D }}>
+              Proof from teams moving real inventory.
             </h2>
           </div>
-          <p className="max-w-[390px] text-[14px] leading-[1.7]" style={{ color: L_MUTED }}>
-            PMUK Global Foods is a Mumbai-based ecommerce operator. Amplify helps their team turn daily SKU and growth work into repeatable, approval-ready workflows.
+          <p className="text-[15px] leading-[1.75]" style={{ color: L_MUTED }}>
+            Compact stories from operators using Amplify to connect catalog, stock, training, ads, supplier files, and marketplace outputs.
           </p>
         </div>
 
-        <div className="grid gap-3 lg:grid-cols-[1.2fr_0.8fr]">
+        <div className="grid gap-4 lg:grid-cols-3">
+          <article className="relative min-h-[430px] overflow-hidden rounded-lg border p-5 sm:p-6" style={{ borderColor: L_BORDER, background: '#ffffff', boxShadow: '0 20px 60px rgba(0,0,0,0.08)' }}>
+            <div className="absolute inset-x-0 top-0 h-28" style={{ background: 'linear-gradient(120deg, rgba(197,241,53,0.26), rgba(255,255,255,0), rgba(26,122,46,0.1))' }} />
+            <div className="relative flex h-full min-h-[382px] flex-col justify-between">
+              <div>
+                <div className="mb-5 inline-flex rounded-lg px-3 py-2 text-[18px] font-black" style={{ background: L_SURFACE, color: L_TEXT, fontFamily: D }}>PMUK</div>
+                <div className="mb-5 text-[10px] uppercase" style={{ color: '#2f7c43', fontFamily: M }}>Food ecommerce ops</div>
+                <h3 className="text-[28px] font-semibold leading-[1.08]" style={{ color: L_TEXT, fontFamily: D }}>
+                  Inventory, bundle SKUs, and AI ad actions in one queue.
+                </h3>
+                <p className="mt-4 text-[14px] leading-[1.65]" style={{ color: L_MUTED }}>
+                  PMUK uses Amplify to keep stock decisions, bundle generation, and ad recommendations moving with manager approval.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-2 pt-8">
+                {['Inventory management', 'Bundle SKU generator', 'AI ads management'].map((item) => (
+                  <span key={item} className="rounded-md px-2.5 py-1 text-[10px] font-bold uppercase" style={{ background: ACCENT, color: BASE, fontFamily: M }}>{item}</span>
+                ))}
+              </div>
+            </div>
+          </article>
+
           <article
-            className="relative min-h-[430px] overflow-hidden rounded-lg border p-5 sm:p-7"
+            className="relative min-h-[430px] overflow-hidden rounded-lg border p-5 sm:p-6"
             style={{
               borderColor: 'rgba(0,0,0,0.12)',
-              backgroundImage: 'linear-gradient(90deg, rgba(0,0,0,0.92), rgba(9,18,10,0.74), rgba(197,241,53,0.16)), radial-gradient(circle at 78% 22%, rgba(197,241,53,0.26), transparent 30%), linear-gradient(135deg, rgba(255,255,255,0.08), transparent 46%)',
+              backgroundImage: 'linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.72)), url("/images/customers/shoemart-store.png")',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              boxShadow: '0 22px 60px rgba(0,0,0,0.16)',
+              boxShadow: '0 24px 68px rgba(0,0,0,0.2)',
             }}
           >
-            <div className="relative flex h-full min-h-[376px] max-w-[540px] flex-col justify-between">
-              <div className="flex items-center gap-3">
-                <span className="rounded-lg bg-white px-3 py-2 text-[18px] font-black" style={{ color: L_TEXT, fontFamily: D }}>
-                  PMUK
-                </span>
-                <span className="text-[10px] uppercase" style={{ color: 'rgba(255,255,255,0.62)', fontFamily: M }}>
-                  Customer story
-                </span>
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.22) 34%, rgba(0,0,0,0.86))' }} />
+            <div className="relative flex h-full min-h-[382px] flex-col justify-between">
+              <div>
+                <div className="inline-flex rounded-lg bg-white px-4 py-2 text-[20px] font-black tracking-[0.16em]" style={{ color: L_TEXT, fontFamily: D }}>
+                  SHOEMART
+                </div>
+                <div className="mt-4 text-[10px] uppercase" style={{ color: 'rgba(255,255,255,0.72)', fontFamily: M }}>Retail training enablement</div>
               </div>
               <div>
                 <div className="mb-5 flex flex-wrap gap-2">
-                  {['Inventory management', 'Bundle SKU generator', 'AI ads management'].map((item) => (
+                  {['Tutorial videos', 'Sales associate training', 'Launch readiness'].map((item) => (
                     <span key={item} className="rounded-md px-2.5 py-1 text-[10px] font-bold uppercase" style={{ background: ACCENT, color: BASE, fontFamily: M }}>
                       {item}
                     </span>
                   ))}
                 </div>
-                <p className="max-w-[470px] text-[24px] font-semibold leading-[1.15] text-white sm:text-[32px]" style={{ fontFamily: D }}>
-                  PMUK uses Amplify to keep inventory decisions, bundle SKUs, and ad actions moving without rebuilding spreadsheets every week.
+                <p className="text-[25px] font-semibold leading-[1.14] text-white" style={{ fontFamily: D }}>
+                  Shoe Mart turns product knowledge into training videos and store-ready selling guidance.
+                </p>
+                <p className="mt-4 text-[13px] leading-[1.65]" style={{ color: 'rgba(255,255,255,0.72)' }}>
+                  Launch notes, product stories, and retail SOPs become repeatable tutorials for sales associates across footwear teams.
                 </p>
               </div>
             </div>
           </article>
 
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-            <article className="rounded-lg border bg-white p-5" style={{ borderColor: L_BORDER }}>
-              <div className="mb-6 inline-flex rounded-lg px-3 py-2 text-[18px] font-black" style={{ background: L_SURFACE, color: L_TEXT, fontFamily: D }}>PMUK</div>
-              <h3 className="mb-3 text-[19px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>Food ecommerce operations, not point tools.</h3>
-              <p className="text-[13px] leading-[1.65]" style={{ color: L_MUTED }}>
-                One workflow can track stock, generate bundle SKUs, prepare ad recommendations, and keep managers in the approval loop.
-              </p>
-            </article>
-
-            <article className="rounded-lg border p-5" style={{ borderColor: L_BORDER, background: '#101010' }}>
-              <div className="mb-5 text-[10px] uppercase" style={{ color: ACCENT, fontFamily: M }}>Workflows covered</div>
-              <div className="grid grid-cols-2 gap-2">
-                {PMUK_WORKFLOWS.map((workflow) => (
-                  <span key={workflow} className="rounded-md border px-2 py-2 text-center text-[10px] uppercase" style={{ borderColor: 'rgba(255,255,255,0.12)', color: SOFT, fontFamily: M }}>
-                    {workflow}
+          <article className="relative min-h-[430px] overflow-hidden rounded-lg border p-5 sm:p-6" style={{ borderColor: 'rgba(255,255,255,0.08)', background: '#0f0f0f', boxShadow: '0 20px 60px rgba(0,0,0,0.14)' }}>
+            <div className="absolute inset-x-0 top-0 h-[190px] overflow-hidden">
+              <img src="/images/products/customer-shoe-boot.jpg" alt="" className="h-full w-full object-cover" style={{ filter: 'saturate(0.86) contrast(0.9) brightness(0.52)' }} />
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.18), #0f0f0f)' }} />
+            </div>
+            <div className="relative flex h-full min-h-[382px] flex-col justify-between">
+              <div>
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="rounded-lg bg-white px-3 py-2">
+                    <img src="/logos/geoomnii.png" alt="Geoomnii" className="h-7 w-auto object-contain" />
                   </span>
-                ))}
+                  <span className="rounded-lg bg-white px-3 py-2">
+                    <img src="/logos/beira-rio.png" alt="Beira Rio" className="h-7 w-auto object-contain" />
+                  </span>
+                </div>
+                <div className="mt-6 text-[10px] uppercase" style={{ color: ACCENT, fontFamily: M }}>Portfolio operations</div>
               </div>
-            </article>
-          </div>
+              <div>
+                <h3 className="text-[27px] font-semibold leading-[1.12] text-white" style={{ fontFamily: D }}>
+                  Distributed footwear catalog, stock, and listing work without rebuilding every sheet.
+                </h3>
+                <p className="mt-4 text-[13px] leading-[1.65]" style={{ color: 'rgba(255,255,255,0.68)' }}>
+                  Geoomnii organizes Beira Rio item masters, supplier stock slices, product images, and marketplace templates into approved outputs.
+                </p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {['8 Beira Rio brands', '8 online platforms', 'Approved feeds'].map((item) => (
+                    <span key={item} className="rounded-md px-2.5 py-1 text-[10px] font-bold uppercase" style={{ background: ACCENT, color: BASE, fontFamily: M }}>{item}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </article>
         </div>
       </div>
     </section>
@@ -1574,6 +1607,8 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <CustomerSection />
+
       <section id="product-flow" className="scroll-mt-[96px]" style={{ background: '#0d0d0d', borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
         <div className="mx-auto max-w-[1160px] px-5 py-16 sm:px-6 sm:py-24">
           <div className="mb-10 grid gap-6 lg:grid-cols-[0.88fr_1.12fr] lg:items-end">
@@ -1666,7 +1701,6 @@ export default function LandingPage() {
       </section>
 
       <IntegrationsSection />
-      <CustomerSection />
 
       <section id="cta" className="relative overflow-hidden" style={{ background: '#081008', borderTop: `1px solid ${BORDER}` }}>
         <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(120deg, rgba(197,241,53,0.13), transparent 38%, rgba(255,255,255,0.04))' }} />
