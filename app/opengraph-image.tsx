@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
 export const runtime = 'nodejs'
-export const alt = 'Amplify | AI Product Manager for E-Commerce'
+export const alt = 'Amplify | AI Workspace for Brand Operators'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
@@ -56,7 +56,7 @@ export default async function Image() {
               letterSpacing: '0.02em',
             }}
           >
-            AI Product Manager for E-Commerce
+            AI Workspace for Brand Operators
           </div>
         </div>
       </div>
