@@ -19,11 +19,18 @@ const L_MUTED = '#6c7168'
 const L_BORDER = 'rgba(0,0,0,0.1)'
 
 const NAV_LINKS = [
+  { label: 'Product', href: '#product-flow' },
   { label: 'Platform', href: '#platform' },
-  { label: 'Product Flow', href: '#product-flow' },
   { label: 'Enrichment', href: '#enrichment' },
-  { label: 'Agents', href: '#agents' },
   { label: 'Integrations', href: '#integrations' },
+]
+
+const USE_CASE_LINKS = [
+  { label: 'Listing Ops', href: '#use-listings', detail: 'Generate marketplace files' },
+  { label: 'Company Brain', href: '#use-brain', detail: 'Ask sales and stock' },
+  { label: 'Inventory', href: '#use-forecast', detail: 'Read the channel ledger' },
+  { label: 'Approvals', href: '#use-actions', detail: 'Review agent work' },
+  { label: 'Marketplace files', href: '#marketplace-files', detail: 'Invoice to XLSX' },
 ]
 
 const ENRICHMENT_ROWS = [
@@ -63,114 +70,6 @@ const ENRICHMENT_ROWS = [
     before: 'Regular fit',
     after: 'Men’s EU sizing. Select your usual boot size.',
     note: 'Operational notes become clear PDP guidance.',
-  },
-]
-
-const AGENT_TABS = [
-  {
-    id: 'diagnosis',
-    label: 'Diagnosis',
-    title: 'Prioritize the SKUs that need review.',
-    body: 'The Diagnosis Agent combines Shopify orders, Loop returns, Gorgias tickets, and product evidence to rank the SKUs most likely to need a fix.',
-    command: 'Show SKUs with missing product attributes',
-    metrics: ['12.8% return rate', '42 evidence snippets', '6 fixes pending'],
-    score: 72,
-    chart: [64, 46, 78, 52, 86],
-    fields: [
-      ['Material', 'Missing', 'review'],
-      ['Closure', 'Inferred', 'ready'],
-      ['Image set', 'Needs review', 'review'],
-      ['Sizing note', 'Missing', 'review'],
-    ],
-    rows: [
-      ['BR-772104-CAF', 'Missing material detail', 'High'],
-      ['BR-772105-PRE', 'Image review needed', 'Med'],
-      ['BR-772106-NDE', 'Size guidance missing', 'Med'],
-    ],
-  },
-  {
-    id: 'listing',
-    label: 'Listings',
-    title: 'Prepare listing updates with evidence.',
-    body: 'The Listing Automation Agent proposes titles, bullets, attributes, tags, and channel files with a before/after diff your team can approve.',
-    command: 'Create a listing update for BR-772104-CAF',
-    metrics: ['Title diff', 'Attribute fill', 'Size guidance'],
-    score: 88,
-    chart: [48, 62, 74, 86, 92],
-    fields: [
-      ['Title', 'Updated', 'ready'],
-      ['Tags', 'Updated', 'ready'],
-      ['Size note', 'Added', 'ready'],
-      ['Product image', 'Selected', 'ready'],
-    ],
-    rows: [
-      ['body_html', 'Add sizing guidance', 'Ready'],
-      ['tags', 'ankle boot, leather', 'Ready'],
-      ['metafield:size_note', 'EU boot sizing', 'Ready'],
-    ],
-  },
-  {
-    id: 'inventory',
-    label: 'Inventory',
-    title: 'Turn stock, velocity, and lead time into restock decisions.',
-    body: 'The Inventory Agent flags low stock, dead stock, overstock, and replenishment needs using category-level context and supplier lead times.',
-    command: 'Build restock suggestions with 21 day lead time',
-    metrics: ['18 days cover', '1,240 units', 'Manager approval'],
-    score: 61,
-    chart: [88, 76, 52, 38, 42],
-    fields: [
-      ['Days cover', '18 days', 'review'],
-      ['Sales velocity', 'Rising', 'ready'],
-      ['Lead time', '21 days', 'ready'],
-      ['PO quantity', '320 units', 'review'],
-    ],
-    rows: [
-      ['BR-772104-CAF', 'Restock 320', 'Approve'],
-      ['BR-9011-CRM', 'Hold', 'Healthy'],
-      ['BR-772105-PRE', 'Markdown risk', 'Review'],
-    ],
-  },
-  {
-    id: 'purchase',
-    label: 'PO Creator',
-    title: 'Draft purchase orders from forecast and inventory signals.',
-    body: 'The Purchase Order Creator turns sell-through, days cover, supplier lead time, and budget limits into a PO draft for manager approval.',
-    command: 'Create a PO draft for Beira Rio carryover styles',
-    metrics: ['AED 42K draft', '18 day lead time', 'Manager approval'],
-    score: 83,
-    chart: [44, 58, 63, 71, 87],
-    fields: [
-      ['Supplier', 'Beira Rio', 'ready'],
-      ['Buy window', 'Next 30 days', 'ready'],
-      ['Budget check', 'Within limit', 'ready'],
-      ['PO quantity', '1,240 units', 'review'],
-    ],
-    rows: [
-      ['BR-772104-CAF', 'Add 320 units', 'Draft'],
-      ['BR-9011-CRM', 'Add 180 units', 'Draft'],
-      ['BR-772105-PRE', 'Hold buy', 'Review'],
-    ],
-  },
-  {
-    id: 'sales',
-    label: 'Sales',
-    title: 'Find revenue moves without living in pivot tables.',
-    body: 'The Sales Agent reads channel sales, margin, returns, and stock position so merchandising can act on the right SKUs first.',
-    command: 'Explain last week sales movement by channel',
-    metrics: ['Amazon +18%', 'Noon -7%', '3 actions ready'],
-    score: 76,
-    chart: [52, 68, 61, 74, 82],
-    fields: [
-      ['Top channel', 'Amazon', 'ready'],
-      ['Slow channel', 'Noon', 'review'],
-      ['Margin', 'Protected', 'ready'],
-      ['Action', 'Bundle test', 'review'],
-    ],
-    rows: [
-      ['BR-772104-CAF', 'Feature on Amazon', 'Approve'],
-      ['BR-772106-NDE', 'Bundle with care kit', 'Draft'],
-      ['BR-772105-PRE', 'Move budget from Noon', 'Review'],
-    ],
   },
 ]
 
@@ -217,98 +116,98 @@ const ORBIT = [
 const PRODUCT_FLOW_TABS = [
   {
     id: 'listings',
-    label: 'Listing automation',
-    eyebrow: 'Weekly catalog run',
-    title: 'Create marketplace-ready listings from the files your team already uses.',
-    body: 'Supplier invoices, master sheets, product images, and marketplace templates become clean SKU rows with the right attributes filled in.',
-    command: 'Build Namshi and 6th Street files for the new Beira Rio drop',
+    label: 'Listing Ops',
+    eyebrow: 'Template compile',
+    title: 'Turn messy product files into approved channel listings.',
+    body: 'Invoices, SKU sheets, product images, and channel templates become clean rows your team can review.',
+    command: 'Build Namshi and 6th Street files',
     metrics: [
-      ['184', 'SKU rows created'],
-      ['37', 'attributes filled'],
-      ['4', 'manager checks'],
+      ['184', 'SKUs'],
+      ['37', 'fields filled'],
+      ['4', 'checks'],
     ],
-    steps: ['Read supplier PI', 'Normalize sizes and colors', 'Match images to SKUs', 'Fill marketplace fields', 'Queue manager review'],
+    steps: ['Read source files', 'Match images', 'Fill fields', 'Check rules', 'Queue review'],
     rows: [
-      ['Supplier PI', 'Style, color, sizes, quantities', 'Synced'],
-      ['Image folder', '5 URLs matched to BR-772104', 'Ready'],
-      ['Namshi template', 'Closure, toe, heel, material', 'Mapped'],
-      ['6th Street file', 'Variants and image URLs', 'Mapped'],
-      ['Manager review', '4 fields need confirmation', 'Open'],
+      ['Supplier PI', 'Style, color, sizes', 'Synced'],
+      ['Images', '5 URLs matched', 'Ready'],
+      ['Namshi file', 'Attributes mapped', 'Mapped'],
+      ['6th Street', 'Variants ready', 'Mapped'],
+      ['Review', '4 fields need a check', 'Open'],
     ],
     chart: [32, 46, 58, 79, 92],
-    decision: 'Export after confirming sole type and secondary color for 4 SKUs.',
-    action: 'Prepare channel XLSX files',
+    decision: 'Confirm the four uncertain fields, then export both marketplace files.',
+    action: 'Prepare XLSX files',
   },
   {
     id: 'brain',
     label: 'Company Brain',
-    eyebrow: 'Analysis workspace',
-    title: 'Ask the company brain what changed and why.',
-    body: 'Sales, returns, stock, pricing, product data, and channel history sit in one operator-friendly view instead of scattered spreadsheets.',
+    eyebrow: 'Retail planning',
+    title: 'Ask what changed, why it moved, and what to do next.',
+    body: 'Sales, returns, stock, pricing, and channel history sit in one operator-friendly view.',
     command: 'Explain last week sales by channel, category, and SKU',
     metrics: [
-      ['+18%', 'Amazon footwear sales'],
+      ['+18%', 'Amazon sales'],
       ['-7%', 'Noon conversion'],
-      ['12', 'SKUs driving change'],
+      ['12', 'SKUs'],
     ],
-    steps: ['Pull sales by channel', 'Group by SKU and size', 'Compare to inventory', 'Attach return reasons', 'Summarize the movement'],
+    steps: ['Pull sales', 'Group by SKU', 'Check stock', 'Add returns', 'Summarize'],
     rows: [
-      ['Pivot: channel x category', 'Amazon footwear up 18%', 'Growth'],
-      ['Pivot: SKU x size', 'EU 38 and 39 sold through fastest', 'Watch'],
-      ['Returns overlay', 'BR-772104 fit notes missing', 'Fix'],
-      ['Margin view', 'Markdown not needed on top sellers', 'Hold'],
-      ['Operator answer', 'Push stock to Amazon before weekend', 'Ready'],
+      ['Channel pivot', 'Amazon footwear +18%', 'Growth'],
+      ['Size curve', 'EU 38 and 39 fastest', 'Watch'],
+      ['Returns', 'Fit note missing', 'Fix'],
+      ['Margin', 'No markdown needed', 'Hold'],
+      ['Answer', 'Move stock to Amazon', 'Ready'],
     ],
     chart: [44, 52, 49, 68, 81],
-    decision: 'Keep price steady, move available inventory toward Amazon, and fix fit copy before the weekend campaign.',
+    decision: 'Keep price steady, shift stock toward Amazon, and fix fit copy before the campaign.',
     action: 'Send actions to Sales Agent',
   },
   {
     id: 'forecast',
-    label: 'Forecasting',
-    eyebrow: 'What to buy next',
-    title: 'Turn sales velocity into a buy plan.',
-    body: 'Amplify forecasts demand using recent sales, days of cover, supplier lead time, return risk, and the stock already sitting in each channel.',
+    label: 'Inventory',
+    eyebrow: 'Channel ledger',
+    title: 'Convert sales velocity into a buy plan.',
+    body: 'Recent sales, days of cover, lead time, return risk, and channel stock become a clear buy recommendation.',
     command: 'Forecast the next buy with 21 day supplier lead time',
     metrics: [
       ['18', 'days cover'],
       ['1,240', 'units suggested'],
       ['AED 42K', 'PO value'],
     ],
-    steps: ['Calculate sell-through', 'Check days cover', 'Apply supplier lead time', 'Protect margin', 'Draft buy plan'],
+    steps: ['Read sell-through', 'Check cover', 'Apply lead time', 'Protect margin', 'Draft buy'],
     rows: [
       ['BR-772104-CAF', '320 units, high confidence', 'Buy'],
       ['BR-9011-CRM', '180 units, steady carryover', 'Buy'],
-      ['BR-772105-PRE', 'Hold due to slow size curve', 'Hold'],
-      ['BR-772106-NDE', 'Bundle test before reorder', 'Test'],
-      ['Budget guardrail', 'Within monthly buy limit', 'Passed'],
+      ['BR-772105-PRE', 'Slow size curve', 'Hold'],
+      ['BR-772106-NDE', 'Bundle before reorder', 'Test'],
+      ['Budget', 'Within monthly limit', 'Passed'],
     ],
     chart: [78, 70, 61, 52, 43],
-    decision: 'Draft the PO for fast-moving carryover styles and hold the slower color until the bundle test finishes.',
+    decision: 'Draft the PO for fast-moving carryover styles and hold the slower color.',
     action: 'Create purchase order draft',
   },
   {
     id: 'actions',
-    label: 'Agent actions',
-    eyebrow: 'Approval queue',
-    title: 'Approve the work before agents touch live systems.',
-    body: 'Inventory, purchase order, listing, and sales agents prepare actions with evidence, impact, and rollback notes so operators stay in control.',
+    label: 'Approvals',
+    eyebrow: 'Inbox',
+    title: 'Approve the work before anything goes live.',
+    body: 'Listing, inventory, PO, and sales agents prepare actions with evidence, impact, and rollback notes.',
     command: 'Show every action waiting on merchandising approval',
     metrics: [
       ['9', 'actions queued'],
       ['3', 'agents ready'],
-      ['0', 'live writes without approval'],
+      ['0', 'auto writes'],
     ],
-    steps: ['Review evidence', 'Check impact', 'Approve or edit', 'Apply to channel', 'Measure result'],
+    steps: ['Review evidence', 'Check impact', 'Approve or edit', 'Apply', 'Measure'],
     rows: [
-      ['Inventory Agent', 'Shift 220 units to Amazon FBA', 'Approve'],
-      ['PO Creator', 'Draft Beira Rio PO for AED 42K', 'Review'],
-      ['Sales Agent', 'Move Noon budget to Amazon weekend push', 'Approve'],
-      ['Listing Agent', 'Add fit guidance to 12 SKUs', 'Approve'],
-      ['Audit trail', 'Every change logged with before/after', 'On'],
+      ['Inventory Agent', 'Shift 220 units', 'Approve'],
+      ['Procurement Agent', 'Draft AED 42K PO', 'Review'],
+      ['Merchandising Agent', 'Move weekend budget', 'Approve'],
+      ['Listing Ops', 'Add fit copy to 12 SKUs', 'Approve'],
+      ['Audit trail', 'Before/after logged', 'On'],
     ],
     chart: [38, 54, 63, 73, 88],
-    decision: 'Approve three low-risk actions now, edit the PO draft, and keep every write attached to a before/after record.',
+    decision: 'Approve the low-risk actions, edit the PO draft, and keep the audit trail attached.',
     action: 'Open approval queue',
   },
 ]
@@ -530,180 +429,355 @@ function HeroConsole() {
 function ProductFlowWorkbench() {
   const [active, setActive] = useState(PRODUCT_FLOW_TABS[0].id)
   const flow = PRODUCT_FLOW_TABS.find((item) => item.id === active) || PRODUCT_FLOW_TABS[0]
-  const chartPath = flow.chart
-    .map((value, index) => {
-      const x = 12 + index * 46
-      const y = 102 - value * 0.72
-      return `${index === 0 ? 'M' : 'L'} ${x} ${y}`
-    })
-    .join(' ')
 
-  return (
-    <div className="overflow-hidden rounded-lg border" style={{ borderColor: BORDER, background: '#101010', boxShadow: '0 34px 110px rgba(0,0,0,0.34)' }}>
-      <div className="border-b px-4 py-3 sm:px-5" style={{ borderColor: BORDER }}>
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <Logo size={30} />
-            <div>
-              <div className="text-[15px] font-semibold text-white" style={{ fontFamily: D }}>Amplify operator workspace</div>
-              <div className="text-[10px] uppercase" style={{ color: MUTED, fontFamily: M }}>Catalog, sales, inventory, and approvals</div>
-            </div>
+  useEffect(() => {
+    const setFlowFromHash = () => {
+      const requested = window.location.hash.replace('#use-', '')
+      if (PRODUCT_FLOW_TABS.some((item) => item.id === requested)) {
+        setActive(requested)
+      }
+    }
+
+    setFlowFromHash()
+    window.addEventListener('hashchange', setFlowFromHash)
+    return () => window.removeEventListener('hashchange', setFlowFromHash)
+  }, [])
+
+  const selectFlow = (id: string) => {
+    setActive(id)
+    window.history.replaceState(null, '', `#use-${id}`)
+  }
+
+  const badge = (label: string, tone: 'ready' | 'warn' | 'blocked' | 'neutral' = 'neutral') => {
+    const styles = {
+      ready: { background: '#e8f7ed', color: '#137a3a', borderColor: '#bfe7cd' },
+      warn: { background: '#fff7db', color: '#9a6500', borderColor: '#ecd48a' },
+      blocked: { background: '#fff0ef', color: '#b53a32', borderColor: '#efc5c0' },
+      neutral: { background: '#f3f5ef', color: '#646b5d', borderColor: '#e2e8da' },
+    }[tone]
+
+    return (
+      <span key={label} className="inline-flex items-center rounded-md border px-2 py-1 text-[10px] font-semibold uppercase" style={{ ...styles, fontFamily: M }}>
+        {label}
+      </span>
+    )
+  }
+
+  const metric = (value: string, label: string, tone: 'dark' | 'light' = 'light') => (
+    <div className="rounded-lg border p-3" style={{ borderColor: tone === 'dark' ? 'rgba(255,255,255,0.12)' : L_BORDER, background: tone === 'dark' ? 'rgba(255,255,255,0.05)' : '#fff' }}>
+      <div className="text-[24px] font-semibold leading-none" style={{ color: tone === 'dark' ? '#fff' : L_TEXT, fontFamily: D }}>{value}</div>
+      <div className="mt-1 text-[10px] uppercase" style={{ color: tone === 'dark' ? MUTED : L_MUTED, fontFamily: M }}>{label}</div>
+    </div>
+  )
+
+  const sourceFiles = ['master_item_sheet.xlsx', 'stock_snapshot.csv', 'confirmed_sales.xlsx', 'namshi_template.xlsx']
+
+  const renderListingOps = () => (
+    <div className="grid gap-4 xl:grid-cols-[0.9fr_1.1fr]">
+      <section className="rounded-lg border bg-white p-4" style={{ borderColor: L_BORDER }}>
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div className="text-[10px] uppercase" style={{ color: '#1D7A6D', fontFamily: M }}>Template Generator</div>
+            <h3 className="mt-1 text-[24px] font-semibold leading-tight" style={{ color: L_TEXT, fontFamily: D }}>Centrepoint UAE output</h3>
           </div>
-          <div className="rounded-md px-2.5 py-1 text-[10px] uppercase" style={{ background: 'rgba(197,241,53,0.12)', color: ACCENT, fontFamily: M }}>
-            Approval-first agents
+          {badge('export ready', 'ready')}
+        </div>
+        <div className="grid gap-2 sm:grid-cols-3">
+          {metric('184', 'rows')}
+          {metric('37', 'fields')}
+          {metric('4', 'review')}
+        </div>
+        <div className="mt-4 overflow-hidden rounded-lg border" style={{ borderColor: L_BORDER }}>
+          {[
+            ['Product image', 'ImgBB album', '184 matched', 'ready'],
+            ['Closure', 'image review', 'lace-up', 'ready'],
+            ['Material', 'master sheet', 'needs check', 'warn'],
+            ['Target price', 'pricing sheet', 'manager approval', 'blocked'],
+          ].map(([field, source, value, tone]) => (
+            <div key={field} className="grid grid-cols-12 gap-3 border-b px-3 py-3 text-[12px] last:border-b-0" style={{ borderColor: L_BORDER }}>
+              <span className="col-span-4 font-semibold" style={{ color: L_TEXT }}>{field}</span>
+              <span className="col-span-3 truncate" style={{ color: L_MUTED }}>{source}</span>
+              <span className="col-span-3 truncate" style={{ color: L_TEXT }}>{value}</span>
+              <span className="col-span-2 text-right">{badge(tone === 'ready' ? 'ready' : tone === 'warn' ? 'review' : 'blocked', tone as 'ready' | 'warn' | 'blocked')}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="rounded-lg border bg-white p-4" style={{ borderColor: L_BORDER }}>
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div className="text-[10px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>Workbook preview</div>
+            <h3 className="mt-1 text-[20px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>Generated rows before export</h3>
+          </div>
+          <div className="flex gap-1 rounded-md border bg-[#f7faf6] p-1" style={{ borderColor: L_BORDER }}>
+            {['Centrepoint', 'Namshi', '6th Street'].map((item, index) => (
+              <span key={item} className="rounded px-2 py-1 text-[10px] font-semibold" style={{ background: index === 0 ? '#1D7A6D' : 'transparent', color: index === 0 ? '#fff' : L_MUTED, fontFamily: M }}>{item}</span>
+            ))}
           </div>
         </div>
+        <div className="overflow-hidden rounded-lg border" style={{ borderColor: L_BORDER }}>
+          {[
+            ['BR-772104-CAF', 'Leather Lace-Up Boot', '5 images', 'Ready'],
+            ['BR-9011-CRM', 'Carryover Sandal', '3 images', 'Ready'],
+            ['BR-772105-PRE', 'Patent Mary Jane', 'price approval', 'Review'],
+            ['BR-772106-NDE', 'Comfort Mule', 'material check', 'Review'],
+          ].map((row, index) => (
+            <div key={row[0]} className="grid grid-cols-12 gap-3 border-b px-3 py-3 text-[12px] last:border-b-0" style={{ borderColor: L_BORDER, background: index === 0 ? '#f4faef' : '#fff' }}>
+              <span className="col-span-3 truncate font-semibold" style={{ color: L_TEXT }}>{row[0]}</span>
+              <span className="col-span-4 truncate" style={{ color: L_TEXT }}>{row[1]}</span>
+              <span className="col-span-3 truncate" style={{ color: L_MUTED }}>{row[2]}</span>
+              <span className="col-span-2 text-right">{badge(row[3], row[3] === 'Ready' ? 'ready' : 'warn')}</span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-4 rounded-lg border p-3" style={{ borderColor: '#cfe4dc', background: '#f7fbfa' }}>
+          <div className="text-[10px] uppercase" style={{ color: '#1D7A6D', fontFamily: M }}>Operator command</div>
+          <div className="mt-1 text-[14px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>Generate review workbook for blocked price and material fields.</div>
+        </div>
+      </section>
+    </div>
+  )
 
-        <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-          {PRODUCT_FLOW_TABS.map((item) => {
-            const selected = item.id === flow.id
-            return (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => setActive(item.id)}
-                className="rounded-lg border px-3 py-3 text-left transition-transform hover:-translate-y-0.5"
-                style={{ borderColor: selected ? 'rgba(197,241,53,0.4)' : BORDER, background: selected ? 'rgba(197,241,53,0.11)' : 'rgba(255,255,255,0.045)' }}
-              >
-                <div className="text-[10px] uppercase" style={{ color: selected ? ACCENT : MUTED, fontFamily: M }}>{item.eyebrow}</div>
-                <div className="mt-1 text-[15px] font-semibold text-white" style={{ fontFamily: D }}>{item.label}</div>
-              </button>
-            )
-          })}
+  const renderCompanyBrain = () => (
+    <div className="grid gap-4 xl:grid-cols-[0.95fr_1.05fr]">
+      <section className="rounded-lg border bg-white p-4" style={{ borderColor: L_BORDER }}>
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <div>
+            <div className="text-[10px] uppercase" style={{ color: '#1D7A6D', fontFamily: M }}>Company Brain</div>
+            <h3 className="mt-1 text-[24px] font-semibold leading-tight" style={{ color: L_TEXT, fontFamily: D }}>Retail planning snapshot</h3>
+          </div>
+          {badge('run complete', 'ready')}
+        </div>
+        <div className="grid gap-2 sm:grid-cols-4">
+          {metric('45K', 'sales rows')}
+          {metric('7', 'source files')}
+          {metric('90', 'agent recs')}
+          {metric('82', 'health')}
+        </div>
+        <div className="mt-4 rounded-lg border p-4" style={{ borderColor: L_BORDER, background: '#fbfcf8' }}>
+          <div className="mb-3 flex items-center justify-between">
+            <span className="text-[10px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>MIS view</span>
+            <span className="text-[10px] uppercase" style={{ color: '#1D7A6D', fontFamily: M }}>brand x channel</span>
+          </div>
+          <svg viewBox="0 0 460 150" className="h-[150px] w-full" aria-hidden="true">
+            {[0, 1, 2, 3].map((line) => <line key={line} x1="0" x2="460" y1={24 + line * 32} y2={24 + line * 32} stroke="rgba(0,0,0,0.08)" />)}
+            <path d="M18 114 L104 94 L190 102 L276 70 L362 48 L442 35" fill="none" stroke="#1D7A6D" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M18 114 L104 94 L190 102 L276 70 L362 48 L442 35 L442 138 L18 138 Z" fill="rgba(29,122,109,0.12)" />
+            {[18, 104, 190, 276, 362, 442].map((x, index) => <circle key={x} cx={x} cy={[114, 94, 102, 70, 48, 35][index]} r="5" fill="#C5F135" stroke="#1D7A6D" strokeWidth="2" />)}
+          </svg>
+        </div>
+      </section>
+
+      <section className="rounded-lg border bg-white p-4" style={{ borderColor: L_BORDER }}>
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <div>
+            <div className="text-[10px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>Action queue</div>
+            <h3 className="mt-1 text-[20px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>What the team should review</h3>
+          </div>
+          {badge('approval gated', 'neutral')}
+        </div>
+        <div className="space-y-3">
+          {[
+            ['Save SKU and barcode join memory', 'Sales, stock, and listing files now share stable product identity.', 'Ready'],
+            ['Review pricing wave for UAE', 'Top sellers do not need markdown; slower color needs bundle test.', 'Review'],
+            ['Unblock supplier stock sync', 'Stock slice can publish after supplier policy is confirmed.', 'Open'],
+            ['Send listing fixes to approvals', '12 SKUs need fit copy and material confirmation.', 'Ready'],
+          ].map((item) => (
+            <div key={item[0]} className="rounded-lg border p-3" style={{ borderColor: L_BORDER, background: item[2] === 'Ready' ? '#f4faef' : '#fff' }}>
+              <div className="flex items-center justify-between gap-3">
+                <h4 className="text-[14px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>{item[0]}</h4>
+                {badge(item[2], item[2] === 'Ready' ? 'ready' : item[2] === 'Review' ? 'warn' : 'neutral')}
+              </div>
+              <p className="mt-1 text-[12px] leading-[1.5]" style={{ color: L_MUTED }}>{item[1]}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  )
+
+  const renderInventory = () => (
+    <div className="grid gap-4 xl:grid-cols-[1fr_0.82fr]">
+      <section className="rounded-lg border bg-white p-4" style={{ borderColor: L_BORDER }}>
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div className="text-[10px] uppercase" style={{ color: '#1D7A6D', fontFamily: M }}>Inventory ledger</div>
+            <h3 className="mt-1 text-[24px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>Positions by channel and SKU</h3>
+          </div>
+          {badge('synced 4 min ago', 'ready')}
+        </div>
+        <div className="grid gap-2 sm:grid-cols-4">
+          {metric('8', 'channels')}
+          {metric('1,240', 'units to buy')}
+          {metric('18', 'days cover')}
+          {metric('42K', 'PO draft')}
+        </div>
+        <div className="mt-4 overflow-hidden rounded-lg border" style={{ borderColor: L_BORDER }}>
+          {[
+            ['BR-772104-CAF', 'Amazon', 'low', '320 buy'],
+            ['BR-9011-CRM', 'Noon', 'in stock', 'hold'],
+            ['PMUK-GUSTO-120', 'Shopify', 'low', 'bundle SKU'],
+            ['SM-TRAIN-001', 'Retail', 'ready', 'training pack'],
+          ].map((row, index) => (
+            <div key={`${row[0]}-${row[1]}`} className="grid grid-cols-12 gap-3 border-b px-3 py-3 text-[12px] last:border-b-0" style={{ borderColor: L_BORDER, background: index === 0 ? '#fffaf0' : '#fff' }}>
+              <span className="col-span-4 truncate font-semibold" style={{ color: L_TEXT }}>{row[0]}</span>
+              <span className="col-span-2" style={{ color: L_MUTED }}>{row[1]}</span>
+              <span className="col-span-3">{badge(row[2], row[2] === 'low' ? 'warn' : 'ready')}</span>
+              <span className="col-span-3 text-right font-semibold" style={{ color: L_TEXT }}>{row[3]}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="rounded-lg border bg-white p-4" style={{ borderColor: L_BORDER }}>
+        <div className="mb-4">
+          <div className="text-[10px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>Inventory Agent</div>
+          <h3 className="mt-1 text-[20px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>Suggested actions</h3>
+        </div>
+        <div className="space-y-3">
+          {[
+            ['Reorder carryover boots', '320 units, 21 day lead time', 'Approve'],
+            ['Hold slow color', 'size curve under target', 'Hold'],
+            ['Generate PO draft', 'AED 42K to Beira Rio', 'Review'],
+            ['Push channel stock', 'single pool with caps', 'Ready'],
+          ].map((item) => (
+            <div key={item[0]} className="rounded-lg border p-3" style={{ borderColor: L_BORDER, background: item[2] === 'Approve' ? '#f4faef' : '#fff' }}>
+              <div className="flex items-center justify-between gap-3">
+                <h4 className="text-[14px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>{item[0]}</h4>
+                {badge(item[2], item[2] === 'Approve' || item[2] === 'Ready' ? 'ready' : item[2] === 'Review' ? 'warn' : 'neutral')}
+              </div>
+              <p className="mt-1 text-[12px]" style={{ color: L_MUTED }}>{item[1]}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  )
+
+  const renderApprovals = () => (
+    <div className="grid gap-4 xl:grid-cols-[0.82fr_1.18fr]">
+      <section className="rounded-lg border bg-white p-4" style={{ borderColor: L_BORDER }}>
+        <div className="mb-4">
+          <div className="text-[10px] uppercase" style={{ color: '#1D7A6D', fontFamily: M }}>Approval inbox</div>
+          <h3 className="mt-1 text-[24px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>Nothing writes live without review.</h3>
+        </div>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {metric('17', 'needs review')}
+          {metric('12', 'listing blockers')}
+          {metric('3', 'pricing blockers')}
+          {metric('2', 'PO drafts')}
+        </div>
+        <div className="mt-4 rounded-lg border p-3" style={{ borderColor: '#cfe4dc', background: '#f7fbfa' }}>
+          <div className="text-[10px] uppercase" style={{ color: '#1D7A6D', fontFamily: M }}>Policy</div>
+          <p className="mt-1 text-[13px] leading-[1.55]" style={{ color: L_TEXT }}>Agents can prepare files, recommendations, and API payloads, but approvals stay with the operator.</p>
+        </div>
+      </section>
+
+      <section className="rounded-lg border bg-white p-4" style={{ borderColor: L_BORDER }}>
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-[20px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>Pending decisions</h3>
+          {badge('seeded demo', 'neutral')}
+        </div>
+        <div className="space-y-3">
+          {[
+            ['Listing repair', 'BR-772105-PRE', 'Approve target price before Centrepoint export.', 'Approve'],
+            ['Pricing exception', 'BR-9011-CRM', 'Keep price steady; markdown not recommended.', 'Needs info'],
+            ['Replenishment RFQ', 'BR-772104-CAF', 'PO draft for 320 units from forecast.', 'Review'],
+            ['AI ads action', 'PMUK-GUSTO-120', 'Bundle ad copy and SKU generator output ready.', 'Approve'],
+          ].map((item) => (
+            <div key={`${item[0]}-${item[1]}`} className="rounded-lg border p-3" style={{ borderColor: L_BORDER }}>
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <div className="text-[10px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>{item[0]}</div>
+                  <h4 className="mt-1 text-[14px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>{item[1]}</h4>
+                  <p className="mt-1 text-[12px] leading-[1.45]" style={{ color: L_MUTED }}>{item[2]}</p>
+                </div>
+                <div className="flex gap-2">
+                  {badge(item[3], item[3] === 'Approve' ? 'ready' : item[3] === 'Review' ? 'warn' : 'neutral')}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  )
+
+  return (
+    <div className="overflow-hidden rounded-xl border" style={{ borderColor: 'rgba(255,255,255,0.16)', background: '#eef3ed', boxShadow: '0 34px 110px rgba(0,0,0,0.38)' }}>
+      <div className="flex items-center justify-between gap-4 border-b px-4 py-3" style={{ borderColor: L_BORDER, background: '#0d0f0c' }}>
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="flex gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+          </div>
+          <div className="hidden min-w-0 rounded-md border px-3 py-1.5 text-[11px] sm:block" style={{ borderColor: 'rgba(255,255,255,0.12)', color: MUTED, fontFamily: M }}>
+            app.use-amplify.com/geoomnii/{flow.label.toLowerCase().replaceAll(' ', '-')}
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          {badge('seeded workspace', 'neutral')}
+          <button type="button" className="rounded-md px-3 py-1.5 text-[10px] font-bold uppercase" style={{ background: ACCENT, color: BASE, fontFamily: M }}>
+            Run
+          </button>
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-[0.38fr_0.62fr]">
-        <aside className="border-b p-4 sm:p-5 lg:border-b-0 lg:border-r" style={{ borderColor: BORDER }}>
-          <div className="overflow-hidden rounded-lg border bg-white p-2" style={{ borderColor: BORDER }}>
-            <div className="relative aspect-[4/3] overflow-hidden rounded-md bg-[#eef1ea]">
-              <img src="/images/products/customer-shoe-boot.jpg" alt="Product in Amplify workspace" className="h-full w-full object-cover" />
-              <div className="absolute bottom-3 left-3 rounded-md px-2 py-1 text-[10px] font-bold uppercase" style={{ background: ACCENT, color: BASE, fontFamily: M }}>
-                Active SKU
-              </div>
+      <div className="grid min-h-[640px] lg:grid-cols-[228px_1fr]" style={{ color: L_TEXT }}>
+        <aside className="border-b bg-[#f7faf6] p-4 lg:border-b-0 lg:border-r" style={{ borderColor: L_BORDER }}>
+          <div className="mb-5 flex items-center gap-2">
+            <Logo size={28} />
+            <div>
+              <div className="text-[14px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>Amplify</div>
+              <div className="text-[10px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>Geoomnii workspace</div>
             </div>
           </div>
-
-          <div className="mt-4 rounded-lg border p-4" style={{ borderColor: 'rgba(197,241,53,0.3)', background: 'rgba(197,241,53,0.08)' }}>
-            <div className="mb-2 flex items-center gap-2 text-[10px] uppercase" style={{ color: ACCENT, fontFamily: M }}>
-              <SparkIcon />
-              Operator request
-            </div>
-            <p className="text-[18px] font-semibold leading-snug text-white" style={{ fontFamily: D }}>{flow.command}</p>
+          <div className="grid gap-1.5 sm:grid-cols-2 lg:grid-cols-1">
+            {PRODUCT_FLOW_TABS.map((item) => {
+              const selected = item.id === active
+              return (
+                <button
+                  key={item.id}
+                  id={`use-${item.id}`}
+                  type="button"
+                  onClick={() => selectFlow(item.id)}
+                  className="rounded-lg border px-3 py-3 text-left transition-colors"
+                  style={{ borderColor: selected ? '#b7dcbf' : 'transparent', background: selected ? '#eaf6e7' : 'transparent' }}
+                >
+                  <div className="text-[10px] uppercase" style={{ color: selected ? '#1D7A6D' : L_MUTED, fontFamily: M }}>{item.eyebrow}</div>
+                  <div className="mt-1 text-[14px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>{item.label}</div>
+                </button>
+              )
+            })}
           </div>
-
-          <div className="mt-4 rounded-lg border p-4" style={{ borderColor: BORDER, background: 'rgba(255,255,255,0.04)' }}>
-            <div className="mb-4 text-[10px] uppercase" style={{ color: MUTED, fontFamily: M }}>Run timeline</div>
-            <div className="space-y-3">
-              {flow.steps.map((step, index) => (
-                <div key={step} className="grid grid-cols-[24px_1fr] gap-3">
-                  <div className="flex flex-col items-center">
-                    <span className="grid h-6 w-6 place-items-center rounded-full text-[10px] font-bold" style={{ background: index < 4 ? ACCENT : 'rgba(255,255,255,0.08)', color: index < 4 ? BASE : SOFT, fontFamily: M }}>
-                      {index + 1}
-                    </span>
-                    {index < flow.steps.length - 1 && <span className="mt-1 h-5 w-px" style={{ background: index < 3 ? 'rgba(197,241,53,0.42)' : BORDER }} />}
-                  </div>
-                  <div className="pt-0.5 text-[13px] leading-snug" style={{ color: index < 4 ? '#fff' : SOFT }}>{step}</div>
-                </div>
+          <div className="mt-5 hidden rounded-lg border bg-white p-3 lg:block" style={{ borderColor: L_BORDER }}>
+            <div className="mb-2 text-[10px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>Connected sources</div>
+            <div className="space-y-1.5">
+              {sourceFiles.map((file) => (
+                <div key={file} className="truncate rounded-md bg-[#f3f6f0] px-2 py-1.5 text-[11px]" style={{ color: L_MUTED, fontFamily: M }}>{file}</div>
               ))}
             </div>
-          </div>
-
-          <div className="mt-4 flex flex-wrap gap-2">
-            {['Shopify', 'ERP export', 'Returns', 'Supplier PI', 'Marketplace templates'].map((item) => (
-              <span key={item} className="rounded-md border px-2 py-1.5 text-[10px] uppercase" style={{ borderColor: BORDER, color: SOFT, fontFamily: M }}>
-                {item}
-              </span>
-            ))}
           </div>
         </aside>
 
-        <div className="p-3 sm:p-5">
-          <div className="max-h-[680px] overflow-y-auto pr-1">
-            <div className="rounded-lg border p-4 sm:p-5" style={{ borderColor: BORDER, background: 'rgba(255,255,255,0.035)' }}>
-              <div className="text-[10px] uppercase" style={{ color: ACCENT, fontFamily: M }}>{flow.eyebrow}</div>
-              <h3 className="mt-2 max-w-[680px] text-[32px] font-semibold leading-[1.04] text-white sm:text-[42px]" style={{ fontFamily: D }}>{flow.title}</h3>
-              <p className="mt-4 max-w-[680px] text-[15px] leading-[1.7]" style={{ color: SOFT }}>{flow.body}</p>
-
-              <div className="mt-5 grid gap-2 sm:grid-cols-3">
-                {flow.metrics.map(([value, label]) => (
-                  <div key={label} className="rounded-lg border p-4" style={{ borderColor: BORDER, background: 'rgba(0,0,0,0.2)' }}>
-                    <div className="text-[28px] font-bold text-white" style={{ fontFamily: D }}>{value}</div>
-                    <div className="mt-1 text-[10px] uppercase leading-tight" style={{ color: MUTED, fontFamily: M }}>{label}</div>
-                  </div>
-                ))}
-              </div>
+        <div className="min-w-0 bg-[#eef3ed]">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b bg-white px-4 py-3 sm:px-5" style={{ borderColor: L_BORDER }}>
+            <div>
+              <div className="text-[10px] uppercase" style={{ color: '#1D7A6D', fontFamily: M }}>{flow.eyebrow}</div>
+              <h3 className="text-[22px] font-semibold leading-tight" style={{ color: L_TEXT, fontFamily: D }}>{flow.label}</h3>
             </div>
-
-            <div className="mt-3 grid gap-3 xl:grid-cols-[0.92fr_1.08fr]">
-              <div className="rounded-lg border p-4" style={{ borderColor: BORDER, background: 'rgba(255,255,255,0.035)' }}>
-                <div className="mb-3 flex items-center justify-between gap-3">
-                  <div className="text-[10px] uppercase" style={{ color: MUTED, fontFamily: M }}>Analysis result</div>
-                  <div className="rounded-md px-2 py-1 text-[10px] uppercase" style={{ background: 'rgba(197,241,53,0.1)', color: ACCENT, fontFamily: M }}>Live model</div>
-                </div>
-                <svg viewBox="0 0 210 112" className="h-[150px] w-full" aria-hidden="true">
-                  <defs>
-                    <linearGradient id={`flowFill-${flow.id}`} x1="0" x2="0" y1="0" y2="1">
-                      <stop offset="0%" stopColor="#C5F135" stopOpacity="0.32" />
-                      <stop offset="100%" stopColor="#C5F135" stopOpacity="0.02" />
-                    </linearGradient>
-                  </defs>
-                  {[0, 1, 2].map((line) => (
-                    <line key={line} x1="0" x2="210" y1={24 + line * 30} y2={24 + line * 30} stroke="rgba(255,255,255,0.08)" />
-                  ))}
-                  <path d={`${chartPath} L 196 106 L 12 106 Z`} fill={`url(#flowFill-${flow.id})`} />
-                  <path d={chartPath} fill="none" stroke={ACCENT} strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
-                  {flow.chart.map((value, index) => (
-                    <circle key={`${flow.id}-${index}`} cx={12 + index * 46} cy={102 - value * 0.72} r="4" fill={ACCENT} />
-                  ))}
-                </svg>
-                <div className="mt-3 rounded-lg border p-3" style={{ borderColor: 'rgba(197,241,53,0.28)', background: 'rgba(197,241,53,0.08)' }}>
-                  <div className="mb-1 text-[10px] uppercase" style={{ color: ACCENT, fontFamily: M }}>Recommended decision</div>
-                  <p className="text-[14px] leading-[1.6] text-white">{flow.decision}</p>
-                </div>
-              </div>
-
-              <div className="rounded-lg border p-4" style={{ borderColor: BORDER, background: 'rgba(255,255,255,0.035)' }}>
-                <div className="mb-3 flex items-center justify-between gap-3">
-                  <div className="text-[10px] uppercase" style={{ color: MUTED, fontFamily: M }}>Decision queue</div>
-                  <div className="text-[10px] uppercase" style={{ color: ACCENT, fontFamily: M }}>{flow.action}</div>
-                </div>
-                <div className="overflow-hidden rounded-lg border" style={{ borderColor: BORDER }}>
-                  {flow.rows.map((row, index) => {
-                    const state = row[2]
-                    const highlighted = ['Ready', 'Mapped', 'Growth', 'Buy', 'Approve', 'Passed', 'On'].includes(state)
-                    return (
-                      <div key={row.join('-')} className="grid grid-cols-12 gap-2 border-b px-3 py-3 text-[11px] last:border-b-0" style={{ borderColor: BORDER, background: index === 0 ? 'rgba(197,241,53,0.08)' : 'rgba(255,255,255,0.035)' }}>
-                        <span className="col-span-4 truncate font-semibold text-white">{row[0]}</span>
-                        <span className="col-span-5 truncate" style={{ color: SOFT }}>{row[1]}</span>
-                        <span className="col-span-3 text-right" style={{ color: highlighted ? ACCENT : SOFT, fontFamily: M }}>{state}</span>
-                      </div>
-                    )
-                  })}
-                </div>
-
-                <div className="mt-3 grid gap-2 sm:grid-cols-3">
-                  {['Evidence attached', 'Impact checked', 'Rollback notes'].map((item) => (
-                    <div key={item} className="rounded-md border px-3 py-2 text-[10px] uppercase" style={{ borderColor: BORDER, color: SOFT, fontFamily: M }}>
-                      {item}
-                    </div>
-                  ))}
-                </div>
-              </div>
+            <div className="flex flex-wrap gap-2">
+              {['Logic ERP', 'Supplier PI', 'Marketplace XLSX', 'Approval logs'].map((item) => badge(item, 'neutral'))}
             </div>
+          </div>
 
-            <div className="mt-3 grid gap-3 md:grid-cols-3">
-              {[
-                ['Operator keeps control', 'Every action is a draft until the team approves it.'],
-                ['Company memory stays attached', 'Decisions use product, channel, sales, returns, and supplier context.'],
-                ['Weekly work gets repeatable', 'The same flow can run for the next drop, brand, or marketplace.'],
-              ].map(([title, body]) => (
-                <div key={title} className="rounded-lg border p-4" style={{ borderColor: BORDER, background: 'rgba(0,0,0,0.18)' }}>
-                  <h4 className="text-[15px] font-semibold text-white" style={{ fontFamily: D }}>{title}</h4>
-                  <p className="mt-2 text-[12px] leading-[1.6]" style={{ color: SOFT }}>{body}</p>
-                </div>
-              ))}
-            </div>
+          <div className="p-4 sm:p-5">
+            {active === 'listings' && renderListingOps()}
+            {active === 'brain' && renderCompanyBrain()}
+            {active === 'forecast' && renderInventory()}
+            {active === 'actions' && renderApprovals()}
           </div>
         </div>
       </div>
@@ -825,251 +899,162 @@ function EnrichmentSlider() {
   )
 }
 
-function AgentTabs() {
-  const [active, setActive] = useState('listing')
-  const tab = AGENT_TABS.find((item) => item.id === active) || AGENT_TABS[1]
-  const chartPath = tab.chart
-    .map((value, index) => {
-      const x = 8 + index * 46
-      const y = 94 - value * 0.72
-      return `${index === 0 ? 'M' : 'L'} ${x} ${y}`
-    })
-    .join(' ')
+function TemplateVisual() {
+  const statusBadge = (label: string, tone: 'ready' | 'review' | 'blocked' = 'ready') => {
+    const styles = {
+      ready: { background: '#e8f7ed', color: '#137a3a', borderColor: '#bfe7cd' },
+      review: { background: '#fff7db', color: '#9a6500', borderColor: '#ecd48a' },
+      blocked: { background: '#fff0ef', color: '#b53a32', borderColor: '#efc5c0' },
+    }[tone]
+
+    return (
+      <span className="rounded-md border px-2 py-1 text-[10px] font-semibold uppercase" style={{ ...styles, fontFamily: M }}>
+        {label}
+      </span>
+    )
+  }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[0.52fr_1.48fr] lg:items-start">
-      <div className="grid gap-2">
-        {AGENT_TABS.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            onClick={() => setActive(item.id)}
-            className="rounded-lg border p-4 text-left transition-transform hover:-translate-y-0.5"
-            style={{ borderColor: item.id === active ? 'rgba(197,241,53,0.36)' : BORDER, background: item.id === active ? 'rgba(197,241,53,0.1)' : GLASS }}
-          >
-            <div className="flex items-center justify-between gap-3">
-              <div className="text-[18px] font-semibold text-white" style={{ fontFamily: D }}>{item.label}</div>
-              <span className="text-[10px] uppercase" style={{ color: item.id === active ? ACCENT : MUTED, fontFamily: M }}>Agent</span>
-            </div>
-            <p className="mt-2 text-[13px] leading-[1.55]" style={{ color: SOFT }}>{item.title}</p>
-          </button>
-        ))}
+    <div className="overflow-hidden rounded-xl border" style={{ borderColor: L_BORDER, background: '#eef3ed', boxShadow: '0 28px 86px rgba(0,0,0,0.12)' }}>
+      <div className="flex items-center justify-between gap-4 border-b px-4 py-3" style={{ borderColor: L_BORDER, background: '#0d0f0c' }}>
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="flex gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+          </div>
+          <div className="hidden min-w-0 rounded-md border px-3 py-1.5 text-[11px] sm:block" style={{ borderColor: 'rgba(255,255,255,0.12)', color: MUTED, fontFamily: M }}>
+            app.use-amplify.com/geoomnii/marketplace-files
+          </div>
+        </div>
+        <button type="button" className="rounded-md px-3 py-1.5 text-[10px] font-bold uppercase" style={{ background: ACCENT, color: BASE, fontFamily: M }}>
+          Export
+        </button>
       </div>
 
-      <div className="overflow-hidden rounded-lg border" style={{ borderColor: BORDER, background: '#151515', boxShadow: '0 30px 90px rgba(0,0,0,0.3)' }}>
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b px-5 py-4" style={{ borderColor: BORDER }}>
-          <div className="flex items-center gap-3">
+      <div className="grid lg:grid-cols-[228px_1fr]">
+        <aside className="border-b bg-[#f7faf6] p-4 lg:border-b-0 lg:border-r" style={{ borderColor: L_BORDER }}>
+          <div className="mb-5 flex items-center gap-2">
             <Logo size={28} />
             <div>
-              <div className="text-[15px] font-semibold text-white" style={{ fontFamily: D }}>{tab.label} Agent</div>
-              <div className="text-[10px] uppercase" style={{ color: MUTED, fontFamily: M }}>Product operations workspace</div>
+              <div className="text-[14px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>Amplify</div>
+              <div className="text-[10px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>Listing Ops</div>
             </div>
           </div>
-          <div className="rounded-md px-2.5 py-1 text-[10px] uppercase" style={{ background: 'rgba(197,241,53,0.12)', color: ACCENT, fontFamily: M }}>
-            Approval required
-          </div>
-        </div>
-
-        <div className="grid gap-0 xl:grid-cols-[0.72fr_1.28fr]">
-          <div className="border-b p-5 xl:border-b-0 xl:border-r" style={{ borderColor: BORDER }}>
-            <div className="grid gap-4 md:grid-cols-[160px_1fr] xl:grid-cols-1">
-              <div className="overflow-hidden rounded-lg border bg-white p-2" style={{ borderColor: BORDER }}>
-                <div className="relative aspect-[4/3] overflow-hidden rounded-md bg-[#eef1ea]">
-                  <img src="/images/products/customer-shoe-boot.jpg" alt="Men's leather lace-up ankle boot" className="h-full w-full object-cover" />
-                </div>
+          <div className="grid gap-1.5 sm:grid-cols-2 lg:grid-cols-1">
+            {[
+              ['Source files', 'uploaded'],
+              ['Template compile', 'active'],
+              ['Image review', 'mapped'],
+              ['Approval queue', '4 checks'],
+            ].map(([label, detail], index) => (
+              <div key={label} className="rounded-lg border px-3 py-3" style={{ borderColor: index === 1 ? '#b7dcbf' : 'transparent', background: index === 1 ? '#eaf6e7' : 'transparent' }}>
+                <div className="text-[10px] uppercase" style={{ color: index === 1 ? '#1D7A6D' : L_MUTED, fontFamily: M }}>{detail}</div>
+                <div className="mt-1 text-[14px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>{label}</div>
               </div>
-              <div>
-                <div className="text-[10px] uppercase" style={{ color: MUTED, fontFamily: M }}>Active SKU</div>
-                <h3 className="mt-1 text-[28px] font-semibold leading-[1.05] text-white" style={{ fontFamily: D }}>BR-772104-CAF</h3>
-                <p className="mt-2 text-[13px] leading-[1.6]" style={{ color: SOFT }}>
-                  Men’s Leather Lace-Up Ankle Boot. Source invoice, image set, channel rules, and approval history are attached.
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-4 rounded-lg border p-4" style={{ borderColor: 'rgba(197,241,53,0.3)', background: 'rgba(197,241,53,0.08)' }}>
-              <div className="mb-2 flex items-center justify-between gap-3">
-                <div className="text-[10px] uppercase" style={{ color: ACCENT, fontFamily: M }}>Agent instruction</div>
-                <SparkIcon />
-              </div>
-              <div className="text-[16px] font-semibold text-white" style={{ fontFamily: D }}>{tab.command}</div>
-            </div>
-
-            <div className="mt-4 grid gap-2">
-              {tab.fields.map(([field, value, state]) => (
-                <div key={field} className="flex items-center justify-between gap-3 rounded-lg border px-3 py-2.5" style={{ borderColor: BORDER, background: 'rgba(255,255,255,0.045)' }}>
-                  <div>
-                    <div className="text-[10px] uppercase" style={{ color: MUTED, fontFamily: M }}>{field}</div>
-                    <div className="mt-0.5 text-[13px] font-semibold text-white" style={{ fontFamily: D }}>{value}</div>
-                  </div>
-                  <span className="rounded-md px-2 py-1 text-[9px] uppercase" style={{ background: state === 'ready' ? 'rgba(197,241,53,0.12)' : 'rgba(255,255,255,0.08)', color: state === 'ready' ? ACCENT : SOFT, fontFamily: M }}>
-                    {state}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="p-5">
-            <div className="grid gap-3 md:grid-cols-[1fr_0.88fr]">
-              <div className="rounded-lg border p-4" style={{ borderColor: BORDER, background: 'rgba(255,255,255,0.035)' }}>
-                <div className="mb-3 flex items-center justify-between">
-                  <div className="text-[10px] uppercase" style={{ color: MUTED, fontFamily: M }}>Attribute readiness</div>
-                  <div className="rounded-md px-2 py-1 text-[10px] uppercase" style={{ background: 'rgba(197,241,53,0.1)', color: ACCENT, fontFamily: M }}>Live run</div>
-                </div>
-                <div className="grid items-center gap-4 sm:grid-cols-[104px_1fr]">
-                  <div className="relative h-[104px] w-[104px]">
-                    <svg viewBox="0 0 120 120" className="h-full w-full -rotate-90" aria-hidden="true">
-                      <circle cx="60" cy="60" r="44" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="12" />
-                      <circle cx="60" cy="60" r="44" fill="none" stroke={ACCENT} strokeWidth="12" pathLength="100" strokeDasharray={`${tab.score} 100`} strokeLinecap="round" />
-                    </svg>
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="text-[24px] font-semibold text-white" style={{ fontFamily: D }}>{tab.score}%</span>
-                      <span className="text-[9px] uppercase" style={{ color: MUTED, fontFamily: M }}>Ready</span>
-                    </div>
-                  </div>
-                  <svg viewBox="0 0 200 100" className="h-[104px] w-full" aria-hidden="true">
-                    <defs>
-                      <linearGradient id={`agentFill-${tab.id}`} x1="0" x2="0" y1="0" y2="1">
-                        <stop offset="0%" stopColor="#C5F135" stopOpacity="0.28" />
-                        <stop offset="100%" stopColor="#C5F135" stopOpacity="0.02" />
-                      </linearGradient>
-                    </defs>
-                    <path d={`${chartPath} L 192 96 L 8 96 Z`} fill={`url(#agentFill-${tab.id})`} />
-                    <path d={chartPath} fill="none" stroke={ACCENT} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                    {tab.chart.map((value, index) => (
-                      <circle key={`${tab.id}-${index}`} cx={8 + index * 46} cy={94 - value * 0.72} r="3.5" fill={ACCENT} />
-                    ))}
-                    {[0, 1, 2].map((line) => (
-                      <line key={line} x1="0" x2="200" y1={24 + line * 28} y2={24 + line * 28} stroke="rgba(255,255,255,0.08)" />
-                    ))}
-                  </svg>
-                </div>
-              </div>
-
-              <div className="rounded-lg border p-4" style={{ borderColor: BORDER, background: 'rgba(255,255,255,0.035)' }}>
-                <div className="mb-3 text-[10px] uppercase" style={{ color: MUTED, fontFamily: M }}>Evidence sources</div>
-                <div className="space-y-2">
-                  {['Supplier invoice parsed', 'Image set reviewed', 'Return evidence checked', 'Channel template loaded'].map((item, index) => (
-                    <div key={item} className="flex items-center gap-2 text-[12px]" style={{ color: SOFT }}>
-                      <span className="h-2 w-2 rounded-full" style={{ background: index < 3 ? ACCENT : 'rgba(255,255,255,0.24)' }} />
-                      <span>{item}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-3 grid gap-2 sm:grid-cols-4">
-              {['Invoice', 'Images', 'Channel rules', 'Approval'].map((stage, index) => (
-                <div key={stage} className="rounded-lg border px-3 py-3" style={{ borderColor: index < 3 ? 'rgba(197,241,53,0.22)' : BORDER, background: index < 3 ? 'rgba(197,241,53,0.07)' : 'rgba(255,255,255,0.035)' }}>
-                  <div className="mb-2 flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full" style={{ background: index < 3 ? ACCENT : 'rgba(255,255,255,0.24)' }} />
-                    <span className="text-[9px] uppercase" style={{ color: index < 3 ? ACCENT : MUTED, fontFamily: M }}>{String(index + 1).padStart(2, '0')}</span>
-                  </div>
-                  <div className="text-[12px] font-semibold text-white" style={{ fontFamily: D }}>{stage}</div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-3 grid gap-3 md:grid-cols-[1fr_0.92fr]">
-              <div className="rounded-lg border p-4" style={{ borderColor: BORDER, background: 'rgba(0,0,0,0.18)' }}>
-                <div className="mb-3 text-[10px] uppercase" style={{ color: MUTED, fontFamily: M }}>Proposed update</div>
-                <div className="grid gap-2">
-                  {[
-                    ['Title', 'Men Shoes Brown', 'Men’s Leather Lace-Up Ankle Boot - Brown'],
-                    ['Closure', '-', 'Lace-up closure'],
-                    ['Material', 'Synthetic', 'Leather upper, rubber outsole'],
-                  ].map(([field, before, after]) => (
-                    <div key={field} className="rounded-md border p-3" style={{ borderColor: BORDER, background: 'rgba(255,255,255,0.035)' }}>
-                      <div className="mb-2 text-[10px] uppercase" style={{ color: MUTED, fontFamily: M }}>{field}</div>
-                      <div className="grid gap-2 text-[12px] sm:grid-cols-2">
-                        <div className="rounded-md px-2 py-2" style={{ background: 'rgba(255,255,255,0.05)', color: MUTED }}>{before}</div>
-                        <div className="rounded-md px-2 py-2" style={{ background: 'rgba(197,241,53,0.1)', color: '#fff' }}>{after}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="rounded-lg border p-4" style={{ borderColor: BORDER, background: 'rgba(0,0,0,0.18)' }}>
-                <div className="mb-3 text-[10px] uppercase" style={{ color: MUTED, fontFamily: M }}>Output queue</div>
-                <div className="overflow-hidden rounded-lg border" style={{ borderColor: BORDER }}>
-                  {tab.rows.map((row, index) => (
-                    <div key={row.join('-')} className="grid grid-cols-12 gap-3 border-b px-3 py-3 text-[11px] last:border-b-0" style={{ borderColor: BORDER, background: index === 0 ? 'rgba(197,241,53,0.08)' : 'rgba(255,255,255,0.035)' }}>
-                      <span className="col-span-3 truncate font-semibold text-white">{row[0]}</span>
-                      <span className="col-span-6 truncate" style={{ color: SOFT }}>{row[1]}</span>
-                      <span className="col-span-3 text-right" style={{ color: ACCENT, fontFamily: M }}>{row[2]}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-3 grid grid-cols-3 gap-2">
-                  {tab.metrics.map((metric) => (
-                    <div key={metric} className="rounded-md border px-2 py-2 text-[9px] uppercase" style={{ borderColor: BORDER, color: SOFT, fontFamily: M }}>
-                      {metric}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function TemplateVisual() {
-  return (
-    <div className="rounded-lg border bg-white p-4" style={{ borderColor: L_BORDER, boxShadow: '0 24px 70px rgba(0,0,0,0.11)' }}>
-      <TransformationFlow />
-      <div className="grid gap-3 md:grid-cols-3">
-        {WORKFLOW_CARDS.map((card, index) => (
-          <article key={card.title} className="rounded-lg border p-4" style={{ borderColor: index === 1 ? 'rgba(26,122,46,0.25)' : L_BORDER, background: index === 1 ? 'rgba(197,241,53,0.11)' : L_SURFACE }}>
-            <div className="mb-5 flex items-center justify-between">
-              <span className="text-[10px] uppercase" style={{ color: index === 1 ? '#1a7a2e' : L_MUTED, fontFamily: M }}>{String(index + 1).padStart(2, '0')}</span>
-              <span className="h-2 w-2 rounded-full" style={{ background: index <= 1 ? '#1a7a2e' : 'rgba(0,0,0,0.18)' }} />
-            </div>
-            <h3 className="text-[19px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>{card.title}</h3>
-            <p className="mt-3 min-h-[66px] text-[13px] leading-[1.6]" style={{ color: L_MUTED }}>{card.body}</p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {card.tags.map((tag) => (
-                <span key={tag} className="rounded-md border px-2 py-1 text-[9px] uppercase" style={{ borderColor: L_BORDER, color: L_MUTED, fontFamily: M }}>
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </article>
-        ))}
-      </div>
-      <ImageEnhancementVisual />
-      <div className="mt-4 overflow-hidden rounded-lg border" style={{ borderColor: L_BORDER }}>
-        <div className="grid grid-cols-12 bg-[#0d1209] px-3 py-2 text-[9px] uppercase" style={{ color: ACCENT, fontFamily: M }}>
-          <span className="col-span-2">SKU</span>
-          <span className="col-span-2">Image</span>
-          <span className="col-span-2">Closure</span>
-          <span className="col-span-2">Toe</span>
-          <span className="col-span-2">Heel</span>
-          <span className="col-span-2 text-right">Status</span>
-        </div>
-        {[
-          ['BR-772104-CAF', '5 URLs', 'Lace-up', 'Round', 'Low', 'Ready'],
-          ['BR-772105-PRE', '5 URLs', 'Lace-up', 'Round', 'Low', 'Ready'],
-          ['BR-772106-NDE', '4 URLs', 'Slip-on', 'Round', 'Flat', 'Review'],
-        ].map((row) => (
-          <div key={row[0]} className="grid grid-cols-12 border-t px-3 py-3 text-[11px]" style={{ borderColor: L_BORDER, color: L_TEXT }}>
-            {row.map((cell, index) => (
-              <span key={`${row[0]}-${cell}`} className={`${index === 0 ? 'col-span-2 font-semibold' : 'col-span-2'} ${index === row.length - 1 ? 'text-right' : ''}`} style={{ color: index === row.length - 1 ? '#1a7a2e' : undefined, fontFamily: index === row.length - 1 ? M : undefined }}>
-                {cell}
-              </span>
             ))}
           </div>
-        ))}
+          <div className="mt-5 hidden rounded-lg border bg-white p-3 lg:block" style={{ borderColor: L_BORDER }}>
+            <div className="mb-2 text-[10px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>Input files</div>
+            <div className="space-y-1.5">
+              {['supplier_invoice.xlsx', 'master_item_sheet.xlsx', 'imgbb_album.csv', 'centrepoint_template.xlsx'].map((file) => (
+                <div key={file} className="truncate rounded-md bg-[#f3f6f0] px-2 py-1.5 text-[11px]" style={{ color: L_MUTED, fontFamily: M }}>{file}</div>
+              ))}
+            </div>
+          </div>
+        </aside>
+
+        <div className="min-w-0 bg-[#eef3ed]">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b bg-white px-4 py-3 sm:px-5" style={{ borderColor: L_BORDER }}>
+            <div>
+              <div className="text-[10px] uppercase" style={{ color: '#1D7A6D', fontFamily: M }}>Marketplace files</div>
+              <h3 className="text-[22px] font-semibold leading-tight" style={{ color: L_TEXT, fontFamily: D }}>Invoice to channel-ready XLSX</h3>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {['Namshi', '6th Street', 'Centrepoint', 'Amazon'].map((item) => (
+                <span key={item} className="rounded-md border px-2 py-1 text-[10px] font-semibold uppercase" style={{ borderColor: '#e2e8da', background: '#f3f5ef', color: '#646b5d', fontFamily: M }}>{item}</span>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid gap-4 p-4 sm:p-5 xl:grid-cols-[0.9fr_1.1fr]">
+            <section className="rounded-lg border bg-white p-4" style={{ borderColor: L_BORDER }}>
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <div>
+                  <div className="text-[10px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>Source normalization</div>
+                  <h4 className="mt-1 text-[20px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>Supplier invoice expanded by size</h4>
+                </div>
+                {statusBadge('mapped', 'ready')}
+              </div>
+              <div className="overflow-hidden rounded-lg border" style={{ borderColor: L_BORDER }}>
+                {[
+                  ['772104', 'CAFÉ', '35', '12', 'hero'],
+                  ['772104', 'CAFÉ', '36', '18', 'mapped'],
+                  ['772104', 'CAFÉ', '37', '21', 'mapped'],
+                  ['772105', 'PRETO', '38', '14', 'review'],
+                ].map((row, index) => (
+                  <div key={`${row[0]}-${row[2]}`} className="grid grid-cols-12 gap-3 border-b px-3 py-3 text-[12px] last:border-b-0" style={{ borderColor: L_BORDER, background: index === 0 ? '#f4faef' : '#fff' }}>
+                    <span className="col-span-3 font-semibold" style={{ color: L_TEXT }}>{row[0]}</span>
+                    <span className="col-span-3" style={{ color: L_TEXT }}>{row[1]}</span>
+                    <span className="col-span-2" style={{ color: L_MUTED }}>{row[2]}</span>
+                    <span className="col-span-2" style={{ color: L_MUTED }}>{row[3]}</span>
+                    <span className="col-span-2 text-right" style={{ color: row[4] === 'review' ? '#9a6500' : '#137a3a', fontFamily: M }}>{row[4]}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 grid gap-2 sm:grid-cols-3">
+                {['HSN', 'Heel', 'Closure'].map((field) => (
+                  <div key={field} className="rounded-md border px-3 py-2 text-center text-[10px] uppercase" style={{ borderColor: L_BORDER, color: L_MUTED, fontFamily: M }}>{field}</div>
+                ))}
+              </div>
+            </section>
+
+            <section className="rounded-lg border bg-white p-4" style={{ borderColor: L_BORDER }}>
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <div className="text-[10px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>Platform outputs</div>
+                  <h4 className="mt-1 text-[20px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>Ready files with review blockers isolated</h4>
+                </div>
+                {statusBadge('ready XLSX', 'ready')}
+              </div>
+              <div className="space-y-2">
+                {[
+                  ['Namshi', 'closure, toe, heel, images', 'Ready', 'ready'],
+                  ['6th Street', 'variant template and image URLs', 'Ready', 'ready'],
+                  ['Centrepoint', 'UDA fields need approval', 'Review', 'review'],
+                  ['Amazon', 'flat-file enum checks', 'Ready', 'ready'],
+                ].map(([platform, detail, status, tone]) => (
+                  <div key={platform} className="rounded-lg border p-3" style={{ borderColor: L_BORDER, background: status === 'Ready' ? '#f4faef' : '#fff' }}>
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <h5 className="text-[15px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>{platform}</h5>
+                        <p className="mt-1 text-[12px]" style={{ color: L_MUTED }}>{detail}</p>
+                      </div>
+                      {statusBadge(status, tone as 'ready' | 'review')}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 rounded-lg border p-3" style={{ borderColor: '#cfe4dc', background: '#f7fbfa' }}>
+                <div className="mb-3 flex items-center justify-between">
+                  <span className="text-[10px] uppercase" style={{ color: '#1D7A6D', fontFamily: M }}>Namshi export fields</span>
+                  {statusBadge('mapped', 'ready')}
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {['Closure', 'Toe shape', 'Upper material', 'Image URLs'].map((field) => (
+                    <span key={field} className="rounded-md border px-3 py-2 text-[10px] uppercase" style={{ borderColor: '#d9e8dd', color: L_MUTED, fontFamily: M }}>
+                      {field}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
       </div>
     </div>
   )
 }
-
 function TransformationFlow() {
   const [activeOutput, setActiveOutput] = useState('Namshi')
   const masterRows = [
@@ -1337,7 +1322,7 @@ function CustomerSection() {
             </h2>
           </div>
           <p className="text-[15px] leading-[1.75]" style={{ color: L_MUTED }}>
-            Compact stories from operators using Amplify to connect catalog, stock, training, ads, supplier files, and marketplace outputs.
+            Three operator stories across catalog, inventory, ads, training, and marketplace outputs.
           </p>
         </div>
 
@@ -1361,13 +1346,13 @@ function CustomerSection() {
               </div>
               <div>
                 <h3 className="text-[27px] font-semibold leading-[1.12] text-white" style={{ fontFamily: D }}>
-                  Distributed footwear catalog, stock, and listing work without rebuilding every sheet.
+                  Catalog, stock, and marketplace files for Beira Rio teams.
                 </h3>
                 <p className="mt-4 text-[13px] leading-[1.65]" style={{ color: 'rgba(255,255,255,0.68)' }}>
-                  Geoomnii organizes Beira Rio item masters, supplier stock slices, product images, and marketplace templates into approved outputs.
+                  Item masters, stock slices, product images, and templates become approved outputs.
                 </p>
                 <div className="mt-6 flex flex-wrap gap-2">
-                  {['8 Beira Rio brands', '8 online platforms', 'Approved feeds'].map((item) => (
+                  {['Catalog ops', 'Stock sync', 'Marketplace feeds'].map((item) => (
                     <span key={item} className="rounded-md px-2.5 py-1 text-[10px] font-bold uppercase" style={{ background: ACCENT, color: BASE, fontFamily: M }}>{item}</span>
                   ))}
                 </div>
@@ -1379,7 +1364,7 @@ function CustomerSection() {
             className="relative min-h-[430px] overflow-hidden rounded-lg border p-5 sm:p-6"
             style={{
               borderColor: 'rgba(0,0,0,0.1)',
-              backgroundImage: 'linear-gradient(180deg, rgba(255,255,255,0.74), rgba(255,255,255,0.93) 54%, rgba(255,255,255,0.98)), url("/images/customers/pmuk-gusto-hot-sauce.png")',
+              backgroundImage: 'linear-gradient(180deg, rgba(255,255,255,0.52), rgba(255,255,255,0.82) 52%, rgba(255,255,255,0.94)), url("/images/customers/pmuk-gusto-hot-sauce.png")',
               backgroundSize: 'cover',
               backgroundPosition: 'center top',
               boxShadow: '0 22px 62px rgba(120,42,54,0.12)',
@@ -1393,11 +1378,11 @@ function CustomerSection() {
                   Inventory, bundle SKUs, and AI ad actions in one queue.
                 </h3>
                 <p className="mt-4 text-[14px] leading-[1.65]" style={{ color: L_MUTED }}>
-                  PMUK uses Amplify to keep stock decisions, bundle generation, and ad recommendations moving with manager approval.
+                  Stock decisions, bundle SKUs, and ad recommendations stay ready for manager approval.
                 </p>
               </div>
               <div className="flex flex-wrap gap-2 pt-8">
-                {['Inventory management', 'Bundle SKU generator', 'AI ads management'].map((item) => (
+                {['Inventory', 'Bundle SKUs', 'AI ads'].map((item) => (
                   <span key={item} className="rounded-md px-2.5 py-1 text-[10px] font-bold uppercase" style={{ background: ACCENT, color: BASE, fontFamily: M }}>{item}</span>
                 ))}
               </div>
@@ -1422,19 +1407,19 @@ function CustomerSection() {
                 <div className="mt-4 text-[10px] uppercase" style={{ color: 'rgba(255,255,255,0.72)', fontFamily: M }}>Retail training enablement</div>
               </div>
               <div>
-                <div className="mb-5 flex flex-wrap gap-2">
-                  {['Tutorial videos', 'Sales associate training', 'Launch readiness'].map((item) => (
+                <p className="text-[25px] font-semibold leading-[1.14] text-white" style={{ fontFamily: D }}>
+                  Product training for Shoe Mart store teams.
+                </p>
+                <p className="mt-4 text-[13px] leading-[1.65]" style={{ color: 'rgba(255,255,255,0.72)' }}>
+                  Launch notes and selling guidance become repeatable tutorials for sales associates.
+                </p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {['Training videos', 'Store teams', 'Launch readiness'].map((item) => (
                     <span key={item} className="rounded-md px-2.5 py-1 text-[10px] font-bold uppercase" style={{ background: ACCENT, color: BASE, fontFamily: M }}>
                       {item}
                     </span>
                   ))}
                 </div>
-                <p className="text-[25px] font-semibold leading-[1.14] text-white" style={{ fontFamily: D }}>
-                  Shoe Mart turns product knowledge into training videos and store-ready selling guidance.
-                </p>
-                <p className="mt-4 text-[13px] leading-[1.65]" style={{ color: 'rgba(255,255,255,0.72)' }}>
-                  Launch notes, product stories, and retail SOPs become repeatable tutorials for sales associates across footwear teams.
-                </p>
               </div>
             </div>
           </article>
@@ -1511,7 +1496,30 @@ export default function LandingPage() {
             <span className="text-[14px] font-semibold text-white" style={{ fontFamily: D }}>Amplify</span>
           </a>
           <div className="hidden items-center gap-6 md:flex">
-            {NAV_LINKS.map((link) => (
+            {NAV_LINKS.slice(0, 1).map((link) => (
+              <a key={link.href} href={link.href} className="text-[12px] transition-colors hover:text-white" style={{ color: SOFT, fontFamily: M }}>
+                {link.label}
+              </a>
+            ))}
+            <div className="group relative">
+              <button type="button" className="flex items-center gap-1 text-[12px] transition-colors hover:text-white" style={{ color: SOFT, fontFamily: M }}>
+                Use cases
+                <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ color: MUTED }}>
+                  <path d="M3 5l3 3 3-3" />
+                </svg>
+              </button>
+              <div className="pointer-events-none absolute left-1/2 top-full z-20 w-[292px] -translate-x-1/2 pt-3 opacity-0 transition-opacity duration-150 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
+                <div className="overflow-hidden rounded-lg border p-2" style={{ background: 'rgba(14,14,14,0.96)', borderColor: BORDER, boxShadow: '0 24px 70px rgba(0,0,0,0.38)', backdropFilter: 'blur(22px)', WebkitBackdropFilter: 'blur(22px)' }}>
+                  {USE_CASE_LINKS.map((link) => (
+                    <a key={link.href} href={link.href} className="block rounded-md px-3 py-3 transition-colors hover:bg-white/5">
+                      <span className="block text-[12px] font-semibold text-white" style={{ fontFamily: D }}>{link.label}</span>
+                      <span className="mt-0.5 block text-[10px] uppercase" style={{ color: MUTED, fontFamily: M }}>{link.detail}</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+            {NAV_LINKS.slice(1).map((link) => (
               <a key={link.href} href={link.href} className="text-[12px] transition-colors hover:text-white" style={{ color: SOFT, fontFamily: M }}>
                 {link.label}
               </a>
@@ -1556,6 +1564,16 @@ export default function LandingPage() {
                 {link.label}
               </a>
             ))}
+            <div className="my-2 h-px" style={{ background: BORDER }} />
+            <div className="px-3 pb-1 pt-2 text-[10px] uppercase" style={{ color: MUTED, fontFamily: M }}>Use cases</div>
+            {USE_CASE_LINKS.map((link) => (
+              <a key={link.href} href={link.href} onClick={() => setMobileOpen(false)} className="block rounded-lg px-3 py-3 text-[14px] text-white" style={{ fontFamily: M }}>
+                {link.label}
+              </a>
+            ))}
+            <a href="/audit" onClick={() => setMobileOpen(false)} className="mt-2 block rounded-lg px-3 py-3 text-[14px] font-bold" style={{ background: ACCENT, color: BASE, fontFamily: M }}>
+              Free audit
+            </a>
           </div>
         </div>
       )}
@@ -1566,9 +1584,9 @@ export default function LandingPage() {
         <div className="relative mx-auto max-w-[1180px] px-5 pb-16 sm:px-6 sm:pb-24">
           <div className="grid items-center gap-10 lg:grid-cols-[0.92fr_1.08fr]">
             <div>
-              <a href="#enrichment" className="mb-7 inline-flex max-w-full flex-wrap items-center gap-2 rounded-lg px-3 py-2" style={{ background: 'rgba(197,241,53,0.08)', border: '1px solid rgba(197,241,53,0.2)' }}>
-                <span className="shrink-0 rounded-md px-2 py-0.5 text-[10px] font-bold" style={{ background: ACCENT, color: BASE, fontFamily: M }}>NEW</span>
-                <span className="min-w-0 text-[10px] uppercase leading-[1.5] sm:text-[11px]" style={{ color: SOFT, fontFamily: M }}>Listings, company brain, forecasting, agent actions</span>
+              <a href="/audit" className="mb-7 inline-flex max-w-full flex-wrap items-center gap-2 rounded-lg px-3 py-2" style={{ background: 'rgba(197,241,53,0.08)', border: '1px solid rgba(197,241,53,0.2)' }}>
+                <span className="shrink-0 rounded-md px-2 py-0.5 text-[10px] font-bold" style={{ background: ACCENT, color: BASE, fontFamily: M }}>FREE AUDIT</span>
+                <span className="min-w-0 text-[10px] uppercase leading-[1.5] sm:text-[11px]" style={{ color: SOFT, fontFamily: M }}>Paste a product link and get quick listing feedback</span>
               </a>
               <SectionLabel label="AI operations for brand teams" />
               <h1 className="mt-6 max-w-[720px] text-[clamp(42px,5.8vw,80px)] font-bold leading-[0.98] text-white" style={{ fontFamily: D }}>
@@ -1620,13 +1638,13 @@ export default function LandingPage() {
         <div className="mx-auto max-w-[1160px] px-5 py-16 sm:px-6 sm:py-24">
           <div className="mb-10 grid gap-6 lg:grid-cols-[0.88fr_1.12fr] lg:items-end">
             <div>
-              <SectionLabel label="Product flow" />
+              <SectionLabel label="Product preview" />
               <h2 className="mt-7 max-w-[720px] text-[clamp(32px,5vw,64px)] font-bold leading-[1.02] text-white" style={{ fontFamily: D }}>
-                See the actual operator flow, from listing automation to approved actions.
+                The product, embedded like an operator would use it.
               </h2>
             </div>
             <p className="text-[15px] leading-[1.75] sm:text-[17px]" style={{ color: SOFT }}>
-              The workspace is organized around the work a brand team repeats every week: clean listings, answer sales questions, forecast what to buy, and approve agent actions.
+              A seeded Geoomnii workspace showing Listing Ops, Company Brain, Inventory, and Approvals with real commerce inputs.
             </p>
           </div>
           <ProductFlowWorkbench />
@@ -1675,32 +1693,17 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="agents" className="scroll-mt-[96px]" style={{ background: BASE, borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
-        <div className="mx-auto max-w-[1160px] px-5 py-16 sm:px-6 sm:py-24">
-          <div className="mb-10 max-w-[760px]">
-            <SectionLabel label="Agent workspaces" />
-            <h2 className="mt-7 text-[clamp(32px,5vw,64px)] font-bold leading-[1.02] text-white" style={{ fontFamily: D }}>
-              Specialized agents for recurring commerce workflows.
-            </h2>
-            <p className="mt-5 max-w-[620px] text-[15px] leading-[1.75]" style={{ color: SOFT }}>
-              Diagnosis, Listings, Inventory, PO Creator, and Sales are separate enough to feel trustworthy, but connected through the same company brain.
-            </p>
-          </div>
-          <AgentTabs />
-        </div>
-      </section>
-
-      <section style={{ background: L_BG }}>
+      <section id="marketplace-files" className="scroll-mt-[96px]" style={{ background: L_BG }}>
         <div className="mx-auto max-w-[1160px] px-5 py-16 sm:px-6 sm:py-24">
           <div className="mb-10 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
             <div>
               <SectionLabel label="Marketplace files" tone="light" />
               <h2 className="mt-7 max-w-[700px] text-[clamp(32px,5vw,62px)] font-bold leading-[1.02]" style={{ color: L_TEXT, fontFamily: D }}>
-                From invoices and product images to marketplace-ready files.
+                Marketplace files inside the same workspace.
               </h2>
             </div>
             <p className="text-[15px] leading-[1.75] sm:text-[17px]" style={{ color: L_MUTED }}>
-              Built from the actual Structa pipeline: supplier invoices, master sheets, SKU image albums, attribute checks, manager review, and final XLSX exports.
+              Operators move from product cleanup to channel-ready exports without leaving the app: invoices, master sheets, images, review blockers, and XLSX files stay connected.
             </p>
           </div>
           <TemplateVisual />
