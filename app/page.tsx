@@ -1342,63 +1342,6 @@ function CustomerSection() {
         </div>
 
         <div className="grid gap-4 lg:grid-cols-3">
-          <article className="relative min-h-[430px] overflow-hidden rounded-lg border p-5 sm:p-6" style={{ borderColor: L_BORDER, background: '#ffffff', boxShadow: '0 20px 60px rgba(0,0,0,0.08)' }}>
-            <div className="absolute inset-x-0 top-0 h-28" style={{ background: 'linear-gradient(120deg, rgba(197,241,53,0.26), rgba(255,255,255,0), rgba(26,122,46,0.1))' }} />
-            <div className="relative flex h-full min-h-[382px] flex-col justify-between">
-              <div>
-                <div className="mb-5 inline-flex rounded-lg px-3 py-2 text-[18px] font-black" style={{ background: L_SURFACE, color: L_TEXT, fontFamily: D }}>PMUK</div>
-                <div className="mb-5 text-[10px] uppercase" style={{ color: '#2f7c43', fontFamily: M }}>Food ecommerce ops</div>
-                <h3 className="text-[28px] font-semibold leading-[1.08]" style={{ color: L_TEXT, fontFamily: D }}>
-                  Inventory, bundle SKUs, and AI ad actions in one queue.
-                </h3>
-                <p className="mt-4 text-[14px] leading-[1.65]" style={{ color: L_MUTED }}>
-                  PMUK uses Amplify to keep stock decisions, bundle generation, and ad recommendations moving with manager approval.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-2 pt-8">
-                {['Inventory management', 'Bundle SKU generator', 'AI ads management'].map((item) => (
-                  <span key={item} className="rounded-md px-2.5 py-1 text-[10px] font-bold uppercase" style={{ background: ACCENT, color: BASE, fontFamily: M }}>{item}</span>
-                ))}
-              </div>
-            </div>
-          </article>
-
-          <article
-            className="relative min-h-[430px] overflow-hidden rounded-lg border p-5 sm:p-6"
-            style={{
-              borderColor: 'rgba(0,0,0,0.12)',
-              backgroundImage: 'linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.72)), url("/images/customers/shoemart-store.png")',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              boxShadow: '0 24px 68px rgba(0,0,0,0.2)',
-            }}
-          >
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.22) 34%, rgba(0,0,0,0.86))' }} />
-            <div className="relative flex h-full min-h-[382px] flex-col justify-between">
-              <div>
-                <div className="inline-flex rounded-lg bg-white px-4 py-2 text-[20px] font-black tracking-[0.16em]" style={{ color: L_TEXT, fontFamily: D }}>
-                  SHOEMART
-                </div>
-                <div className="mt-4 text-[10px] uppercase" style={{ color: 'rgba(255,255,255,0.72)', fontFamily: M }}>Retail training enablement</div>
-              </div>
-              <div>
-                <div className="mb-5 flex flex-wrap gap-2">
-                  {['Tutorial videos', 'Sales associate training', 'Launch readiness'].map((item) => (
-                    <span key={item} className="rounded-md px-2.5 py-1 text-[10px] font-bold uppercase" style={{ background: ACCENT, color: BASE, fontFamily: M }}>
-                      {item}
-                    </span>
-                  ))}
-                </div>
-                <p className="text-[25px] font-semibold leading-[1.14] text-white" style={{ fontFamily: D }}>
-                  Shoe Mart turns product knowledge into training videos and store-ready selling guidance.
-                </p>
-                <p className="mt-4 text-[13px] leading-[1.65]" style={{ color: 'rgba(255,255,255,0.72)' }}>
-                  Launch notes, product stories, and retail SOPs become repeatable tutorials for sales associates across footwear teams.
-                </p>
-              </div>
-            </div>
-          </article>
-
           <article className="relative min-h-[430px] overflow-hidden rounded-lg border p-5 sm:p-6" style={{ borderColor: 'rgba(255,255,255,0.08)', background: '#0f0f0f', boxShadow: '0 20px 60px rgba(0,0,0,0.14)' }}>
             <div className="absolute inset-x-0 top-0 h-[190px] overflow-hidden">
               <img src="/images/products/customer-shoe-boot.jpg" alt="" className="h-full w-full object-cover" style={{ filter: 'saturate(0.86) contrast(0.9) brightness(0.52)' }} />
@@ -1428,6 +1371,70 @@ function CustomerSection() {
                     <span key={item} className="rounded-md px-2.5 py-1 text-[10px] font-bold uppercase" style={{ background: ACCENT, color: BASE, fontFamily: M }}>{item}</span>
                   ))}
                 </div>
+              </div>
+            </div>
+          </article>
+
+          <article
+            className="relative min-h-[430px] overflow-hidden rounded-lg border p-5 sm:p-6"
+            style={{
+              borderColor: 'rgba(0,0,0,0.1)',
+              backgroundImage: 'linear-gradient(180deg, rgba(255,255,255,0.74), rgba(255,255,255,0.93) 54%, rgba(255,255,255,0.98)), url("/images/customers/pmuk-gusto-hot-sauce.png")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center top',
+              boxShadow: '0 22px 62px rgba(120,42,54,0.12)',
+            }}
+          >
+            <div className="relative flex h-full min-h-[382px] flex-col justify-between">
+              <div>
+                <div className="mb-5 inline-flex rounded-lg px-3 py-2 text-[18px] font-black" style={{ background: 'rgba(255,255,255,0.86)', color: L_TEXT, fontFamily: D, boxShadow: '0 12px 30px rgba(0,0,0,0.08)' }}>PMUK</div>
+                <div className="mb-5 text-[10px] uppercase" style={{ color: '#8a2d3c', fontFamily: M }}>Gusto food ecommerce ops</div>
+                <h3 className="text-[28px] font-semibold leading-[1.08]" style={{ color: L_TEXT, fontFamily: D }}>
+                  Inventory, bundle SKUs, and AI ad actions in one queue.
+                </h3>
+                <p className="mt-4 text-[14px] leading-[1.65]" style={{ color: L_MUTED }}>
+                  PMUK uses Amplify to keep stock decisions, bundle generation, and ad recommendations moving with manager approval.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-2 pt-8">
+                {['Inventory management', 'Bundle SKU generator', 'AI ads management'].map((item) => (
+                  <span key={item} className="rounded-md px-2.5 py-1 text-[10px] font-bold uppercase" style={{ background: ACCENT, color: BASE, fontFamily: M }}>{item}</span>
+                ))}
+              </div>
+            </div>
+          </article>
+
+          <article
+            className="relative min-h-[430px] overflow-hidden rounded-lg border p-5 sm:p-6"
+            style={{
+              borderColor: 'rgba(0,0,0,0.12)',
+              backgroundImage: 'linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.3) 38%, rgba(0,0,0,0.88)), url("/images/customers/shoemart-interior.png")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              boxShadow: '0 24px 68px rgba(0,0,0,0.2)',
+            }}
+          >
+            <div className="relative flex h-full min-h-[382px] flex-col justify-between">
+              <div>
+                <div className="inline-flex rounded-lg px-4 py-2 text-[25px] font-black tracking-[0.2em]" style={{ color: '#fff', fontFamily: D, background: 'rgba(0,0,0,0.46)', boxShadow: '0 14px 36px rgba(0,0,0,0.32)' }}>
+                  SHOEMART
+                </div>
+                <div className="mt-4 text-[10px] uppercase" style={{ color: 'rgba(255,255,255,0.72)', fontFamily: M }}>Retail training enablement</div>
+              </div>
+              <div>
+                <div className="mb-5 flex flex-wrap gap-2">
+                  {['Tutorial videos', 'Sales associate training', 'Launch readiness'].map((item) => (
+                    <span key={item} className="rounded-md px-2.5 py-1 text-[10px] font-bold uppercase" style={{ background: ACCENT, color: BASE, fontFamily: M }}>
+                      {item}
+                    </span>
+                  ))}
+                </div>
+                <p className="text-[25px] font-semibold leading-[1.14] text-white" style={{ fontFamily: D }}>
+                  Shoe Mart turns product knowledge into training videos and store-ready selling guidance.
+                </p>
+                <p className="mt-4 text-[13px] leading-[1.65]" style={{ color: 'rgba(255,255,255,0.72)' }}>
+                  Launch notes, product stories, and retail SOPs become repeatable tutorials for sales associates across footwear teams.
+                </p>
               </div>
             </div>
           </article>
