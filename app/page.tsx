@@ -26,11 +26,44 @@ const NAV_LINKS = [
 ]
 
 const USE_CASE_LINKS = [
-  { label: 'Listing Ops', href: '#use-listings', detail: 'Generate marketplace files' },
-  { label: 'Company Brain', href: '#use-brain', detail: 'Ask sales and stock' },
-  { label: 'Inventory', href: '#use-forecast', detail: 'Read the channel ledger' },
-  { label: 'Approvals', href: '#use-actions', detail: 'Review agent work' },
-  { label: 'Marketplace files', href: '#marketplace-files', detail: 'Invoice to XLSX' },
+  { label: 'Listing Ops', href: '/use-cases/listing-ops', detail: 'Generate marketplace files' },
+  { label: 'Company Brain', href: '/use-cases/company-brain', detail: 'Ask sales and stock' },
+  { label: 'Inventory', href: '/use-cases/inventory', detail: 'Read the channel ledger' },
+  { label: 'Approvals', href: '/use-cases/approvals', detail: 'Review agent work' },
+  { label: 'Marketplace files', href: '/use-cases/marketplace-files', detail: 'Invoice to XLSX' },
+]
+
+const HOME_USE_CASES = [
+  {
+    title: 'Listing Ops',
+    href: '/use-cases/listing-ops',
+    metric: '184 SKU rows',
+    body: 'Generate marketplace-ready listings from invoices, item masters, product images, and channel templates.',
+  },
+  {
+    title: 'Company Brain',
+    href: '/use-cases/company-brain',
+    metric: '45K sales rows',
+    body: 'Ask what changed, why it moved, and which SKU, channel, or price action deserves attention.',
+  },
+  {
+    title: 'Inventory',
+    href: '/use-cases/inventory',
+    metric: '1,240 units',
+    body: 'Read stock, velocity, lead time, and channel cover before drafting restock actions.',
+  },
+  {
+    title: 'Approvals',
+    href: '/use-cases/approvals',
+    metric: '17 decisions',
+    body: 'Review agent-prepared listing updates, PO drafts, pricing decisions, and ad actions before they ship.',
+  },
+  {
+    title: 'Marketplace files',
+    href: '/use-cases/marketplace-files',
+    metric: '4 platforms',
+    body: 'Convert supplier invoices and image albums into Namshi, 6th Street, Centrepoint, and Amazon files.',
+  },
 ]
 
 const ENRICHMENT_ROWS = [
@@ -70,24 +103,6 @@ const ENRICHMENT_ROWS = [
     before: 'Regular fit',
     after: 'Men’s EU sizing. Select your usual boot size.',
     note: 'Operational notes become clear PDP guidance.',
-  },
-]
-
-const WORKFLOW_CARDS = [
-  {
-    title: 'Template Generator',
-    body: 'Master sheet + marketplace template + ImgBB album becomes a ready-to-submit XLSX.',
-    tags: ['Namshi', '6th Street', 'Centrepoint', 'Amazon'],
-  },
-  {
-    title: 'Image Intelligence',
-    body: 'Extract closure, toe, heel band, color, outsole, and kids attributes from SKU images.',
-    tags: ['Image checks', 'Attribute fill', 'Manager review', 'Validation'],
-  },
-  {
-    title: 'Human Approval',
-    body: 'Managers review evidence, diffs, and generated files before changes ship.',
-    tags: ['Diffs', 'Audit trail', 'Rollback', 'Apply'],
   },
 ]
 
@@ -899,322 +914,6 @@ function EnrichmentSlider() {
   )
 }
 
-function TemplateVisual() {
-  const statusBadge = (label: string, tone: 'ready' | 'review' | 'blocked' = 'ready') => {
-    const styles = {
-      ready: { background: '#e8f7ed', color: '#137a3a', borderColor: '#bfe7cd' },
-      review: { background: '#fff7db', color: '#9a6500', borderColor: '#ecd48a' },
-      blocked: { background: '#fff0ef', color: '#b53a32', borderColor: '#efc5c0' },
-    }[tone]
-
-    return (
-      <span className="rounded-md border px-2 py-1 text-[10px] font-semibold uppercase" style={{ ...styles, fontFamily: M }}>
-        {label}
-      </span>
-    )
-  }
-
-  return (
-    <div className="overflow-hidden rounded-xl border" style={{ borderColor: L_BORDER, background: '#eef3ed', boxShadow: '0 28px 86px rgba(0,0,0,0.12)' }}>
-      <div className="flex items-center justify-between gap-4 border-b px-4 py-3" style={{ borderColor: L_BORDER, background: '#0d0f0c' }}>
-        <div className="flex min-w-0 items-center gap-3">
-          <div className="flex gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
-            <span className="h-2.5 w-2.5 rounded-full bg-[#ffbd2e]" />
-            <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
-          </div>
-          <div className="hidden min-w-0 rounded-md border px-3 py-1.5 text-[11px] sm:block" style={{ borderColor: 'rgba(255,255,255,0.12)', color: MUTED, fontFamily: M }}>
-            app.use-amplify.com/geoomnii/marketplace-files
-          </div>
-        </div>
-        <button type="button" className="rounded-md px-3 py-1.5 text-[10px] font-bold uppercase" style={{ background: ACCENT, color: BASE, fontFamily: M }}>
-          Export
-        </button>
-      </div>
-
-      <div className="grid lg:grid-cols-[228px_1fr]">
-        <aside className="border-b bg-[#f7faf6] p-4 lg:border-b-0 lg:border-r" style={{ borderColor: L_BORDER }}>
-          <div className="mb-5 flex items-center gap-2">
-            <Logo size={28} />
-            <div>
-              <div className="text-[14px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>Amplify</div>
-              <div className="text-[10px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>Listing Ops</div>
-            </div>
-          </div>
-          <div className="grid gap-1.5 sm:grid-cols-2 lg:grid-cols-1">
-            {[
-              ['Source files', 'uploaded'],
-              ['Template compile', 'active'],
-              ['Image review', 'mapped'],
-              ['Approval queue', '4 checks'],
-            ].map(([label, detail], index) => (
-              <div key={label} className="rounded-lg border px-3 py-3" style={{ borderColor: index === 1 ? '#b7dcbf' : 'transparent', background: index === 1 ? '#eaf6e7' : 'transparent' }}>
-                <div className="text-[10px] uppercase" style={{ color: index === 1 ? '#1D7A6D' : L_MUTED, fontFamily: M }}>{detail}</div>
-                <div className="mt-1 text-[14px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>{label}</div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-5 hidden rounded-lg border bg-white p-3 lg:block" style={{ borderColor: L_BORDER }}>
-            <div className="mb-2 text-[10px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>Input files</div>
-            <div className="space-y-1.5">
-              {['supplier_invoice.xlsx', 'master_item_sheet.xlsx', 'imgbb_album.csv', 'centrepoint_template.xlsx'].map((file) => (
-                <div key={file} className="truncate rounded-md bg-[#f3f6f0] px-2 py-1.5 text-[11px]" style={{ color: L_MUTED, fontFamily: M }}>{file}</div>
-              ))}
-            </div>
-          </div>
-        </aside>
-
-        <div className="min-w-0 bg-[#eef3ed]">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b bg-white px-4 py-3 sm:px-5" style={{ borderColor: L_BORDER }}>
-            <div>
-              <div className="text-[10px] uppercase" style={{ color: '#1D7A6D', fontFamily: M }}>Marketplace files</div>
-              <h3 className="text-[22px] font-semibold leading-tight" style={{ color: L_TEXT, fontFamily: D }}>Invoice to channel-ready XLSX</h3>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {['Namshi', '6th Street', 'Centrepoint', 'Amazon'].map((item) => (
-                <span key={item} className="rounded-md border px-2 py-1 text-[10px] font-semibold uppercase" style={{ borderColor: '#e2e8da', background: '#f3f5ef', color: '#646b5d', fontFamily: M }}>{item}</span>
-              ))}
-            </div>
-          </div>
-
-          <div className="grid gap-4 p-4 sm:p-5 xl:grid-cols-[0.9fr_1.1fr]">
-            <section className="rounded-lg border bg-white p-4" style={{ borderColor: L_BORDER }}>
-              <div className="mb-4 flex items-center justify-between gap-3">
-                <div>
-                  <div className="text-[10px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>Source normalization</div>
-                  <h4 className="mt-1 text-[20px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>Supplier invoice expanded by size</h4>
-                </div>
-                {statusBadge('mapped', 'ready')}
-              </div>
-              <div className="overflow-hidden rounded-lg border" style={{ borderColor: L_BORDER }}>
-                {[
-                  ['772104', 'CAFÉ', '35', '12', 'hero'],
-                  ['772104', 'CAFÉ', '36', '18', 'mapped'],
-                  ['772104', 'CAFÉ', '37', '21', 'mapped'],
-                  ['772105', 'PRETO', '38', '14', 'review'],
-                ].map((row, index) => (
-                  <div key={`${row[0]}-${row[2]}`} className="grid grid-cols-12 gap-3 border-b px-3 py-3 text-[12px] last:border-b-0" style={{ borderColor: L_BORDER, background: index === 0 ? '#f4faef' : '#fff' }}>
-                    <span className="col-span-3 font-semibold" style={{ color: L_TEXT }}>{row[0]}</span>
-                    <span className="col-span-3" style={{ color: L_TEXT }}>{row[1]}</span>
-                    <span className="col-span-2" style={{ color: L_MUTED }}>{row[2]}</span>
-                    <span className="col-span-2" style={{ color: L_MUTED }}>{row[3]}</span>
-                    <span className="col-span-2 text-right" style={{ color: row[4] === 'review' ? '#9a6500' : '#137a3a', fontFamily: M }}>{row[4]}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-4 grid gap-2 sm:grid-cols-3">
-                {['HSN', 'Heel', 'Closure'].map((field) => (
-                  <div key={field} className="rounded-md border px-3 py-2 text-center text-[10px] uppercase" style={{ borderColor: L_BORDER, color: L_MUTED, fontFamily: M }}>{field}</div>
-                ))}
-              </div>
-            </section>
-
-            <section className="rounded-lg border bg-white p-4" style={{ borderColor: L_BORDER }}>
-              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <div className="text-[10px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>Platform outputs</div>
-                  <h4 className="mt-1 text-[20px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>Ready files with review blockers isolated</h4>
-                </div>
-                {statusBadge('ready XLSX', 'ready')}
-              </div>
-              <div className="space-y-2">
-                {[
-                  ['Namshi', 'closure, toe, heel, images', 'Ready', 'ready'],
-                  ['6th Street', 'variant template and image URLs', 'Ready', 'ready'],
-                  ['Centrepoint', 'UDA fields need approval', 'Review', 'review'],
-                  ['Amazon', 'flat-file enum checks', 'Ready', 'ready'],
-                ].map(([platform, detail, status, tone]) => (
-                  <div key={platform} className="rounded-lg border p-3" style={{ borderColor: L_BORDER, background: status === 'Ready' ? '#f4faef' : '#fff' }}>
-                    <div className="flex items-center justify-between gap-3">
-                      <div>
-                        <h5 className="text-[15px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>{platform}</h5>
-                        <p className="mt-1 text-[12px]" style={{ color: L_MUTED }}>{detail}</p>
-                      </div>
-                      {statusBadge(status, tone as 'ready' | 'review')}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-4 rounded-lg border p-3" style={{ borderColor: '#cfe4dc', background: '#f7fbfa' }}>
-                <div className="mb-3 flex items-center justify-between">
-                  <span className="text-[10px] uppercase" style={{ color: '#1D7A6D', fontFamily: M }}>Namshi export fields</span>
-                  {statusBadge('mapped', 'ready')}
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  {['Closure', 'Toe shape', 'Upper material', 'Image URLs'].map((field) => (
-                    <span key={field} className="rounded-md border px-3 py-2 text-[10px] uppercase" style={{ borderColor: '#d9e8dd', color: L_MUTED, fontFamily: M }}>
-                      {field}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </section>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-function TransformationFlow() {
-  const [activeOutput, setActiveOutput] = useState('Namshi')
-  const masterRows = [
-    ['772104', 'CAFÉ', '35', '12'],
-    ['772104', 'CAFÉ', '36', '18'],
-    ['772104', 'CAFÉ', '37', '21'],
-    ['772104', 'CAFÉ', '38', '16'],
-  ]
-
-  const platforms = [
-    { name: 'Namshi', detail: 'closure, toe, heel', fields: ['Closure', 'Toe shape', 'Upper material', 'Image URLs'], status: 'Ready' },
-    { name: '6th Street', detail: 'variant template', fields: ['Gender segment', 'Color family', 'Size variants', 'Product images'], status: 'Ready' },
-    { name: 'Centrepoint', detail: 'UDA fields', fields: ['Retail hierarchy', 'HSN code', 'Secondary color', 'Sole type'], status: 'Review' },
-    { name: 'Amazon', detail: 'flat-file enum', fields: ['Browse node', 'Bullet copy', 'Search terms', 'Variation theme'], status: 'Ready' },
-  ]
-  const selectedPlatform = platforms.find((platform) => platform.name === activeOutput) || platforms[0]
-
-  return (
-    <div className="mb-4 overflow-hidden rounded-lg border" style={{ borderColor: L_BORDER, background: '#0d1209' }}>
-      <div className="border-b px-4 py-3" style={{ borderColor: BORDER }}>
-        <div className="text-[10px] uppercase" style={{ color: ACCENT, fontFamily: M }}>Transformation process</div>
-        <h3 className="mt-1 text-[22px] font-semibold text-white" style={{ fontFamily: D }}>Invoice to master sheet to channel-ready files</h3>
-      </div>
-      <div className="grid gap-0 lg:grid-cols-[0.78fr_1.02fr_0.78fr]">
-        <div className="border-b p-4 lg:border-b-0 lg:border-r" style={{ borderColor: BORDER }}>
-          <div className="mb-3 flex items-center justify-between">
-            <span className="text-[10px] uppercase" style={{ color: MUTED, fontFamily: M }}>Supplier invoice</span>
-            <span className="text-[10px]" style={{ color: ACCENT, fontFamily: M }}>wide format</span>
-          </div>
-          <div className="rounded-lg border bg-white p-3" style={{ borderColor: 'rgba(255,255,255,0.14)' }}>
-            <div className="mb-3 grid grid-cols-4 gap-1 text-[9px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>
-              <span>Style</span><span>Color</span><span>35</span><span>36</span>
-            </div>
-            {[
-              ['772104', 'CAFE', '12', '18'],
-              ['772105', 'PRETO', '8', '14'],
-              ['772106', 'NUDE', '10', '16'],
-            ].map((row) => (
-              <div key={row.join('-')} className="grid grid-cols-4 gap-1 border-t py-2 text-[11px]" style={{ borderColor: L_BORDER, color: L_TEXT }}>
-                {row.map((cell) => <span key={cell}>{cell}</span>)}
-              </div>
-            ))}
-          </div>
-          <div className="mt-3 rounded-lg border p-3" style={{ borderColor: BORDER, background: 'rgba(255,255,255,0.045)' }}>
-            <div className="text-[18px] font-semibold text-white" style={{ fontFamily: D }}>1 invoice line</div>
-            <div className="mt-1 text-[11px] uppercase" style={{ color: MUTED, fontFamily: M }}>split by size, material, color</div>
-          </div>
-        </div>
-
-        <div className="border-b p-4 lg:border-b-0 lg:border-r" style={{ borderColor: BORDER }}>
-          <div className="mb-3 flex items-center justify-between">
-            <span className="text-[10px] uppercase" style={{ color: MUTED, fontFamily: M }}>Amplify master sheet</span>
-            <span className="text-[10px]" style={{ color: ACCENT, fontFamily: M }}>tall SKU rows</span>
-          </div>
-          <div className="overflow-hidden rounded-lg border" style={{ borderColor: BORDER }}>
-            <div className="grid grid-cols-12 bg-[rgba(197,241,53,0.12)] px-3 py-2 text-[9px] uppercase" style={{ color: ACCENT, fontFamily: M }}>
-              <span className="col-span-3">Parent</span>
-              <span className="col-span-3">Color</span>
-              <span className="col-span-2">Size</span>
-              <span className="col-span-2">Qty</span>
-              <span className="col-span-2 text-right">Image</span>
-            </div>
-            {masterRows.map((row, index) => (
-              <div key={`${row[0]}-${row[2]}`} className="grid grid-cols-12 border-t px-3 py-3 text-[11px]" style={{ borderColor: BORDER, background: index === 0 ? 'rgba(197,241,53,0.08)' : 'rgba(255,255,255,0.035)', color: SOFT }}>
-                <span className="col-span-3 font-semibold text-white">{row[0]}</span>
-                <span className="col-span-3">{row[1]}</span>
-                <span className="col-span-2">{row[2]}</span>
-                <span className="col-span-2">{row[3]}</span>
-                <span className="col-span-2 text-right" style={{ color: ACCENT, fontFamily: M }}>{index === 0 ? 'hero' : 'mapped'}</span>
-              </div>
-            ))}
-          </div>
-          <div className="mt-3 grid grid-cols-3 gap-2">
-            {['HSN', 'Heel', 'Closure'].map((label) => (
-              <div key={label} className="rounded-md border p-2 text-center text-[10px] uppercase" style={{ borderColor: BORDER, color: SOFT, fontFamily: M }}>
-                {label}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="p-4">
-          <div className="mb-3 flex items-center justify-between">
-            <span className="text-[10px] uppercase" style={{ color: MUTED, fontFamily: M }}>Platform outputs</span>
-            <span className="text-[10px]" style={{ color: ACCENT, fontFamily: M }}>ready XLSX</span>
-          </div>
-          <div className="grid gap-2">
-            {platforms.map((platform) => {
-              const active = platform.name === selectedPlatform.name
-              return (
-              <button
-                key={platform.name}
-                type="button"
-                onClick={() => setActiveOutput(platform.name)}
-                className="rounded-lg border p-3 text-left transition-colors"
-                style={{ borderColor: active ? 'rgba(197,241,53,0.36)' : BORDER, background: active ? 'rgba(197,241,53,0.1)' : 'rgba(255,255,255,0.045)' }}
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <div className="text-[15px] font-semibold text-white" style={{ fontFamily: D }}>{platform.name}</div>
-                  <div className="text-[10px] uppercase" style={{ color: active ? ACCENT : MUTED, fontFamily: M }}>{platform.status}</div>
-                </div>
-                <div className="mt-1 text-[12px]" style={{ color: SOFT }}>{platform.detail}</div>
-              </button>
-            )})}
-          </div>
-          <div className="mt-3 rounded-lg border p-3" style={{ borderColor: 'rgba(197,241,53,0.28)', background: 'rgba(197,241,53,0.08)' }}>
-            <div className="mb-2 flex items-center justify-between gap-3">
-              <div className="text-[12px] font-semibold text-white" style={{ fontFamily: D }}>{selectedPlatform.name} export fields</div>
-              <div className="text-[10px] uppercase" style={{ color: ACCENT, fontFamily: M }}>mapped</div>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              {selectedPlatform.fields.map((field) => (
-                <div key={field} className="rounded-md border px-2 py-2 text-[10px] uppercase" style={{ borderColor: BORDER, color: SOFT, fontFamily: M }}>
-                  {field}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function ImageEnhancementVisual() {
-  return (
-    <div className="mt-4 grid gap-3 rounded-lg border p-3 md:grid-cols-[0.92fr_1.08fr]" style={{ borderColor: L_BORDER, background: '#0d1209' }}>
-      <div className="relative min-h-[330px] overflow-hidden rounded-lg bg-[#111]">
-        <img src="/images/products/customer-shoe-boot.jpg" alt="Product image enhancement preview" className="absolute inset-0 h-full w-full object-cover" style={{ filter: 'saturate(0.72) contrast(0.82) brightness(0.62) blur(1px)' }} />
-        <div className="absolute inset-y-0 right-0 w-[54%] overflow-hidden border-l" style={{ borderColor: 'rgba(197,241,53,0.7)' }}>
-          <img src="/images/products/customer-shoe-boot.jpg" alt="" className="h-full w-full object-cover" style={{ filter: 'saturate(1.14) contrast(1.12) brightness(1.06)' }} />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(197,241,53,0.08), transparent 42%)' }} />
-        </div>
-        <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <div className="text-[10px] uppercase" style={{ color: ACCENT, fontFamily: M }}>Image enhancement</div>
-            <div className="mt-1 text-[20px] font-semibold text-white" style={{ fontFamily: D }}>Raw supplier image to product-detail asset</div>
-          </div>
-          <div className="rounded-full border bg-white px-3 py-1.5 text-[10px] uppercase" style={{ borderColor: 'rgba(255,255,255,0.2)', color: L_TEXT, fontFamily: M }}>
-            Before / after
-          </div>
-        </div>
-      </div>
-      <div className="grid content-center gap-2 p-2">
-        {[
-          ['Background and lighting cleanup', 'Make supplier images feel consistent across the product grid.'],
-          ['Image-derived attributes', 'Detect closure, toe shape, heel style, secondary color, material cues, and variant details.'],
-          ['Channel-ready exports', 'Attach the right URLs and metadata to each marketplace template row.'],
-        ].map(([title, body], index) => (
-          <div key={title} className="rounded-lg border p-4" style={{ borderColor: index === 0 ? 'rgba(197,241,53,0.36)' : BORDER, background: index === 0 ? 'rgba(197,241,53,0.1)' : 'rgba(255,255,255,0.045)' }}>
-            <div className="mb-1 text-[10px] uppercase" style={{ color: index === 0 ? ACCENT : MUTED, fontFamily: M }}>{String(index + 1).padStart(2, '0')}</div>
-            <h3 className="text-[16px] font-semibold text-white" style={{ fontFamily: D }}>{title}</h3>
-            <p className="mt-2 text-[13px] leading-[1.6]" style={{ color: SOFT }}>{body}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 function IntegrationLogo({ item, small = false }: { item: (typeof INTEGRATIONS)[number]; small?: boolean }) {
   const dark = 'dark' in item && item.dark
   return (
@@ -1693,20 +1392,36 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="marketplace-files" className="scroll-mt-[96px]" style={{ background: L_BG }}>
+      <section id="use-cases" className="scroll-mt-[96px]" style={{ background: L_BG }}>
         <div className="mx-auto max-w-[1160px] px-5 py-16 sm:px-6 sm:py-24">
           <div className="mb-10 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
             <div>
-              <SectionLabel label="Marketplace files" tone="light" />
+              <SectionLabel label="Use cases" tone="light" />
               <h2 className="mt-7 max-w-[700px] text-[clamp(32px,5vw,62px)] font-bold leading-[1.02]" style={{ color: L_TEXT, fontFamily: D }}>
-                Marketplace files inside the same workspace.
+                Five focused pages for the work operators repeat.
               </h2>
             </div>
             <p className="text-[15px] leading-[1.75] sm:text-[17px]" style={{ color: L_MUTED }}>
-              Operators move from product cleanup to channel-ready exports without leaving the app: invoices, master sheets, images, review blockers, and XLSX files stay connected.
+              The homepage keeps the big picture. Each use case gets a deeper page with the same embedded product UI, seeded data, and approval-first workflow.
             </p>
           </div>
-          <TemplateVisual />
+          <div className="grid gap-3 md:grid-cols-5">
+            {HOME_USE_CASES.map((item, index) => (
+              <a key={item.href} href={item.href} className="group rounded-lg border bg-white p-4 transition-transform hover:-translate-y-0.5" style={{ borderColor: index === 0 ? '#b7dcbf' : L_BORDER, boxShadow: index === 0 ? '0 22px 60px rgba(29,122,109,0.12)' : 'none' }}>
+                <div className="mb-8 flex items-center justify-between gap-3">
+                  <span className="text-[10px] uppercase" style={{ color: index === 0 ? '#1D7A6D' : L_MUTED, fontFamily: M }}>{item.metric}</span>
+                  <span className="grid h-7 w-7 place-items-center rounded-md border transition-colors group-hover:bg-[#111] group-hover:text-white" style={{ borderColor: L_BORDER, color: L_TEXT }}>
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M3 8h10" />
+                      <path d="m9 4 4 4-4 4" />
+                    </svg>
+                  </span>
+                </div>
+                <h3 className="text-[19px] font-semibold leading-tight" style={{ color: L_TEXT, fontFamily: D }}>{item.title}</h3>
+                <p className="mt-3 text-[13px] leading-[1.55]" style={{ color: L_MUTED }}>{item.body}</p>
+              </a>
+            ))}
+          </div>
         </div>
       </section>
 
