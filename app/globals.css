@@ -19,8 +19,32 @@ body {
 }
 
 ::selection {
-  background: rgba(197, 241, 53, 0.25);
-  color: #fff;
+  background: rgba(24, 115, 106, 0.2);
+  color: #17212b;
+}
+
+.amplify-email[data-tone="light"]::placeholder {
+  color: #8a9691;
+}
+
+.amplify-email[data-tone="dark"]::placeholder {
+  color: rgba(255, 255, 255, 0.46);
+}
+
+@keyframes hero-demo-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.hero-demo-progress {
+  transform-origin: left;
+  animation: hero-demo-progress 2.3s linear forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-demo-progress {
+    animation: none;
+  }
 }
 
 ::-webkit-scrollbar {

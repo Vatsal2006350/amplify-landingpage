@@ -2,21 +2,23 @@
 
 import { useEffect, useState } from 'react'
 
-const ACCENT = '#C5F135'
-const BASE = '#080808'
-const INK = '#ffffff'
+const ACCENT = '#18736A'
+const SIGNAL = '#9EE078'
+const BASE = '#F4F8F7'
+const DARK = '#101613'
+const INK = '#17212B'
 const MUTED = 'rgba(255,255,255,0.58)'
 const SOFT = 'rgba(255,255,255,0.78)'
-const BORDER = 'rgba(255,255,255,0.12)'
-const GLASS = 'rgba(255,255,255,0.065)'
+const BORDER = 'rgba(23,33,29,0.12)'
+const GLASS = 'rgba(255,255,255,0.72)'
 const D = 'var(--font-display)'
 const M = 'var(--font-mono)'
 
-const L_BG = '#fbfcf8'
-const L_SURFACE = '#f1f4ec'
-const L_TEXT = '#111111'
-const L_MUTED = '#6c7168'
-const L_BORDER = 'rgba(0,0,0,0.1)'
+const L_BG = '#F4F8F7'
+const L_SURFACE = '#EAF1EE'
+const L_TEXT = '#17212B'
+const L_MUTED = '#66736F'
+const L_BORDER = 'rgba(23,33,29,0.12)'
 
 const NAV_LINKS = [
   { label: 'Product', href: '#product-flow' },
@@ -38,31 +40,31 @@ const HOME_USE_CASES = [
     title: 'Listing Ops',
     href: '/use-cases/listing-ops',
     metric: '184 SKU rows',
-    body: 'Generate marketplace-ready listings from invoices, item masters, product images, and channel templates.',
+    body: 'Turn source files into marketplace-ready listings.',
   },
   {
     title: 'Company Brain',
     href: '/use-cases/company-brain',
     metric: '45K sales rows',
-    body: 'Ask what changed, why it moved, and which SKU, channel, or price action deserves attention.',
+    body: 'Ask what changed and what deserves attention.',
   },
   {
     title: 'Inventory',
     href: '/use-cases/inventory',
     metric: '1,240 units',
-    body: 'Read stock, velocity, lead time, and channel cover before drafting restock actions.',
+    body: 'Plan restocks from velocity, cover, and lead time.',
   },
   {
     title: 'Approvals',
     href: '/use-cases/approvals',
     metric: '17 decisions',
-    body: 'Review agent-prepared listing updates, PO drafts, pricing decisions, and ad actions before they ship.',
+    body: 'Review agent work before anything goes live.',
   },
   {
     title: 'Marketplace files',
     href: '/use-cases/marketplace-files',
     metric: '4 platforms',
-    body: 'Convert supplier invoices and image albums into Namshi, 6th Street, Centrepoint, and Amazon files.',
+    body: 'Convert supplier data into channel-ready files.',
   },
 ]
 
@@ -252,15 +254,15 @@ function SparkIcon() {
 }
 
 function SectionLabel({ label, align = 'left', tone = 'dark' }: { label: string; align?: 'left' | 'center'; tone?: 'dark' | 'light' }) {
-  const textColor = tone === 'light' ? L_MUTED : MUTED
+  const textColor = tone === 'light' ? L_MUTED : 'rgba(255,255,255,0.58)'
 
   return (
     <div className={`flex items-center gap-3 ${align === 'center' ? 'justify-center' : ''}`} style={{ fontFamily: M }}>
-      <span className="h-px w-8" style={{ background: ACCENT }} />
+      <span className="h-px w-8" style={{ background: tone === 'light' ? ACCENT : SIGNAL }} />
       <span className="text-[11px] uppercase" style={{ color: align === 'center' ? L_MUTED : textColor }}>
         {label}
       </span>
-      {align === 'center' && <span className="h-px w-8" style={{ background: ACCENT }} />}
+      {align === 'center' && <span className="h-px w-8" style={{ background: tone === 'light' ? ACCENT : SIGNAL }} />}
     </div>
   )
 }
@@ -272,6 +274,7 @@ function WaitlistForm({
   message,
   onSubmit,
   compact = false,
+  tone = 'dark',
 }: {
   email: string
   setEmail: (email: string) => void
@@ -279,16 +282,17 @@ function WaitlistForm({
   message: string
   onSubmit: () => void
   compact?: boolean
+  tone?: 'light' | 'dark'
 }) {
   if (status === 'success') {
     return (
-      <div className="flex min-h-[52px] items-center gap-3 rounded-lg px-4" style={{ background: 'rgba(197,241,53,0.12)', border: `1px solid rgba(197,241,53,0.28)` }}>
-        <span className="grid h-5 w-5 place-items-center rounded-full" style={{ background: ACCENT, color: BASE }}>
+      <div className="flex min-h-[52px] items-center gap-3 rounded-lg px-4" style={{ background: '#eaf8f5', border: '1px solid #bde5dc' }}>
+        <span className="grid h-5 w-5 place-items-center rounded-full" style={{ background: SIGNAL, color: DARK }}>
           <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
             <path d="m5 10 3 3 7-7" />
           </svg>
         </span>
-        <span className="text-[12px]" style={{ color: ACCENT, fontFamily: M }}>{message}</span>
+        <span className="text-[12px]" style={{ color: tone === 'light' ? ACCENT : SIGNAL, fontFamily: M }}>{message}</span>
       </div>
     )
   }
@@ -302,9 +306,9 @@ function WaitlistForm({
         }}
         className={`flex w-full overflow-hidden rounded-lg ${compact ? 'flex-col sm:flex-row' : 'flex-col sm:max-w-[540px] sm:flex-row'}`}
         style={{
-          background: 'rgba(255,255,255,0.07)',
-          border: `1px solid rgba(255,255,255,0.14)`,
-          boxShadow: '0 18px 60px rgba(0,0,0,0.28)',
+          background: tone === 'light' ? '#ffffff' : 'rgba(255,255,255,0.07)',
+          border: `1px solid ${tone === 'light' ? L_BORDER : 'rgba(255,255,255,0.14)'}`,
+          boxShadow: tone === 'light' ? '0 18px 52px rgba(15,31,28,0.1)' : '0 18px 60px rgba(0,0,0,0.28)',
         }}
       >
         <input
@@ -313,13 +317,15 @@ function WaitlistForm({
           onChange={(event) => setEmail(event.target.value)}
           placeholder="Work email"
           disabled={status === 'loading'}
-          className="h-[52px] min-w-0 shrink-0 bg-transparent px-4 text-[14px] text-white outline-none placeholder:text-[rgba(255,255,255,0.46)] disabled:opacity-50 sm:flex-1"
+          className="amplify-email h-[52px] min-w-0 shrink-0 bg-transparent px-4 text-[14px] outline-none disabled:opacity-50 sm:flex-1"
+          data-tone={tone}
+          style={{ color: tone === 'light' ? INK : '#fff' }}
         />
         <button
           type="submit"
           disabled={status === 'loading'}
           className="flex h-[52px] shrink-0 items-center justify-center gap-2 px-6 text-[12px] font-bold transition-opacity hover:opacity-90 disabled:opacity-55"
-          style={{ background: ACCENT, color: BASE, fontFamily: M }}
+          style={{ background: tone === 'light' ? ACCENT : SIGNAL, color: tone === 'light' ? '#fff' : DARK, fontFamily: M }}
         >
           {status === 'loading' ? 'REQUESTING' : 'REQUEST EARLY ACCESS'}
           {status !== 'loading' && <ArrowIcon />}
@@ -331,108 +337,158 @@ function WaitlistForm({
 }
 
 function HeroConsole() {
-  const stages = ['Sync', 'Detect', 'Recommend', 'Approve', 'Measure']
-  const evidence = [
-    ['Loop', 'Reason: too narrow', '28 returns'],
-    ['Gorgias', 'Customer says size runs small', '14 tickets'],
-    ['Shopify', 'BR-772104-CAF variant sales spike', 'Live'],
+  const [activeStep, setActiveStep] = useState(0)
+  const stages = [
+    { label: 'Data', detail: '4 sources connected' },
+    { label: 'Scan', detail: '8 channels checked' },
+    { label: 'Review', detail: '4 fields need review' },
+    { label: 'Export', detail: 'Workbook ready' },
+  ]
+  const platforms = [
+    ['Namshi', '182 ready', '2 review', 'Ready'],
+    ['6th Street', '184 ready', '0 review', 'Ready'],
+    ['Centrepoint', '180 ready', '4 review', 'Review'],
+    ['Amazon', '184 ready', '0 review', 'Ready'],
   ]
 
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const interval = window.setInterval(() => setActiveStep((step) => (step + 1) % stages.length), 2300)
+    return () => window.clearInterval(interval)
+  }, [stages.length])
+
   return (
-    <div className="relative">
-      <div className="absolute -inset-px rounded-lg" style={{ background: `linear-gradient(135deg, rgba(197,241,53,0.48), rgba(255,255,255,0.08), rgba(75,150,255,0.24))` }} />
-      <div
-        className="relative overflow-hidden rounded-lg"
-        style={{
-          background: 'linear-gradient(180deg, rgba(255,255,255,0.15), rgba(255,255,255,0.055))',
-          border: `1px solid ${BORDER}`,
-          boxShadow: '0 34px 110px rgba(0,0,0,0.55)',
-          backdropFilter: 'blur(28px)',
-          WebkitBackdropFilter: 'blur(28px)',
-        }}
-      >
-        <div className="flex items-center justify-between border-b px-4 py-3" style={{ borderColor: BORDER }}>
-          <div className="flex items-center gap-2">
-            <Logo size={24} />
-            <div>
-              <div className="text-[13px] font-semibold text-white" style={{ fontFamily: D }}>Amplify Command Center</div>
-              <div className="text-[10px] uppercase" style={{ color: MUTED, fontFamily: M }}>agentic commerce ops</div>
-            </div>
+    <div className="overflow-hidden rounded-xl border bg-white text-left" style={{ borderColor: L_BORDER, boxShadow: '0 34px 100px rgba(15,31,28,0.18)' }}>
+      <div className="flex items-center justify-between border-b bg-white px-4 py-3" style={{ borderColor: L_BORDER }}>
+        <div className="flex items-center gap-3">
+          <div className="flex gap-1.5" aria-hidden="true">
+            <span className="h-2.5 w-2.5 rounded-full bg-[#dce5e0]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#dce5e0]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#9ee078]" />
           </div>
-          <span className="rounded-md px-2 py-1 text-[10px] font-bold" style={{ background: 'rgba(197,241,53,0.14)', color: ACCENT, fontFamily: M }}>
-            LIVE
-          </span>
+          <span className="hidden text-[11px] sm:inline" style={{ color: L_MUTED, fontFamily: M }}>app.use-amplify.com/listing-ops/overview</span>
         </div>
+        <span className="rounded-md border px-2.5 py-1 text-[10px] font-semibold" style={{ borderColor: '#bde5dc', background: '#eaf8f5', color: ACCENT, fontFamily: M }}>SEEDED DEMO</span>
+      </div>
 
-        <div className="grid gap-0 lg:grid-cols-[0.92fr_1.08fr]">
-          <div className="border-b p-4 lg:border-b-0 lg:border-r" style={{ borderColor: BORDER }}>
-            <div className="mb-3 flex items-center justify-between">
-              <span className="text-[10px] uppercase" style={{ color: MUTED, fontFamily: M }}>SKU issue</span>
-              <span className="text-[10px]" style={{ color: ACCENT, fontFamily: M }}>needs approval</span>
+      <div className="grid min-h-[560px] md:grid-cols-[190px_minmax(0,1fr)]">
+        <aside className="hidden flex-col bg-[#101613] p-4 text-white md:flex">
+          <div className="mb-7 flex items-center gap-2.5">
+            <Logo size={30} />
+            <div>
+              <div className="text-[13px] font-semibold">Amplify</div>
+              <div className="text-[9px] uppercase" style={{ color: '#9fb4aa', fontFamily: M }}>Geoomnii</div>
             </div>
-            <div className="rounded-lg border p-4" style={{ borderColor: BORDER, background: 'rgba(0,0,0,0.22)' }}>
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                <div className="min-w-0">
-                  <div className="text-[20px] font-semibold text-white" style={{ fontFamily: D }}>BR-772104-CAF</div>
-                  <div className="mt-1 text-[12px]" style={{ color: MUTED }}>Men’s Leather Lace-Up Ankle Boot</div>
+          </div>
+          <div className="space-y-1.5">
+            {['Overview', 'Listing', 'Company Brain', 'Inventory', 'Approvals'].map((item) => {
+              const selected = item === 'Listing'
+              return (
+                <div key={item} className="rounded-lg border px-3 py-2.5 text-[11px] font-semibold" style={{ borderColor: selected ? '#436050' : 'transparent', background: selected ? '#1a241f' : 'transparent', color: selected ? '#f7fbf8' : '#9fb4aa' }}>
+                  {item}
                 </div>
-                <div className="w-fit rounded-md px-2 py-1 text-[10px] font-bold" style={{ background: 'rgba(197,241,53,0.12)', color: ACCENT, fontFamily: M }}>
-                  REVIEW REQUIRED
-                </div>
-              </div>
-              <div className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-3">
-                {[
-                  ['12.8%', 'returns'],
-                  ['42', 'snippets'],
-                  ['3', 'fields missing'],
-                ].map(([value, label]) => (
-                  <div key={label} className="min-w-0 rounded-md border p-3" style={{ borderColor: BORDER, background: 'rgba(255,255,255,0.045)' }}>
-                    <div className="text-[20px] font-bold text-white" style={{ fontFamily: D }}>{value}</div>
-                    <div className="text-[9px] uppercase" style={{ color: MUTED, fontFamily: M }}>{label}</div>
-                  </div>
-                ))}
-              </div>
+              )
+            })}
+          </div>
+          <div className="mt-auto rounded-lg border p-3" style={{ borderColor: '#28352f', background: '#151d19' }}>
+            <div className="text-[9px] uppercase" style={{ color: '#9fb4aa', fontFamily: M }}>Connected</div>
+            <div className="mt-2 flex items-center gap-2 text-[11px]">
+              <span className="h-2 w-2 rounded-full bg-[#9ee078]" />
+              4 source files
             </div>
+          </div>
+        </aside>
 
-            <div className="mt-3 overflow-hidden rounded-lg border" style={{ borderColor: BORDER, background: 'rgba(0,0,0,0.18)' }}>
-              {evidence.map((row) => (
-                <div key={row[1]} className="grid grid-cols-12 gap-2 border-b px-3 py-3 text-[11px] last:border-b-0" style={{ borderColor: BORDER }}>
-                  <span className="col-span-3 font-semibold text-white">{row[0]}</span>
-                  <span className="col-span-6 truncate" style={{ color: MUTED }}>{row[1]}</span>
-                  <span className="col-span-3 text-right" style={{ color: ACCENT, fontFamily: M }}>{row[2]}</span>
-                </div>
-              ))}
+        <div className="min-w-0 bg-[#eef3f1]">
+          <div className="flex min-h-[54px] items-center justify-between border-b bg-[#f8fbf9] px-4 sm:px-5" style={{ borderColor: '#dce5e0' }}>
+            <div className="text-[11px]" style={{ color: L_MUTED }}><span className="font-semibold" style={{ color: L_TEXT }}>Listing</span> / Overview</div>
+            <div className="flex items-center gap-2 text-[10px]" style={{ color: L_MUTED, fontFamily: M }}>
+              <span className="h-2 w-2 rounded-full bg-[#2c9a68]" />
+              SYNCED 2M AGO
             </div>
           </div>
 
-          <div className="p-4">
-            <div className="mb-3 flex items-center justify-between">
-              <span className="text-[10px] uppercase" style={{ color: MUTED, fontFamily: M }}>Agent run</span>
-              <span className="text-[10px]" style={{ color: ACCENT, fontFamily: M }}>5 workers</span>
-            </div>
-            <div className="relative mb-4 grid grid-cols-5 gap-1">
-              {stages.map((stage, index) => (
-                <div key={stage} className="rounded-md border px-2 py-3 text-center" style={{ borderColor: index === 2 ? 'rgba(197,241,53,0.4)' : BORDER, background: index === 2 ? 'rgba(197,241,53,0.12)' : 'rgba(255,255,255,0.045)' }}>
-                  <div className="mx-auto mb-2 h-2 w-2 rounded-full" style={{ background: index <= 2 ? ACCENT : 'rgba(255,255,255,0.22)' }} />
-                  <div className="text-[9px] uppercase" style={{ color: index <= 2 ? '#fff' : MUTED, fontFamily: M }}>{stage}</div>
-                </div>
-              ))}
-            </div>
-            <div className="rounded-lg border p-4" style={{ borderColor: 'rgba(197,241,53,0.32)', background: 'rgba(197,241,53,0.09)' }}>
-              <div className="mb-2 flex items-center gap-2 text-[10px] uppercase" style={{ color: ACCENT, fontFamily: M }}>
-                <SparkIcon />
-                Review package
+          <div className="p-4 sm:p-5">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <div className="text-[10px] font-semibold uppercase" style={{ color: ACCENT, fontFamily: M }}>Marketplace readiness</div>
+                <h3 className="mt-1 text-[24px] font-semibold leading-tight sm:text-[28px]" style={{ color: L_TEXT }}>Prepare this week&apos;s listings</h3>
+                <p className="mt-1 text-[12px] sm:text-[13px]" style={{ color: L_MUTED }}>Supplier data in. Review workbook out.</p>
               </div>
-              <p className="text-[15px] font-semibold leading-snug text-white" style={{ fontFamily: D }}>
-                Complete product imagery, material, closure, sole, and sizing attributes before channel export.
-              </p>
-              <div className="mt-4 grid grid-cols-2 gap-2">
-                {['Evidence attached', 'Diff ready', 'Rollback safe', 'Impact tracked'].map((item) => (
-                  <div key={item} className="rounded-md border px-3 py-2 text-[10px] uppercase" style={{ borderColor: BORDER, color: SOFT, fontFamily: M }}>
-                    {item}
+              <button type="button" className="h-9 rounded-lg px-3 text-[11px] font-semibold text-white" style={{ background: ACCENT }}>
+                {activeStep === 0 && 'Add source files'}
+                {activeStep === 1 && 'Scanning 8 channels'}
+                {activeStep === 2 && 'Open review workbook'}
+                {activeStep === 3 && 'Export files'}
+              </button>
+            </div>
+
+            <div className="mt-5 grid grid-cols-2 gap-2 lg:grid-cols-4">
+              {stages.map((stage, index) => {
+                const selected = index === activeStep
+                const complete = index < activeStep
+                return (
+                  <button
+                    key={stage.label}
+                    type="button"
+                    onClick={() => setActiveStep(index)}
+                    className="relative min-h-[72px] overflow-hidden rounded-lg border px-3 py-2.5 text-left transition-colors"
+                    style={{ borderColor: selected ? '#69ab9f' : '#d8e2dd', background: selected ? '#e7f7f3' : '#fff' }}
+                  >
+                    <span className="flex items-center gap-2 text-[11px] font-semibold" style={{ color: selected ? ACCENT : L_TEXT }}>
+                      <span className="grid h-5 w-5 place-items-center rounded-full text-[9px]" style={{ background: complete || selected ? ACCENT : '#eef3f1', color: complete || selected ? '#fff' : L_MUTED }}>{complete ? '✓' : index + 1}</span>
+                      {stage.label}
+                    </span>
+                    <span className="mt-1.5 block text-[9px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>{stage.detail}</span>
+                    {selected && <span className="hero-demo-progress absolute inset-x-0 bottom-0 h-[2px]" style={{ background: ACCENT }} />}
+                  </button>
+                )
+              })}
+            </div>
+
+            <div className="mt-4 grid gap-3 xl:grid-cols-[minmax(0,1.25fr)_minmax(240px,0.75fr)]">
+              <section className="overflow-hidden rounded-lg border bg-white" style={{ borderColor: '#d8e2dd' }}>
+                <div className="flex items-center justify-between border-b px-3.5 py-3" style={{ borderColor: '#e2e9e5' }}>
+                  <div>
+                    <div className="text-[11px] font-semibold" style={{ color: L_TEXT }}>Launch board</div>
+                    <div className="text-[9px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>8 marketplace outputs</div>
+                  </div>
+                  <span className="rounded-md px-2 py-1 text-[9px] font-semibold uppercase" style={{ background: '#e8f7ed', color: '#137a3a' }}>184 ready</span>
+                </div>
+                <div className="grid grid-cols-[1.2fr_0.8fr_0.8fr_0.7fr] border-b px-3.5 py-2 text-[8px] uppercase" style={{ borderColor: '#e2e9e5', color: L_MUTED, fontFamily: M }}>
+                  <span>Platform</span><span>Rows</span><span>Review</span><span className="text-right">Status</span>
+                </div>
+                {platforms.map((row, index) => (
+                  <div key={row[0]} className="grid grid-cols-[1.2fr_0.8fr_0.8fr_0.7fr] items-center border-b px-3.5 py-3 text-[10px] last:border-b-0 sm:text-[11px]" style={{ borderColor: '#e2e9e5', background: activeStep === 2 && index === 2 ? '#fff8ea' : '#fff' }}>
+                    <span className="font-semibold" style={{ color: L_TEXT }}>{row[0]}</span>
+                    <span style={{ color: '#137a3a' }}>{row[1]}</span>
+                    <span style={{ color: row[2] === '0 review' ? L_MUTED : '#9a6500' }}>{row[2]}</span>
+                    <span className="text-right font-semibold" style={{ color: row[3] === 'Ready' ? '#137a3a' : '#9a6500' }}>{row[3]}</span>
                   </div>
                 ))}
-              </div>
+              </section>
+
+              <section className="rounded-lg border bg-white p-3.5" style={{ borderColor: '#d8e2dd' }}>
+                <div className="text-[9px] font-semibold uppercase" style={{ color: ACCENT, fontFamily: M }}>Current run</div>
+                <div className="mt-2 text-[17px] font-semibold leading-snug" style={{ color: L_TEXT }}>{stages[activeStep].detail}</div>
+                <div className="mt-4 space-y-2">
+                  {[
+                    ['Supplier PI', 'Synced'],
+                    ['Product images', activeStep > 0 ? '184 matched' : 'Queued'],
+                    ['Channel templates', activeStep > 1 ? 'Checked' : 'Waiting'],
+                    ['Review workbook', activeStep === 3 ? 'Ready' : 'Preparing'],
+                  ].map(([label, value], index) => (
+                    <div key={label} className="flex items-center justify-between gap-3 rounded-md px-2.5 py-2" style={{ background: index <= activeStep ? '#edf8f5' : '#f5f7f6' }}>
+                      <span className="truncate text-[10px]" style={{ color: L_TEXT }}>{label}</span>
+                      <span className="shrink-0 text-[9px] font-semibold uppercase" style={{ color: index <= activeStep ? ACCENT : L_MUTED, fontFamily: M }}>{value}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-3 rounded-lg border p-3" style={{ borderColor: '#bde5dc', background: '#f1faf8' }}>
+                  <div className="flex items-center gap-2 text-[9px] font-semibold uppercase" style={{ color: ACCENT, fontFamily: M }}><SparkIcon /> Next action</div>
+                  <p className="mt-1.5 text-[11px] leading-relaxed" style={{ color: L_MUTED }}>{activeStep < 2 ? 'Amplify is preparing the review queue.' : activeStep === 2 ? 'Confirm four Centrepoint material fields.' : 'Approved marketplace files are ready.'}</p>
+                </div>
+              </section>
             </div>
           </div>
         </div>
@@ -579,7 +635,7 @@ function ProductFlowWorkbench() {
             {[0, 1, 2, 3].map((line) => <line key={line} x1="0" x2="460" y1={24 + line * 32} y2={24 + line * 32} stroke="rgba(0,0,0,0.08)" />)}
             <path d="M18 114 L104 94 L190 102 L276 70 L362 48 L442 35" fill="none" stroke="#1D7A6D" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
             <path d="M18 114 L104 94 L190 102 L276 70 L362 48 L442 35 L442 138 L18 138 Z" fill="rgba(29,122,109,0.12)" />
-            {[18, 104, 190, 276, 362, 442].map((x, index) => <circle key={x} cx={x} cy={[114, 94, 102, 70, 48, 35][index]} r="5" fill="#C5F135" stroke="#1D7A6D" strokeWidth="2" />)}
+            {[18, 104, 190, 276, 362, 442].map((x, index) => <circle key={x} cx={x} cy={[114, 94, 102, 70, 48, 35][index]} r="5" fill={SIGNAL} stroke={ACCENT} strokeWidth="2" />)}
           </svg>
         </div>
       </section>
@@ -720,7 +776,7 @@ function ProductFlowWorkbench() {
   )
 
   return (
-    <div className="overflow-hidden rounded-xl border" style={{ borderColor: 'rgba(255,255,255,0.16)', background: '#eef3ed', boxShadow: '0 34px 110px rgba(0,0,0,0.38)' }}>
+    <div className="overflow-hidden rounded-xl border" style={{ borderColor: L_BORDER, background: '#eef3f1', boxShadow: '0 28px 84px rgba(15,31,28,0.14)' }}>
       <div className="flex items-center justify-between gap-4 border-b px-4 py-3" style={{ borderColor: L_BORDER, background: '#0d0f0c' }}>
         <div className="flex min-w-0 items-center gap-3">
           <div className="flex gap-1.5">
@@ -734,14 +790,14 @@ function ProductFlowWorkbench() {
         </div>
         <div className="flex items-center gap-2">
           {badge('seeded workspace', 'neutral')}
-          <button type="button" className="rounded-md px-3 py-1.5 text-[10px] font-bold uppercase" style={{ background: ACCENT, color: BASE, fontFamily: M }}>
+          <button type="button" className="rounded-md px-3 py-1.5 text-[10px] font-bold uppercase text-white" style={{ background: ACCENT, fontFamily: M }}>
             Run
           </button>
         </div>
       </div>
 
       <div className="grid min-h-[640px] lg:grid-cols-[228px_1fr]" style={{ color: L_TEXT }}>
-        <aside className="border-b bg-[#f7faf6] p-4 lg:border-b-0 lg:border-r" style={{ borderColor: L_BORDER }}>
+        <aside className="border-b bg-[#f8fbf9] p-4 lg:border-b-0 lg:border-r" style={{ borderColor: L_BORDER }}>
           <div className="mb-5 flex items-center gap-2">
             <Logo size={28} />
             <div>
@@ -759,7 +815,7 @@ function ProductFlowWorkbench() {
                   type="button"
                   onClick={() => selectFlow(item.id)}
                   className="rounded-lg border px-3 py-3 text-left transition-colors"
-                  style={{ borderColor: selected ? '#b7dcbf' : 'transparent', background: selected ? '#eaf6e7' : 'transparent' }}
+                  style={{ borderColor: selected ? '#9bd9cd' : 'transparent', background: selected ? '#eaf8f5' : 'transparent' }}
                 >
                   <div className="text-[10px] uppercase" style={{ color: selected ? '#1D7A6D' : L_MUTED, fontFamily: M }}>{item.eyebrow}</div>
                   <div className="mt-1 text-[14px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>{item.label}</div>
@@ -777,7 +833,7 @@ function ProductFlowWorkbench() {
           </div>
         </aside>
 
-        <div className="min-w-0 bg-[#eef3ed]">
+        <div className="min-w-0 bg-[#eef3f1]">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b bg-white px-4 py-3 sm:px-5" style={{ borderColor: L_BORDER }}>
             <div>
               <div className="text-[10px] uppercase" style={{ color: '#1D7A6D', fontFamily: M }}>{flow.eyebrow}</div>
@@ -840,10 +896,10 @@ function EnrichmentSlider() {
     <div className="mx-auto max-w-[1080px] rounded-lg border bg-white p-3 sm:p-4" style={{ borderColor: L_BORDER, boxShadow: '0 26px 80px rgba(0,0,0,0.1)' }}>
       <div className="mb-3 flex flex-wrap items-center justify-between gap-3 px-1">
         <div>
-          <div className="text-[10px] uppercase" style={{ color: '#1a7a2e', fontFamily: M }}>Drag to compare</div>
+          <div className="text-[10px] uppercase" style={{ color: ACCENT, fontFamily: M }}>Drag to compare</div>
           <h3 className="mt-1 text-[22px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>SKU record before and after enrichment</h3>
         </div>
-        <span className="rounded-md px-2.5 py-1 text-[10px] font-bold uppercase" style={{ background: '#0d1209', color: ACCENT, fontFamily: M }}>
+        <span className="rounded-md px-2.5 py-1 text-[10px] font-bold uppercase" style={{ background: DARK, color: SIGNAL, fontFamily: M }}>
           Slide to compare
         </span>
       </div>
@@ -863,11 +919,11 @@ function EnrichmentSlider() {
                 </div>
               </div>
               <div className="p-4 sm:p-5">
-                <div className="mb-3 text-[10px] uppercase" style={{ color: '#1a7a2e', fontFamily: M }}>After</div>
+                <div className="mb-3 text-[10px] uppercase" style={{ color: ACCENT, fontFamily: M }}>After</div>
                 <div className="space-y-2">
                   {ENRICHMENT_ROWS.map((row) => (
-                    <div key={row.field} className="rounded-lg border p-3" style={{ borderColor: 'rgba(26,122,46,0.18)', background: 'rgba(197,241,53,0.1)' }}>
-                      <div className="mb-1 text-[10px] uppercase" style={{ color: '#1a7a2e', fontFamily: M }}>{row.field}</div>
+                    <div key={row.field} className="rounded-lg border p-3" style={{ borderColor: '#bde5dc', background: '#edf8f5' }}>
+                      <div className="mb-1 text-[10px] uppercase" style={{ color: ACCENT, fontFamily: M }}>{row.field}</div>
                       {renderAfterValue(row)}
                       <div className="mt-2 text-[11px] leading-snug" style={{ color: L_MUTED }}>{row.note}</div>
                     </div>
@@ -949,9 +1005,9 @@ function IntegrationsOrbit() {
       <svg className="absolute inset-0 h-full w-full" viewBox="0 0 760 500" aria-hidden="true">
         <defs>
           <linearGradient id="orbitGlow" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0%" stopColor="#C5F135" stopOpacity="0.34" />
-            <stop offset="52%" stopColor="#8BC6EC" stopOpacity="0.14" />
-            <stop offset="100%" stopColor="#C5F135" stopOpacity="0.12" />
+            <stop offset="0%" stopColor="#18736A" stopOpacity="0.26" />
+            <stop offset="52%" stopColor="#9EE078" stopOpacity="0.2" />
+            <stop offset="100%" stopColor="#18736A" stopOpacity="0.12" />
           </linearGradient>
         </defs>
         <ellipse cx="380" cy="250" rx="304" ry="188" fill="#f0f6eb" />
@@ -966,7 +1022,7 @@ function IntegrationsOrbit() {
 
       <div className="absolute left-1/2 top-1/2 flex h-[164px] w-[228px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-lg border bg-white px-5 text-center" style={{ borderColor: L_BORDER, boxShadow: '0 24px 70px rgba(0,0,0,0.12)' }}>
         <Logo size={54} />
-        <div className="mt-3 text-[12px] font-bold uppercase" style={{ color: '#1a7a2e', fontFamily: M }}>Amplify</div>
+        <div className="mt-3 text-[12px] font-bold uppercase" style={{ color: ACCENT, fontFamily: M }}>Amplify</div>
         <div className="mt-1 text-[15px] leading-snug" style={{ color: L_TEXT, fontFamily: D }}>
           One operating layer for every channel.
         </div>
@@ -986,8 +1042,8 @@ function IntegrationsSection() {
     <section id="integrations" className="scroll-mt-[96px]" style={{ background: L_BG, borderTop: `1px solid ${L_BORDER}` }}>
       <div className="mx-auto max-w-[1160px] px-5 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto mb-10 max-w-[760px] text-center">
-          <SectionLabel label="Integrations" align="center" />
-          <h2 className="mt-7 text-[clamp(30px,5vw,62px)] font-bold leading-[1.02]" style={{ color: L_TEXT, fontFamily: D }}>
+          <SectionLabel label="Integrations" align="center" tone="light" />
+          <h2 className="mt-6 text-[clamp(30px,4vw,50px)] font-bold leading-[1.06]" style={{ color: L_TEXT, fontFamily: D }}>
             Keep the stack. Make the work smarter.
           </h2>
           <p className="mx-auto mt-5 max-w-[600px] text-[15px] leading-[1.7]" style={{ color: L_MUTED }}>
@@ -1041,7 +1097,7 @@ function CustomerSection() {
                     <img src="/logos/beira-rio.png" alt="Beira Rio" className="h-7 w-auto object-contain" />
                   </span>
                 </div>
-                <div className="mt-6 text-[10px] uppercase" style={{ color: ACCENT, fontFamily: M }}>Portfolio operations</div>
+                <div className="mt-6 text-[10px] uppercase" style={{ color: SIGNAL, fontFamily: M }}>Portfolio operations</div>
               </div>
               <div>
                 <h3 className="text-[27px] font-semibold leading-[1.12] text-white" style={{ fontFamily: D }}>
@@ -1052,7 +1108,7 @@ function CustomerSection() {
                 </p>
                 <div className="mt-6 flex flex-wrap gap-2">
                   {['Catalog ops', 'Stock sync', 'Marketplace feeds'].map((item) => (
-                    <span key={item} className="rounded-md px-2.5 py-1 text-[10px] font-bold uppercase" style={{ background: ACCENT, color: BASE, fontFamily: M }}>{item}</span>
+                    <span key={item} className="rounded-md px-2.5 py-1 text-[10px] font-bold uppercase" style={{ background: SIGNAL, color: DARK, fontFamily: M }}>{item}</span>
                   ))}
                 </div>
               </div>
@@ -1082,7 +1138,7 @@ function CustomerSection() {
               </div>
               <div className="flex flex-wrap gap-2 pt-8">
                 {['Inventory', 'Bundle SKUs', 'AI ads'].map((item) => (
-                  <span key={item} className="rounded-md px-2.5 py-1 text-[10px] font-bold uppercase" style={{ background: ACCENT, color: BASE, fontFamily: M }}>{item}</span>
+                  <span key={item} className="rounded-md px-2.5 py-1 text-[10px] font-bold uppercase" style={{ background: SIGNAL, color: DARK, fontFamily: M }}>{item}</span>
                 ))}
               </div>
             </div>
@@ -1114,7 +1170,7 @@ function CustomerSection() {
                 </p>
                 <div className="mt-6 flex flex-wrap gap-2">
                   {['Training videos', 'Store teams', 'Launch readiness'].map((item) => (
-                    <span key={item} className="rounded-md px-2.5 py-1 text-[10px] font-bold uppercase" style={{ background: ACCENT, color: BASE, fontFamily: M }}>
+                    <span key={item} className="rounded-md px-2.5 py-1 text-[10px] font-bold uppercase" style={{ background: SIGNAL, color: DARK, fontFamily: M }}>
                       {item}
                     </span>
                   ))}
@@ -1183,8 +1239,8 @@ export default function LandingPage() {
             maxWidth: scrolled ? 900 : 1180,
             height: scrolled ? 48 : 58,
             padding: scrolled ? '0 8px 0 16px' : '0 10px 0 18px',
-            background: scrolled ? 'rgba(14,14,14,0.86)' : 'rgba(8,8,8,0.72)',
-            border: `1px solid ${BORDER}`,
+            background: scrolled ? 'rgba(16,22,19,0.9)' : 'rgba(16,22,19,0.82)',
+            border: '1px solid rgba(255,255,255,0.12)',
             backdropFilter: 'blur(24px)',
             WebkitBackdropFilter: 'blur(24px)',
             boxShadow: '0 16px 50px rgba(0,0,0,0.28)',
@@ -1225,7 +1281,7 @@ export default function LandingPage() {
             ))}
           </div>
           <div className="flex items-center gap-2">
-            <a href="#cta" className="hidden h-9 items-center gap-2 rounded-lg px-4 text-[11px] font-bold transition-opacity hover:opacity-90 sm:flex" style={{ background: ACCENT, color: BASE, fontFamily: M }}>
+            <a href="#cta" className="hidden h-9 items-center gap-2 rounded-lg px-4 text-[11px] font-bold transition-opacity hover:opacity-90 sm:flex" style={{ background: SIGNAL, color: DARK, fontFamily: M }}>
               GET EARLY ACCESS
             </a>
             <button
@@ -1270,61 +1326,55 @@ export default function LandingPage() {
                 {link.label}
               </a>
             ))}
-            <a href="/audit" onClick={() => setMobileOpen(false)} className="mt-2 block rounded-lg px-3 py-3 text-[14px] font-bold" style={{ background: ACCENT, color: BASE, fontFamily: M }}>
+            <a href="/audit" onClick={() => setMobileOpen(false)} className="mt-2 block rounded-lg px-3 py-3 text-[14px] font-bold" style={{ background: SIGNAL, color: DARK, fontFamily: M }}>
               Free audit
             </a>
           </div>
         </div>
       )}
 
-      <section className="relative overflow-hidden pt-[112px]" style={{ background: BASE }}>
-        <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px)', backgroundSize: '54px 54px' }} />
-        <div className="absolute inset-x-0 top-0 h-[760px] pointer-events-none" style={{ background: 'linear-gradient(135deg, rgba(197,241,53,0.17), transparent 34%, rgba(86,142,255,0.1) 72%, transparent)' }} />
+      <section className="relative overflow-hidden pt-[116px]" style={{ background: BASE }}>
+        <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(24,115,106,0.055) 1px, transparent 1px), linear-gradient(90deg, rgba(24,115,106,0.055) 1px, transparent 1px)', backgroundSize: '56px 56px', maskImage: 'linear-gradient(to bottom, black, transparent 76%)' }} />
+        <div className="absolute inset-x-0 top-0 h-[620px] pointer-events-none" style={{ background: 'linear-gradient(140deg, rgba(158,224,120,0.18), transparent 34%, rgba(24,115,106,0.09) 72%, transparent)' }} />
         <div className="relative mx-auto max-w-[1180px] px-5 pb-16 sm:px-6 sm:pb-24">
-          <div className="grid items-center gap-10 lg:grid-cols-[0.92fr_1.08fr]">
-            <div>
-              <a href="/audit" className="mb-7 inline-flex max-w-full flex-wrap items-center gap-2 rounded-lg px-3 py-2" style={{ background: 'rgba(197,241,53,0.08)', border: '1px solid rgba(197,241,53,0.2)' }}>
-                <span className="shrink-0 rounded-md px-2 py-0.5 text-[10px] font-bold" style={{ background: ACCENT, color: BASE, fontFamily: M }}>FREE AUDIT</span>
-                <span className="min-w-0 text-[10px] uppercase leading-[1.5] sm:text-[11px]" style={{ color: SOFT, fontFamily: M }}>Paste a product link and get quick listing feedback</span>
-              </a>
-              <SectionLabel label="AI operations for brand teams" />
-              <h1 className="mt-6 max-w-[720px] text-[clamp(42px,5.8vw,80px)] font-bold leading-[0.98] text-white" style={{ fontFamily: D }}>
-                Run catalog, inventory, and marketplace work from one AI workspace.
-              </h1>
-              <p className="mt-7 max-w-[590px] text-[16px] leading-[1.75] sm:text-[18px]" style={{ color: SOFT }}>
-                Amplify connects product files, sales, returns, stock, images, and marketplace rules so operators can review fixes, forecasts, purchase orders, and sales actions before anything goes live.
-              </p>
-              <div className="mt-8">
-                <WaitlistForm
-                  email={email}
-                  setEmail={setEmail}
-                  status={status}
-                  message={message}
-                  onSubmit={() => handleSubmit(email, setStatus, setMessage, () => setEmail(''))}
-                />
-              </div>
-              <div className="mt-5 flex flex-wrap gap-4 text-[11px] uppercase" style={{ color: MUTED, fontFamily: M }}>
-                <span>Sales analysis</span>
-                <span>Purchase order drafts</span>
-                <span>Human approval</span>
-              </div>
-            </div>
-
-            <div className="lg:pt-10">
-              <HeroConsole />
+          <div className="mx-auto max-w-[920px] text-center">
+            <a href="/audit" className="mb-7 inline-flex max-w-full flex-wrap items-center justify-center gap-2 rounded-lg border bg-white px-3 py-2" style={{ borderColor: '#cfe0d9', boxShadow: '0 10px 32px rgba(15,31,28,0.06)' }}>
+              <span className="shrink-0 rounded-md px-2 py-0.5 text-[10px] font-bold" style={{ background: SIGNAL, color: DARK, fontFamily: M }}>FREE AUDIT</span>
+              <span className="min-w-0 text-[10px] uppercase leading-[1.5] sm:text-[11px]" style={{ color: L_MUTED, fontFamily: M }}>Get quick feedback on any product page</span>
+            </a>
+            <div className="flex justify-center"><SectionLabel label="Retail operations for brand teams" tone="light" /></div>
+            <h1 className="mx-auto mt-6 max-w-[900px] text-[clamp(40px,7vw,78px)] font-bold leading-[1.01]" style={{ color: INK, fontFamily: D }}>
+              Retail operations,<br className="hidden sm:block" /> finally in one place.
+            </h1>
+            <p className="mx-auto mt-6 max-w-[680px] text-[16px] leading-[1.65] sm:text-[18px]" style={{ color: L_MUTED }}>
+              Turn product files, sales, and stock into ready listings, clear decisions, and approved actions.
+            </p>
+            <div className="mx-auto mt-7 max-w-[540px]">
+              <WaitlistForm
+                email={email}
+                setEmail={setEmail}
+                status={status}
+                message={message}
+                tone="light"
+                onSubmit={() => handleSubmit(email, setStatus, setMessage, () => setEmail(''))}
+              />
             </div>
           </div>
 
-          <div className="mt-12 grid gap-3 sm:grid-cols-4">
+          <div className="mt-12 sm:mt-14">
+            <HeroConsole />
+          </div>
+
+          <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
             {[
-              ['5', 'specialized agents'],
+              ['184', 'SKU rows prepared'],
               ['8+', 'channels supported'],
-              ['45K+', 'SKUs normalized'],
-              ['0', 'unapproved live writes'],
+              ['4', 'fields to review'],
+              ['0', 'unapproved writes'],
             ].map(([value, label]) => (
-              <div key={label} className="rounded-lg border px-4 py-4" style={{ borderColor: BORDER, background: 'rgba(255,255,255,0.045)' }}>
-                <div className="text-[28px] font-bold text-white" style={{ fontFamily: D }}>{value}</div>
-                <div className="mt-1 text-[10px] uppercase" style={{ color: MUTED, fontFamily: M }}>{label}</div>
+              <div key={label} className="rounded-lg border bg-white px-4 py-4" style={{ borderColor: L_BORDER }}>
+                <div className="text-[25px] font-semibold" style={{ color: INK, fontFamily: D }}>{value}</div>
+                <div className="mt-1 text-[9px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>{label}</div>
               </div>
             ))}
           </div>
@@ -1333,42 +1383,42 @@ export default function LandingPage() {
 
       <CustomerSection />
 
-      <section id="product-flow" className="scroll-mt-[96px]" style={{ background: '#0d0d0d', borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
-        <div className="mx-auto max-w-[1160px] px-5 py-16 sm:px-6 sm:py-24">
+      <section id="product-flow" className="scroll-mt-[96px]" style={{ background: '#EAF1EE', borderTop: `1px solid ${L_BORDER}`, borderBottom: `1px solid ${L_BORDER}` }}>
+        <div className="mx-auto max-w-[1160px] px-5 py-14 sm:px-6 sm:py-20">
           <div className="mb-10 grid gap-6 lg:grid-cols-[0.88fr_1.12fr] lg:items-end">
             <div>
-              <SectionLabel label="Product preview" />
-              <h2 className="mt-7 max-w-[720px] text-[clamp(32px,5vw,64px)] font-bold leading-[1.02] text-white" style={{ fontFamily: D }}>
-                The product, embedded like an operator would use it.
+              <SectionLabel label="Explore the product" tone="light" />
+              <h2 className="mt-6 max-w-[720px] text-[clamp(30px,4.2vw,52px)] font-bold leading-[1.06]" style={{ color: L_TEXT, fontFamily: D }}>
+                One workspace. Four operating views.
               </h2>
             </div>
-            <p className="text-[15px] leading-[1.75] sm:text-[17px]" style={{ color: SOFT }}>
-              A seeded Geoomnii workspace showing Listing Ops, Company Brain, Inventory, and Approvals with real commerce inputs.
+            <p className="max-w-[560px] text-[15px] leading-[1.65] sm:text-[16px]" style={{ color: L_MUTED }}>
+              Switch between the same views your catalog, merchandising, and inventory teams use.
             </p>
           </div>
           <ProductFlowWorkbench />
         </div>
       </section>
 
-      <section id="platform" className="scroll-mt-[96px]" style={{ background: '#0d0d0d', borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
-        <div className="mx-auto grid max-w-[1160px] gap-8 px-5 py-14 sm:px-6 sm:py-20 lg:grid-cols-[0.9fr_1.1fr]">
+      <section id="platform" className="scroll-mt-[96px]" style={{ background: L_BG, borderBottom: `1px solid ${L_BORDER}` }}>
+        <div className="mx-auto grid max-w-[1160px] gap-8 px-5 py-14 sm:px-6 sm:py-20 lg:grid-cols-[0.8fr_1.2fr]">
           <div>
-            <SectionLabel label="What it does" />
-            <h2 className="mt-6 max-w-[580px] text-[clamp(30px,4.8vw,58px)] font-bold leading-[1.03] text-white" style={{ fontFamily: D }}>
-              A real operating layer for catalog, sales analysis, forecasts, inventory, and purchase orders.
+            <SectionLabel label="How it works" tone="light" />
+            <h2 className="mt-6 max-w-[520px] text-[clamp(30px,4vw,50px)] font-bold leading-[1.06]" style={{ color: L_TEXT, fontFamily: D }}>
+              From source data to approved work.
             </h2>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             {[
-              ['Sync the truth', 'Products, orders, returns, inventory, supplier PIs, SKU images, and marketplace files stay connected.'],
-              ['Ask the company brain', 'Sales analysis, pivot-style breakdowns, return reasons, and stock movement are summarized in plain language.'],
-              ['Prepare the output', 'Agents produce listing updates, replenishment plans, PO drafts, sales actions, and ready-to-submit marketplace XLSX files.'],
-              ['Approve and learn', 'Managers approve, edit, apply, rollback when needed, and measure pre/post impact weekly.'],
+              ['Connect', 'Products, orders, stock, supplier files, images, and channel templates.'],
+              ['Understand', 'Sales, returns, stock cover, and product movement in plain language.'],
+              ['Prepare', 'Listings, replenishment plans, PO drafts, and marketplace files.'],
+              ['Approve', 'Review evidence and impact before any action goes live.'],
             ].map(([title, body], index) => (
-              <article key={title} className="rounded-lg border p-5" style={{ borderColor: BORDER, background: index === 2 ? 'rgba(197,241,53,0.08)' : GLASS }}>
-                <div className="mb-4 text-[11px] uppercase" style={{ color: index === 2 ? ACCENT : MUTED, fontFamily: M }}>{String(index + 1).padStart(2, '0')}</div>
-                <h3 className="mb-2 text-[18px] font-semibold text-white" style={{ fontFamily: D }}>{title}</h3>
-                <p className="text-[13px] leading-[1.65]" style={{ color: SOFT }}>{body}</p>
+              <article key={title} className="rounded-lg border bg-white p-5" style={{ borderColor: index === 2 ? '#9bd9cd' : L_BORDER, boxShadow: index === 2 ? '0 16px 42px rgba(24,115,106,0.08)' : 'none' }}>
+                <div className="mb-4 text-[10px] uppercase" style={{ color: ACCENT, fontFamily: M }}>{String(index + 1).padStart(2, '0')}</div>
+                <h3 className="mb-2 text-[18px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>{title}</h3>
+                <p className="text-[13px] leading-[1.6]" style={{ color: L_MUTED }}>{body}</p>
               </article>
             ))}
           </div>
@@ -1380,12 +1430,12 @@ export default function LandingPage() {
           <div className="mb-10 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
             <div>
               <SectionLabel label="SKU enrichment" tone="light" />
-              <h2 className="mt-7 max-w-[700px] text-[clamp(32px,5vw,64px)] font-bold leading-[1.02]" style={{ color: L_TEXT, fontFamily: D }}>
-                Review a SKU record before and after enrichment.
+              <h2 className="mt-6 max-w-[700px] text-[clamp(30px,4vw,50px)] font-bold leading-[1.06]" style={{ color: L_TEXT, fontFamily: D }}>
+                See every change before it ships.
               </h2>
             </div>
-            <p className="text-[15px] leading-[1.75] sm:text-[17px]" style={{ color: L_MUTED }}>
-              Source data, image links, and channel requirements become a governed SKU record with structured attributes and product imagery.
+            <p className="max-w-[560px] text-[15px] leading-[1.65] sm:text-[16px]" style={{ color: L_MUTED }}>
+              Compare the source record with the structured marketplace output.
             </p>
           </div>
           <EnrichmentSlider />
@@ -1397,12 +1447,12 @@ export default function LandingPage() {
           <div className="mb-10 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
             <div>
               <SectionLabel label="Use cases" tone="light" />
-              <h2 className="mt-7 max-w-[700px] text-[clamp(32px,5vw,62px)] font-bold leading-[1.02]" style={{ color: L_TEXT, fontFamily: D }}>
-                Five focused pages for the work operators repeat.
+              <h2 className="mt-6 max-w-[700px] text-[clamp(30px,4vw,50px)] font-bold leading-[1.06]" style={{ color: L_TEXT, fontFamily: D }}>
+                Built for the work your team repeats.
               </h2>
             </div>
-            <p className="text-[15px] leading-[1.75] sm:text-[17px]" style={{ color: L_MUTED }}>
-              The homepage keeps the big picture. Each use case gets a deeper page with the same embedded product UI, seeded data, and approval-first workflow.
+            <p className="max-w-[560px] text-[15px] leading-[1.65] sm:text-[16px]" style={{ color: L_MUTED }}>
+              Open a focused workspace for each operational job.
             </p>
           </div>
           <div className="grid gap-3 md:grid-cols-5">
@@ -1427,16 +1477,16 @@ export default function LandingPage() {
 
       <IntegrationsSection />
 
-      <section id="cta" className="relative overflow-hidden" style={{ background: '#081008', borderTop: `1px solid ${BORDER}` }}>
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(120deg, rgba(197,241,53,0.13), transparent 38%, rgba(255,255,255,0.04))' }} />
+      <section id="cta" className="relative overflow-hidden" style={{ background: DARK, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(120deg, rgba(158,224,120,0.13), transparent 38%, rgba(255,255,255,0.04))' }} />
         <div className="relative mx-auto grid max-w-[1160px] gap-10 px-5 py-16 sm:px-6 sm:py-24 lg:grid-cols-[1fr_0.76fr] lg:items-center">
           <div>
             <SectionLabel label="Early access" />
-            <h2 className="mt-6 max-w-[760px] text-[clamp(34px,6vw,76px)] font-bold leading-[0.98] text-white" style={{ fontFamily: D }}>
-              Show us the SKU workflow slowing your team down.
+            <h2 className="mt-6 max-w-[680px] text-[clamp(34px,5vw,60px)] font-bold leading-[1.02] text-white" style={{ fontFamily: D }}>
+              Bring us your messiest workflow.
             </h2>
-            <p className="mt-5 max-w-[560px] text-[16px] leading-[1.75]" style={{ color: SOFT }}>
-              We will map the inputs, build the agent workflow, and make it repeatable enough for your team to run every week.
+            <p className="mt-5 max-w-[520px] text-[16px] leading-[1.65]" style={{ color: SOFT }}>
+              We will turn it into a repeatable, approval-ready process.
             </p>
           </div>
           <div className="rounded-lg border p-4" style={{ borderColor: BORDER, background: GLASS, backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)' }}>
