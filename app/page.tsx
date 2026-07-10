@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { AnimatePresence, m } from 'motion/react'
+import { useEffect, useRef, useState } from 'react'
+import { AnimatePresence, m, useInView } from 'motion/react'
 import { ConnectedWorkflow } from '../components/connected-workflow'
 import { MotionCard, MotionShell, ProductStage, Reveal } from '../components/motion-primitives'
 
@@ -317,10 +317,12 @@ function WaitlistForm({
 }
 
 function HeroConsole() {
+  const filmRef = useRef<HTMLDivElement>(null)
   const [activeStep, setActiveStep] = useState(0)
   const [filmPhase, setFilmPhase] = useState(0)
   const [typedChars, setTypedChars] = useState(0)
   const [isDesktop, setIsDesktop] = useState(false)
+  const isFilmInView = useInView(filmRef, { amount: 0.15, margin: '0px 0px -60% 0px' })
   const brainQuery = 'Why did Amazon footwear sales grow last week?'
   const stages = [
     { label: 'Data', detail: '4 sources connected' },
@@ -337,10 +339,11 @@ function HeroConsole() {
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (!isFilmInView) return
     if (filmPhase !== 0) return
-    const interval = window.setInterval(() => setActiveStep((step) => (step + 1) % stages.length), 2300)
+    const interval = window.setInterval(() => setActiveStep((step) => Math.min(step + 1, stages.length - 1)), 2300)
     return () => window.clearInterval(interval)
-  }, [filmPhase, stages.length])
+  }, [filmPhase, isFilmInView, stages.length])
 
   useEffect(() => {
     const media = window.matchMedia('(min-width: 768px)')
@@ -351,17 +354,24 @@ function HeroConsole() {
   }, [])
 
   useEffect(() => {
+    if (!isFilmInView) {
+      setFilmPhase(0)
+      setActiveStep(0)
+      setTypedChars(0)
+      return
+    }
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setFilmPhase(3)
+      setFilmPhase(4)
       setTypedChars(brainQuery.length)
       return
     }
-    const durations = [5200, 1900, 3600, 4800]
+    const durations = [9600, 2400, 5200, 6800, 8000]
     const timeout = window.setTimeout(() => setFilmPhase((phase) => (phase + 1) % durations.length), durations[filmPhase])
     return () => window.clearTimeout(timeout)
-  }, [brainQuery.length, filmPhase])
+  }, [brainQuery.length, filmPhase, isFilmInView])
 
   useEffect(() => {
+    if (!isFilmInView) return
     if (filmPhase < 2) {
       setTypedChars(0)
       return
@@ -380,10 +390,14 @@ function HeroConsole() {
       })
     }, 44)
     return () => window.clearInterval(interval)
-  }, [brainQuery.length, filmPhase])
+  }, [brainQuery.length, filmPhase, isFilmInView])
+
+  useEffect(() => {
+    if (filmPhase === 0) setActiveStep(0)
+  }, [filmPhase])
 
   return (
-    <div className="relative overflow-hidden rounded-xl border bg-white text-left" style={{ borderColor: L_BORDER, boxShadow: '0 34px 100px rgba(15,31,28,0.18)' }}>
+    <div ref={filmRef} className="relative overflow-hidden rounded-xl border bg-white text-left" style={{ borderColor: L_BORDER, boxShadow: '0 34px 100px rgba(15,31,28,0.18)' }}>
       <div className="flex items-center justify-between border-b bg-white px-4 py-3" style={{ borderColor: L_BORDER }}>
         <div className="flex items-center gap-3">
           <div className="flex gap-1.5" aria-hidden="true">
@@ -391,11 +405,15 @@ function HeroConsole() {
             <span className="h-2.5 w-2.5 rounded-full bg-[#dce5e0]" />
             <span className="h-2.5 w-2.5 rounded-full bg-[#9ee078]" />
           </div>
-          <span className="hidden text-[11px] sm:inline" style={{ color: L_MUTED, fontFamily: M }}>app.use-amplify.com/workspace/{filmPhase >= 2 ? 'company-brain/ask' : 'listing-ops/overview'}</span>
+          <span className="hidden text-[11px] sm:inline" style={{ color: L_MUTED, fontFamily: M }}>app.use-amplify.com/workspace/{filmPhase === 4 ? 'listing-ops/publish' : filmPhase >= 2 ? 'company-brain/ask' : 'listing-ops/overview'}</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="hidden gap-1 sm:flex" aria-label={`Product film scene ${filmPhase + 1} of 4`}>
-            {[0, 1, 2, 3].map((phase) => <span key={phase} className="h-1 w-5 overflow-hidden rounded-full bg-[#dce5e0]"><m.span className="block h-full origin-left" animate={{ scaleX: phase <= filmPhase ? 1 : 0 }} style={{ background: ACCENT }} /></span>)}
+          <div className="hidden gap-1 sm:flex" aria-label={`Product film scene ${filmPhase + 1} of 5`}>
+            {[0, 1, 2, 3, 4].map((phase) => (
+              <button key={phase} type="button" onClick={() => setFilmPhase(phase)} aria-label={`Show product film scene ${phase + 1}`} className="h-1 w-5 overflow-hidden rounded-full bg-[#dce5e0]">
+                <m.span className="block h-full origin-left" animate={{ scaleX: phase <= filmPhase ? 1 : 0 }} style={{ background: ACCENT }} />
+              </button>
+            ))}
           </div>
           <span className="rounded-md border px-2.5 py-1 text-[10px] font-semibold" style={{ borderColor: '#bde5dc', background: '#eaf8f5', color: ACCENT, fontFamily: M }}>LIVE PRODUCT</span>
         </div>
@@ -417,7 +435,7 @@ function HeroConsole() {
           </div>
           <div className="space-y-1.5">
             {['Overview', 'Listing', 'Company Brain', 'Inventory', 'Approvals'].map((item) => {
-              const selected = filmPhase >= 1 ? item === 'Company Brain' : item === 'Listing'
+              const selected = filmPhase === 4 ? item === 'Listing' : filmPhase >= 1 ? item === 'Company Brain' : item === 'Listing'
               return (
                 <button key={item} type="button" onClick={() => item === 'Company Brain' ? setFilmPhase(2) : item === 'Listing' ? setFilmPhase(0) : undefined} className="relative w-full rounded-lg border px-3 py-2.5 text-left text-[11px] font-semibold" style={{ borderColor: selected ? '#436050' : 'transparent', background: selected ? '#1a241f' : 'transparent', color: selected ? '#f7fbf8' : '#9fb4aa', boxShadow: filmPhase === 1 && item === 'Company Brain' ? '0 0 0 1px rgba(158,224,120,0.42), 0 0 34px rgba(158,224,120,0.16)' : 'none' }}>
                   {item}
@@ -529,7 +547,7 @@ function HeroConsole() {
           </div>
 
           <AnimatePresence mode="wait">
-            {filmPhase >= 2 && (
+            {filmPhase >= 2 && filmPhase < 4 && (
               <m.div
                 key="company-brain-film"
                 className="absolute inset-0 z-20 flex flex-col bg-[#eef3f1]"
@@ -603,6 +621,86 @@ function HeroConsole() {
                         </m.div>
                       )}
                     </AnimatePresence>
+                  </section>
+                </div>
+              </m.div>
+            )}
+            {filmPhase === 4 && (
+              <m.div
+                key="publish-film"
+                className="absolute inset-0 z-20 flex flex-col bg-[#eef3f1]"
+                initial={{ opacity: 0, x: 70, scale: 0.985 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, x: 42, scale: 0.99 }}
+                transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <div className="flex min-h-[54px] items-center justify-between border-b bg-[#f8fbf9] px-4 sm:px-5" style={{ borderColor: '#dce5e0' }}>
+                  <div className="text-[11px]" style={{ color: L_MUTED }}><span className="font-semibold" style={{ color: L_TEXT }}>Listing Ops</span> / Publish everywhere</div>
+                  <m.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }} className="flex items-center gap-2 text-[9px] font-semibold uppercase" style={{ color: '#137a3a', fontFamily: M }}><span className="grid h-4 w-4 place-items-center rounded-full bg-[#dff4e6]">✓</span>Approval complete</m.div>
+                </div>
+
+                <div className="grid min-h-0 flex-1 content-start gap-3 p-3 sm:p-4 lg:grid-cols-[0.82fr_1.18fr] lg:content-stretch">
+                  <section className="relative min-h-[170px] overflow-hidden rounded-lg border bg-white p-3 sm:min-h-[220px] sm:p-3.5" style={{ borderColor: '#d8e2dd' }}>
+                    <div className="text-[9px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>Before Amplify</div>
+                    <h3 className="mt-1 text-[14px] font-semibold sm:text-[17px]" style={{ color: L_TEXT }}>Workbook handoffs, every week</h3>
+                    <div className="relative mx-auto mt-2 h-[68px] max-w-[300px] sm:mt-4 sm:h-[136px]">
+                      {[
+                        ['supplier_PI.xlsx', -7, -15, 14],
+                        ['marketplace_mapping_v12.xlsx', 6, 13, 38],
+                        ['amazon_flatfile_FINAL.xlsx', -3, -5, 64],
+                        ['stock_update.csv', 2, 7, 90],
+                      ].map(([name, rotate, x, y], index) => (
+                        <m.div
+                          key={String(name)}
+                          initial={{ opacity: 0, x: isDesktop ? Number(x) - 45 : -24, y: isDesktop ? Number(y) + 18 : index * 14 + 10, rotate: isDesktop ? Number(rotate) * 1.8 : 0 }}
+                          animate={{ opacity: 1, x: isDesktop ? Number(x) : 0, y: isDesktop ? Number(y) : index * 14, rotate: isDesktop ? Number(rotate) : 0 }}
+                          transition={{ delay: 0.24 + index * 0.18, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                          className="absolute inset-x-1 flex h-8 items-center justify-between rounded-md border bg-[#fbfcfb] px-2 shadow-sm sm:inset-x-3 sm:h-11 sm:px-3"
+                          style={{ borderColor: '#d8e2dd' }}
+                        >
+                          <span className="flex min-w-0 items-center gap-2 text-[8px] sm:text-[10px]" style={{ color: L_TEXT, fontFamily: M }}><span className="grid h-5 w-5 shrink-0 place-items-center rounded bg-[#e8f2ed] text-[7px] font-bold sm:h-6 sm:w-6 sm:text-[8px]" style={{ color: ACCENT }}>XLS</span><span className="truncate">{String(name)}</span></span>
+                          <span className="h-2 w-2 rounded-full bg-[#e6a43b]" />
+                        </m.div>
+                      ))}
+                    </div>
+                    <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.18 }} className="mt-2 flex items-center justify-between rounded-lg border px-3 py-2 sm:mt-3 sm:py-2.5" style={{ borderColor: '#d8e2dd', background: '#f8fbf9' }}>
+                      <span className="text-[10px] font-semibold" style={{ color: L_TEXT }}>11 file handoffs</span>
+                      <span className="text-[8px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>Manual upkeep</span>
+                    </m.div>
+                  </section>
+
+                  <section className="flex min-h-[270px] flex-col rounded-lg border bg-white p-3 sm:min-h-[280px] sm:p-3.5" style={{ borderColor: '#d8e2dd' }}>
+                    <div className="flex items-start justify-between gap-3">
+                      <div><div className="text-[9px] uppercase" style={{ color: ACCENT, fontFamily: M }}>One approved publish</div><h3 className="mt-1 text-[17px] font-semibold" style={{ color: L_TEXT }}>184 products, all channels</h3></div>
+                      <m.span initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 1.25 }} className="shrink-0 rounded-md px-2.5 py-2 text-[8px] font-bold uppercase text-white" style={{ background: ACCENT, fontFamily: M }}>Publish 184</m.span>
+                    </div>
+
+                    <div className="relative my-3 h-1 overflow-hidden rounded-full bg-[#e6eeea]">
+                      <m.div className="absolute inset-y-0 left-0 rounded-full" initial={{ width: '0%' }} animate={{ width: '100%' }} transition={{ delay: 1.4, duration: 1.75, ease: [0.22, 1, 0.36, 1] }} style={{ background: ACCENT }} />
+                    </div>
+
+                    <div className="grid flex-1 grid-cols-2 gap-2 sm:grid-cols-3">
+                      {[
+                        { name: 'Amazon', src: '/logos/platforms/amazon.svg', status: 'Live' },
+                        { name: 'Shopify', src: '/logos/platforms/shopify.svg', status: 'Synced' },
+                        { name: 'Best Buy', mark: 'BEST BUY', status: 'Live', tone: '#fff200' },
+                        { name: 'Walmart', mark: 'Walmart ✦', status: 'Live', tone: '#eaf4ff' },
+                        { name: 'Noon', src: '/logos/platforms/noon.svg', status: 'Synced' },
+                        { name: 'Namshi', mark: 'namshi', status: 'Ready', tone: '#f3f5f4' },
+                      ].map((channel, index) => (
+                        <m.div key={channel.name} initial={{ opacity: 0, y: 12, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: 2.05 + index * 0.26, duration: 0.5, ease: [0.22, 1, 0.36, 1] }} className="flex min-h-[52px] flex-col justify-between rounded-lg border p-2 sm:min-h-[70px] sm:p-2.5" style={{ borderColor: '#d8e2dd', background: '#fbfcfb' }}>
+                          <div className="flex h-7 items-center">
+                            {channel.src ? <img src={channel.src} alt={channel.name} className="max-h-6 max-w-[78px] object-contain object-left" /> : <span className="rounded px-1.5 py-1 text-[9px] font-extrabold" style={{ color: channel.name === 'Walmart' ? '#0874c9' : L_TEXT, background: channel.tone, fontFamily: channel.name === 'Namshi' ? D : M }}>{channel.mark}</span>}
+                          </div>
+                          <div className="flex items-center justify-between gap-2"><span className="text-[8px]" style={{ color: L_MUTED }}>{channel.name}</span><span className="flex items-center gap-1 text-[7px] font-bold uppercase" style={{ color: '#137a3a', fontFamily: M }}><span className="h-1.5 w-1.5 rounded-full bg-[#2c9a68]" />{channel.status}</span></div>
+                        </m.div>
+                      ))}
+                    </div>
+
+                    <m.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 3.9, duration: 0.55 }} className="mt-3 flex items-center justify-between gap-3 rounded-lg border px-3 py-2.5" style={{ borderColor: '#9bd9cd', background: '#edf8f5' }}>
+                      <div><div className="text-[9px] font-semibold" style={{ color: L_TEXT }}>Published once. Maintained continuously.</div><div className="mt-0.5 text-[8px]" style={{ color: L_MUTED }}>Listings, price, stock, and availability stay in sync.</div></div>
+                      <m.span animate={{ opacity: [0.35, 1, 0.35] }} transition={{ repeat: Infinity, duration: 1.8 }} className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: SIGNAL }} />
+                    </m.div>
                   </section>
                 </div>
               </m.div>
