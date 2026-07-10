@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { AnimatePresence, m } from 'motion/react'
 import { ConnectedWorkflow } from '../components/connected-workflow'
 import { MotionCard, MotionShell, ProductStage, Reveal } from '../components/motion-primitives'
 
@@ -317,6 +318,10 @@ function WaitlistForm({
 
 function HeroConsole() {
   const [activeStep, setActiveStep] = useState(0)
+  const [filmPhase, setFilmPhase] = useState(0)
+  const [typedChars, setTypedChars] = useState(0)
+  const [isDesktop, setIsDesktop] = useState(false)
+  const brainQuery = 'Why did Amazon footwear sales grow last week?'
   const stages = [
     { label: 'Data', detail: '4 sources connected' },
     { label: 'Scan', detail: '8 channels checked' },
@@ -332,12 +337,53 @@ function HeroConsole() {
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (filmPhase !== 0) return
     const interval = window.setInterval(() => setActiveStep((step) => (step + 1) % stages.length), 2300)
     return () => window.clearInterval(interval)
-  }, [stages.length])
+  }, [filmPhase, stages.length])
+
+  useEffect(() => {
+    const media = window.matchMedia('(min-width: 768px)')
+    const update = () => setIsDesktop(media.matches)
+    update()
+    media.addEventListener('change', update)
+    return () => media.removeEventListener('change', update)
+  }, [])
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setFilmPhase(3)
+      setTypedChars(brainQuery.length)
+      return
+    }
+    const durations = [5200, 1900, 3600, 4800]
+    const timeout = window.setTimeout(() => setFilmPhase((phase) => (phase + 1) % durations.length), durations[filmPhase])
+    return () => window.clearTimeout(timeout)
+  }, [brainQuery.length, filmPhase])
+
+  useEffect(() => {
+    if (filmPhase < 2) {
+      setTypedChars(0)
+      return
+    }
+    if (filmPhase > 2) {
+      setTypedChars(brainQuery.length)
+      return
+    }
+    const interval = window.setInterval(() => {
+      setTypedChars((count) => {
+        if (count >= brainQuery.length) {
+          window.clearInterval(interval)
+          return count
+        }
+        return count + 1
+      })
+    }, 44)
+    return () => window.clearInterval(interval)
+  }, [brainQuery.length, filmPhase])
 
   return (
-    <div className="overflow-hidden rounded-xl border bg-white text-left" style={{ borderColor: L_BORDER, boxShadow: '0 34px 100px rgba(15,31,28,0.18)' }}>
+    <div className="relative overflow-hidden rounded-xl border bg-white text-left" style={{ borderColor: L_BORDER, boxShadow: '0 34px 100px rgba(15,31,28,0.18)' }}>
       <div className="flex items-center justify-between border-b bg-white px-4 py-3" style={{ borderColor: L_BORDER }}>
         <div className="flex items-center gap-3">
           <div className="flex gap-1.5" aria-hidden="true">
@@ -345,27 +391,38 @@ function HeroConsole() {
             <span className="h-2.5 w-2.5 rounded-full bg-[#dce5e0]" />
             <span className="h-2.5 w-2.5 rounded-full bg-[#9ee078]" />
           </div>
-          <span className="hidden text-[11px] sm:inline" style={{ color: L_MUTED, fontFamily: M }}>app.use-amplify.com/listing-ops/overview</span>
+          <span className="hidden text-[11px] sm:inline" style={{ color: L_MUTED, fontFamily: M }}>app.use-amplify.com/workspace/{filmPhase >= 2 ? 'company-brain/ask' : 'listing-ops/overview'}</span>
         </div>
-        <span className="rounded-md border px-2.5 py-1 text-[10px] font-semibold" style={{ borderColor: '#bde5dc', background: '#eaf8f5', color: ACCENT, fontFamily: M }}>SEEDED DEMO</span>
+        <div className="flex items-center gap-2">
+          <div className="hidden gap-1 sm:flex" aria-label={`Product film scene ${filmPhase + 1} of 4`}>
+            {[0, 1, 2, 3].map((phase) => <span key={phase} className="h-1 w-5 overflow-hidden rounded-full bg-[#dce5e0]"><m.span className="block h-full origin-left" animate={{ scaleX: phase <= filmPhase ? 1 : 0 }} style={{ background: ACCENT }} /></span>)}
+          </div>
+          <span className="rounded-md border px-2.5 py-1 text-[10px] font-semibold" style={{ borderColor: '#bde5dc', background: '#eaf8f5', color: ACCENT, fontFamily: M }}>LIVE PRODUCT</span>
+        </div>
       </div>
 
-      <div className="grid min-h-[560px] md:grid-cols-[190px_minmax(0,1fr)]">
-        <aside className="hidden flex-col bg-[#101613] p-4 text-white md:flex">
+      <m.div
+        className="grid min-h-[560px] md:grid-cols-[190px_minmax(0,1fr)]"
+        animate={isDesktop && filmPhase === 1 ? { scale: 1.13, x: 22 } : { scale: 1, x: 0 }}
+        transition={{ duration: 1.05, ease: [0.22, 1, 0.36, 1] }}
+        style={{ transformOrigin: '12% 48%' }}
+      >
+        <aside className="relative hidden flex-col bg-[#101613] p-4 text-white md:flex">
           <div className="mb-7 flex items-center gap-2.5">
             <Logo size={30} />
             <div>
               <div className="text-[13px] font-semibold">Amplify</div>
-              <div className="text-[9px] uppercase" style={{ color: '#9fb4aa', fontFamily: M }}>Geoomnii</div>
+              <div className="text-[9px] uppercase" style={{ color: '#9fb4aa', fontFamily: M }}>Retail workspace</div>
             </div>
           </div>
           <div className="space-y-1.5">
             {['Overview', 'Listing', 'Company Brain', 'Inventory', 'Approvals'].map((item) => {
-              const selected = item === 'Listing'
+              const selected = filmPhase >= 1 ? item === 'Company Brain' : item === 'Listing'
               return (
-                <div key={item} className="rounded-lg border px-3 py-2.5 text-[11px] font-semibold" style={{ borderColor: selected ? '#436050' : 'transparent', background: selected ? '#1a241f' : 'transparent', color: selected ? '#f7fbf8' : '#9fb4aa' }}>
+                <button key={item} type="button" onClick={() => item === 'Company Brain' ? setFilmPhase(2) : item === 'Listing' ? setFilmPhase(0) : undefined} className="relative w-full rounded-lg border px-3 py-2.5 text-left text-[11px] font-semibold" style={{ borderColor: selected ? '#436050' : 'transparent', background: selected ? '#1a241f' : 'transparent', color: selected ? '#f7fbf8' : '#9fb4aa', boxShadow: filmPhase === 1 && item === 'Company Brain' ? '0 0 0 1px rgba(158,224,120,0.42), 0 0 34px rgba(158,224,120,0.16)' : 'none' }}>
                   {item}
-                </div>
+                  {filmPhase === 1 && item === 'Company Brain' && <m.span className="absolute right-3 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full" initial={{ scale: 0 }} animate={{ scale: [0, 1.4, 1] }} style={{ background: SIGNAL }} />}
+                </button>
               )
             })}
           </div>
@@ -378,7 +435,7 @@ function HeroConsole() {
           </div>
         </aside>
 
-        <div className="min-w-0 bg-[#eef3f1]">
+        <div className="relative min-w-0 overflow-hidden bg-[#eef3f1]">
           <div className="flex min-h-[54px] items-center justify-between border-b bg-[#f8fbf9] px-4 sm:px-5" style={{ borderColor: '#dce5e0' }}>
             <div className="text-[11px]" style={{ color: L_MUTED }}><span className="font-semibold" style={{ color: L_TEXT }}>Listing</span> / Overview</div>
             <div className="flex items-center gap-2 text-[10px]" style={{ color: L_MUTED, fontFamily: M }}>
@@ -470,8 +527,89 @@ function HeroConsole() {
               </section>
             </div>
           </div>
+
+          <AnimatePresence mode="wait">
+            {filmPhase >= 2 && (
+              <m.div
+                key="company-brain-film"
+                className="absolute inset-0 z-20 flex flex-col bg-[#eef3f1]"
+                initial={{ opacity: 0, x: 70, scale: 0.985 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, x: 42, scale: 0.99 }}
+                transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <div className="flex min-h-[54px] items-center justify-between border-b bg-[#f8fbf9] px-4 sm:px-5" style={{ borderColor: '#dce5e0' }}>
+                  <div className="text-[11px]" style={{ color: L_MUTED }}><span className="font-semibold" style={{ color: L_TEXT }}>Company Brain</span> / Operator chat</div>
+                  <div className="flex items-center gap-2 text-[9px] uppercase" style={{ color: ACCENT, fontFamily: M }}><span className="h-2 w-2 rounded-full" style={{ background: SIGNAL }} />Live data</div>
+                </div>
+
+                <div className="grid min-h-0 flex-1 gap-3 p-3 sm:p-4 lg:grid-cols-[0.78fr_1.22fr]">
+                  <section className="flex min-h-[250px] flex-col rounded-lg border bg-white" style={{ borderColor: '#d8e2dd' }}>
+                    <div className="border-b px-3.5 py-3" style={{ borderColor: '#e2e9e5' }}>
+                      <div className="text-[9px] uppercase" style={{ color: ACCENT, fontFamily: M }}>Ask Amplify</div>
+                      <div className="mt-1 text-[14px] font-semibold" style={{ color: L_TEXT }}>Retail analysis chat</div>
+                    </div>
+                    <div className="flex flex-1 flex-col justify-end gap-2.5 p-3.5">
+                      {filmPhase === 3 && (
+                        <m.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="ml-auto max-w-[92%] rounded-lg px-3 py-2.5 text-[11px] leading-relaxed text-white" style={{ background: ACCENT }}>
+                          {brainQuery}
+                        </m.div>
+                      )}
+                      {filmPhase === 3 && (
+                        <m.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }} className="max-w-[94%] rounded-lg border bg-[#f8fbf9] px-3 py-2.5 text-[11px] leading-relaxed" style={{ borderColor: '#d8e2dd', color: L_TEXT }}>
+                          Amazon grew 18%. Hero boots converted better, stock stayed available, and returns held flat.
+                        </m.div>
+                      )}
+                      <div className="mt-1 rounded-lg border bg-white p-3" style={{ borderColor: filmPhase === 2 ? '#79bdb1' : '#d8e2dd', boxShadow: filmPhase === 2 ? '0 0 0 3px rgba(24,115,106,0.08)' : 'none' }}>
+                        <div className="min-h-[38px] text-[11px] leading-relaxed" style={{ color: typedChars ? L_TEXT : L_MUTED }}>
+                          {filmPhase === 2 ? brainQuery.slice(0, typedChars) : 'Ask about sales, stock, returns, or margin'}
+                          {filmPhase === 2 && <m.span className="ml-0.5 inline-block h-3 w-px align-middle" animate={{ opacity: [1, 0, 1] }} transition={{ repeat: Infinity, duration: 0.8 }} style={{ background: ACCENT }} />}
+                        </div>
+                        <div className="mt-2 flex items-center justify-between">
+                          <span className="text-[8px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>45K sales rows connected</span>
+                          <m.span animate={filmPhase === 2 && typedChars === brainQuery.length ? { scale: [1, 1.08, 1] } : { scale: 1 }} className="rounded-md px-2.5 py-1.5 text-[8px] font-bold uppercase text-white" style={{ background: ACCENT, fontFamily: M }}>Run analysis</m.span>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section className="min-h-[250px] rounded-lg border bg-white p-3.5" style={{ borderColor: '#d8e2dd' }}>
+                    <AnimatePresence mode="wait">
+                      {filmPhase === 2 ? (
+                        <m.div key="analysis-loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex h-full min-h-[240px] flex-col justify-center">
+                          <div className="text-[9px] uppercase" style={{ color: ACCENT, fontFamily: M }}>Company Brain is working</div>
+                          <h3 className="mt-2 text-[20px] font-semibold" style={{ color: L_TEXT }}>Joining sales, stock, and returns.</h3>
+                          <div className="mt-5 space-y-2.5">
+                            {[82, 64, 91].map((width, index) => <div key={width} className="h-9 overflow-hidden rounded-md bg-[#edf3f0]"><m.div className="h-full" initial={{ x: '-100%' }} animate={{ x: '100%' }} transition={{ repeat: Infinity, duration: 1.4, delay: index * 0.16 }} style={{ width: `${width}%`, background: 'linear-gradient(90deg, transparent, rgba(24,115,106,0.12), transparent)' }} /></div>)}
+                          </div>
+                          <div className="mt-4 flex items-center gap-2 text-[9px] uppercase" style={{ color: L_MUTED, fontFamily: M }}><span className="h-2 w-2 rounded-full" style={{ background: SIGNAL }} />Checking channel movement</div>
+                        </m.div>
+                      ) : (
+                        <m.div key="analysis-result" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.62 }}>
+                          <div className="flex items-start justify-between gap-3"><div><div className="text-[9px] uppercase" style={{ color: ACCENT, fontFamily: M }}>Movement drivers</div><h3 className="mt-1 text-[19px] font-semibold" style={{ color: L_TEXT }}>Amazon footwear sales +18%</h3></div><span className="rounded-md px-2 py-1 text-[8px] font-bold uppercase" style={{ background: '#e8f7ed', color: '#137a3a', fontFamily: M }}>Answered</span></div>
+                          <div className="mt-3 grid grid-cols-3 gap-2">
+                            {[['+24%', 'hero boots'], ['98%', 'in stock'], ['Flat', 'returns']].map(([value, label], index) => <m.div key={label} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 + index * 0.1 }} className="rounded-lg border bg-[#f8fbf9] p-2.5" style={{ borderColor: '#d8e2dd' }}><div className="text-[17px] font-semibold" style={{ color: L_TEXT }}>{value}</div><div className="mt-1 text-[8px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>{label}</div></m.div>)}
+                          </div>
+                          <div className="mt-3 rounded-lg border p-3" style={{ borderColor: '#d8e2dd', background: '#f8fbf9' }}>
+                            <div className="flex h-[72px] items-end gap-2">
+                              {[36, 44, 40, 55, 68, 82].map((height, index) => <m.span key={height} className="flex-1 rounded-t-sm" initial={{ height: 4 }} animate={{ height }} transition={{ delay: 0.28 + index * 0.08, duration: 0.55 }} style={{ background: index === 5 ? SIGNAL : '#87bdb3' }} />)}
+                            </div>
+                          </div>
+                          <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.75 }} className="mt-3 rounded-lg border p-3" style={{ borderColor: '#9bd9cd', background: '#edf8f5' }}>
+                            <div className="text-[8px] uppercase" style={{ color: ACCENT, fontFamily: M }}>Recommended action</div>
+                            <div className="mt-1 text-[11px] font-semibold" style={{ color: L_TEXT }}>Keep price steady and move stock toward Amazon.</div>
+                            <div className="mt-2 flex gap-2"><span className="rounded-md bg-white px-2 py-1 text-[8px]" style={{ color: ACCENT, fontFamily: M }}>Evidence attached</span><span className="rounded-md px-2 py-1 text-[8px] text-white" style={{ background: ACCENT, fontFamily: M }}>Send to sales agent</span></div>
+                          </m.div>
+                        </m.div>
+                      )}
+                    </AnimatePresence>
+                  </section>
+                </div>
+              </m.div>
+            )}
+          </AnimatePresence>
         </div>
-      </div>
+      </m.div>
     </div>
   )
 }
