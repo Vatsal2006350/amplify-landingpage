@@ -10,7 +10,7 @@ const INK = '#17212B'
 const MUTED = 'rgba(255,255,255,0.58)'
 const SOFT = 'rgba(255,255,255,0.78)'
 const BORDER = 'rgba(23,33,29,0.12)'
-const GLASS = 'rgba(255,255,255,0.72)'
+const GLASS = 'rgba(255,255,255,0.055)'
 const D = 'var(--font-display)'
 const M = 'var(--font-mono)'
 
@@ -22,7 +22,6 @@ const L_BORDER = 'rgba(23,33,29,0.12)'
 
 const NAV_LINKS = [
   { label: 'Product', href: '#product-flow' },
-  { label: 'Platform', href: '#platform' },
   { label: 'Enrichment', href: '#enrichment' },
   { label: 'Integrations', href: '#integrations' },
 ]
@@ -1400,31 +1399,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="platform" className="scroll-mt-[96px]" style={{ background: L_BG, borderBottom: `1px solid ${L_BORDER}` }}>
-        <div className="mx-auto grid max-w-[1160px] gap-8 px-5 py-14 sm:px-6 sm:py-20 lg:grid-cols-[0.8fr_1.2fr]">
-          <div>
-            <SectionLabel label="How it works" tone="light" />
-            <h2 className="mt-6 max-w-[520px] text-[clamp(30px,4vw,50px)] font-bold leading-[1.06]" style={{ color: L_TEXT, fontFamily: D }}>
-              From source data to approved work.
-            </h2>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {[
-              ['Connect', 'Products, orders, stock, supplier files, images, and channel templates.'],
-              ['Understand', 'Sales, returns, stock cover, and product movement in plain language.'],
-              ['Prepare', 'Listings, replenishment plans, PO drafts, and marketplace files.'],
-              ['Approve', 'Review evidence and impact before any action goes live.'],
-            ].map(([title, body], index) => (
-              <article key={title} className="rounded-lg border bg-white p-5" style={{ borderColor: index === 2 ? '#9bd9cd' : L_BORDER, boxShadow: index === 2 ? '0 16px 42px rgba(24,115,106,0.08)' : 'none' }}>
-                <div className="mb-4 text-[10px] uppercase" style={{ color: ACCENT, fontFamily: M }}>{String(index + 1).padStart(2, '0')}</div>
-                <h3 className="mb-2 text-[18px] font-semibold" style={{ color: L_TEXT, fontFamily: D }}>{title}</h3>
-                <p className="text-[13px] leading-[1.6]" style={{ color: L_MUTED }}>{body}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <section id="enrichment" className="scroll-mt-[96px]" style={{ background: L_BG }}>
         <div className="mx-auto max-w-[1160px] px-5 py-16 sm:px-6 sm:py-24">
           <div className="mb-10 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
@@ -1489,7 +1463,7 @@ export default function LandingPage() {
               We will turn it into a repeatable, approval-ready process.
             </p>
           </div>
-          <div className="rounded-lg border p-4" style={{ borderColor: BORDER, background: GLASS, backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)' }}>
+          <div className="rounded-lg border p-4" style={{ borderColor: 'rgba(255,255,255,0.14)', background: GLASS, backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
             <WaitlistForm
               email={ctaEmail}
               setEmail={setCtaEmail}

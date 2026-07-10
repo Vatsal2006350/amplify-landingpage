@@ -13,6 +13,7 @@ export type UseCase = {
   tableTitle: string
   tableRows: Array<[string, string, string, 'Ready' | 'Review' | 'Blocked' | 'Open']>
   actions: Array<[string, string, 'Ready' | 'Review' | 'Blocked' | 'Open']>
+  story: Array<{ label: string; title: string; body: string }>
   proof: string
 }
 
@@ -41,6 +42,11 @@ export const USE_CASES: UseCase[] = [
       ['Prepare 6th Street variant file', 'Size rows and image URLs are synced.', 'Ready'],
       ['Ask manager about material', 'Four SKUs need final material confirmation.', 'Review'],
     ],
+    story: [
+      { label: 'Source control', title: 'Start with the files suppliers already send.', body: 'Invoices, item masters, image albums, and channel templates stay visible and versioned in one run.' },
+      { label: 'Listing intelligence', title: 'See the exact rows and attributes that need attention.', body: 'Amplify maps images, fills channel fields, checks template rules, and separates ready rows from review work.' },
+      { label: 'Approved output', title: 'Ship the clean file, not another spreadsheet project.', body: 'Operators confirm uncertain values, then export Namshi, 6th Street, Centrepoint, or Amazon files with evidence attached.' },
+    ],
     proof: 'Used by Geoomnii to keep Beira Rio catalog, stock, and marketplace feeds moving across online channels.',
   },
   {
@@ -66,6 +72,11 @@ export const USE_CASES: UseCase[] = [
       ['Send sales action', 'Shift budget toward Amazon hero styles.', 'Ready'],
       ['Fix fit copy', 'Add size guidance before the weekend campaign.', 'Ready'],
       ['Review Noon conversion', 'Check stock split and variant completeness.', 'Review'],
+    ],
+    story: [
+      { label: 'One retail model', title: 'Bring sales, stock, returns, and pricing together.', body: 'Company Brain joins SKU identity across every uploaded source before it answers a business question.' },
+      { label: 'Decision context', title: 'Move from a number to the reason behind it.', body: 'Channel movement, size curves, return signals, and margin context sit beside the answer instead of across pivot tabs.' },
+      { label: 'Agent handoff', title: 'Turn the answer into work your team can approve.', body: 'Send listing, inventory, pricing, or sales actions directly into an approval queue with the underlying evidence.' },
     ],
     proof: 'Merchandising managers can ask business questions without rebuilding a weekly MIS workbook.',
   },
@@ -93,6 +104,11 @@ export const USE_CASES: UseCase[] = [
       ['Hold slow color', 'Size curve is below target for reorder.', 'Ready'],
       ['Push channel stock', 'Sync stock with channel caps applied.', 'Ready'],
     ],
+    story: [
+      { label: 'Channel ledger', title: 'See available stock and demand in one place.', body: 'ERP stock, marketplace positions, confirmed sales, and supplier lead times resolve into one channel ledger.' },
+      { label: 'Buy planning', title: 'Know what to buy, hold, bundle, or move.', body: 'Days of cover, velocity, size curves, return risk, and lead time create a recommendation operators can inspect.' },
+      { label: 'Purchase action', title: 'Draft the PO without giving up control.', body: 'Amplify prepares quantities and value by supplier, while the merchandising manager reviews every proposed buy.' },
+    ],
     proof: 'PMUK-style inventory, bundle SKU, and ad-action work stays tied to manager approval.',
   },
   {
@@ -119,6 +135,11 @@ export const USE_CASES: UseCase[] = [
       ['Send PO draft', 'Inventory agent prepared the buy recommendation.', 'Review'],
       ['Publish ad action', 'Bundle copy and SKU generator output ready.', 'Ready'],
     ],
+    story: [
+      { label: 'Shared inbox', title: 'Put every agent decision in one review queue.', body: 'Listing changes, replenishment drafts, pricing exceptions, and ad actions arrive in a consistent operator inbox.' },
+      { label: 'Evidence first', title: 'Review the diff, source, and expected impact.', body: 'Each action keeps its evidence and before-and-after state close, so approval never depends on a black box.' },
+      { label: 'Controlled execution', title: 'Approve, edit, or hold before anything ships.', body: 'Every outcome is logged with the operator, timestamp, output, and rollback context.' },
+    ],
     proof: 'Non-technical operators stay in control while agents do the repetitive prep.',
   },
   {
@@ -144,6 +165,11 @@ export const USE_CASES: UseCase[] = [
       ['Export Namshi', 'Mapped fields and image URLs are ready.', 'Ready'],
       ['Review Centrepoint UDA', 'One attribute group needs operator confirmation.', 'Review'],
       ['Archive evidence', 'Source files, decisions, and final outputs stay linked.', 'Ready'],
+    ],
+    story: [
+      { label: 'Invoice expansion', title: 'Turn supplier rows into complete SKU variants.', body: 'Sizes, colors, materials, and image references expand from supplier format into clean marketplace rows.' },
+      { label: 'Template validation', title: 'Check each channel before the upload fails.', body: 'Marketplace-specific fields and enums are validated against the active Namshi, 6th Street, Centrepoint, and Amazon templates.' },
+      { label: 'Ready XLSX', title: 'Export the right file for every destination.', body: 'Operators download reviewed channel files while source inputs, approvals, and output history remain linked.' },
     ],
     proof: 'The same surface supports Geoomnii marketplace work and PMUK bundle/catalog operations.',
   },
