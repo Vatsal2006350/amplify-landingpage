@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { MotionCard, MotionShell, ProductStage, Reveal } from '../../../components/motion-primitives'
 import { USE_CASES, getUseCase, type UseCase } from '../data'
 
 const ACCENT = '#18736A'
@@ -110,7 +111,7 @@ function BrowserBar({ path, action }: { path: string; action?: string }) {
           <span className="h-2.5 w-2.5 rounded-full bg-[#ffc34a]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#48c96c]" />
         </div>
-        <span className="hidden truncate rounded-md border px-3 py-1.5 text-[10px] sm:block" style={{ borderColor: DARK_BORDER, color: 'rgba(255,255,255,0.58)', fontFamily: M }}>app.use-amplify.com/geoomnii/{path}</span>
+        <span className="hidden truncate rounded-md border px-3 py-1.5 text-[10px] sm:block" style={{ borderColor: DARK_BORDER, color: 'rgba(255,255,255,0.58)', fontFamily: M }}>app.use-amplify.com/workspace/{path}</span>
       </div>
       {action && <span className="rounded-md px-3 py-1.5 text-[9px] font-bold uppercase" style={{ background: SIGNAL, color: DARK, fontFamily: M }}>{action}</span>}
     </div>
@@ -127,7 +128,7 @@ function ProductSidebar({ useCase }: { useCase: UseCase }) {
         <Logo size={30} />
         <div>
           <div className="text-[13px] font-semibold">Amplify</div>
-          <div className="text-[9px] uppercase" style={{ color: '#9fb4aa', fontFamily: M }}>Geoomnii</div>
+          <div className="text-[9px] uppercase" style={{ color: '#9fb4aa', fontFamily: M }}>Retail workspace</div>
         </div>
       </div>
       <div className="space-y-1.5">
@@ -280,12 +281,12 @@ function StorySection({ useCase, index }: { useCase: UseCase; index: number }) {
   return (
     <section id={ids[index]} className="scroll-mt-[120px] border-t" style={{ borderColor: BORDER, background: index === 1 ? SURFACE : BASE }}>
       <div className="mx-auto grid max-w-[1160px] gap-8 px-5 py-16 sm:px-6 sm:py-24 lg:grid-cols-[0.7fr_1.3fr] lg:items-center">
-        <div className={index === 1 ? 'lg:order-2' : ''}>
+        <Reveal className={index === 1 ? 'lg:order-2' : ''} x={index === 1 ? 20 : -20} y={12}>
           <SectionLabel label={story.label} />
           <h2 className="mt-6 max-w-[470px] text-[clamp(30px,4vw,50px)] font-bold leading-[1.06]" style={{ color: TEXT, fontFamily: D }}>{story.title}</h2>
           <p className="mt-5 max-w-[470px] text-[15px] leading-[1.7] sm:text-[16px]" style={{ color: MUTED }}>{story.body}</p>
-        </div>
-        <div className={index === 1 ? 'lg:order-1' : ''}>{visual}</div>
+        </Reveal>
+        <ProductStage className={index === 1 ? 'lg:order-1' : ''}>{visual}</ProductStage>
       </div>
     </section>
   )
@@ -301,11 +302,13 @@ function RelatedUseCases({ useCase }: { useCase: UseCase }) {
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {USE_CASES.filter((item) => item.slug !== useCase.slug).map((item) => (
-            <Link key={item.slug} href={`/use-cases/${item.slug}`} className="group rounded-lg border bg-[#f8fbf9] p-4 transition-transform hover:-translate-y-0.5" style={{ borderColor: BORDER }}>
-              <div className="text-[9px] uppercase" style={{ color: ACCENT, fontFamily: M }}>{item.navDetail}</div>
-              <h3 className="mt-8 text-[17px] font-semibold" style={{ color: TEXT }}>{item.label}</h3>
-              <p className="mt-2 text-[12px] leading-relaxed" style={{ color: MUTED }}>{item.headline}</p>
-            </Link>
+            <MotionCard key={item.slug}>
+              <Link href={`/use-cases/${item.slug}`} className="group block min-h-[190px] rounded-lg border bg-[#f8fbf9] p-4" style={{ borderColor: BORDER }}>
+                <div className="text-[9px] uppercase" style={{ color: ACCENT, fontFamily: M }}>{item.navDetail}</div>
+                <h3 className="mt-8 text-[17px] font-semibold" style={{ color: TEXT }}>{item.label}</h3>
+                <p className="mt-2 text-[12px] leading-relaxed" style={{ color: MUTED }}>{item.headline}</p>
+              </Link>
+            </MotionCard>
           ))}
         </div>
       </div>
@@ -319,6 +322,7 @@ export default async function UseCasePage({ params }: PageProps) {
   if (!useCase) notFound()
 
   return (
+    <MotionShell>
     <main className="min-h-screen" style={{ background: BASE }}>
       <Header activeSlug={useCase.slug} />
 
@@ -326,7 +330,7 @@ export default async function UseCasePage({ params }: PageProps) {
         <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(24,115,106,0.055) 1px, transparent 1px), linear-gradient(90deg, rgba(24,115,106,0.055) 1px, transparent 1px)', backgroundSize: '56px 56px', maskImage: 'linear-gradient(to bottom, black, transparent 70%)' }} />
         <div className="absolute inset-x-0 top-0 h-[600px] pointer-events-none" style={{ background: 'linear-gradient(140deg, rgba(158,224,120,0.16), transparent 34%, rgba(24,115,106,0.08) 72%, transparent)' }} />
         <div className="relative mx-auto max-w-[1160px] px-5 pb-14 sm:px-6 sm:pb-20">
-          <div className="mx-auto max-w-[900px] text-center">
+          <Reveal className="mx-auto max-w-[900px] text-center" y={18}>
             <div className="flex justify-center"><SectionLabel label={useCase.eyebrow} /></div>
             <h1 className="mx-auto mt-6 max-w-[900px] text-[clamp(40px,6.5vw,72px)] font-bold leading-[1.02]" style={{ color: TEXT, fontFamily: D }}>{useCase.headline}</h1>
             <p className="mx-auto mt-6 max-w-[700px] text-[16px] leading-[1.65] sm:text-[18px]" style={{ color: MUTED }}>{useCase.summary}</p>
@@ -334,9 +338,9 @@ export default async function UseCasePage({ params }: PageProps) {
               <a href="#source-data" className="rounded-lg px-5 py-3 text-[11px] font-semibold text-white" style={{ background: ACCENT }}>See the workflow</a>
               <Link href="/#cta" className="rounded-lg border bg-white px-5 py-3 text-[11px] font-semibold" style={{ borderColor: BORDER, color: TEXT }}>Talk to us</Link>
             </div>
-          </div>
-          <div className="mt-12"><HeroWorkspace useCase={useCase} /></div>
-          <div className="mt-4 rounded-lg border bg-white px-4 py-3 text-center text-[12px] leading-relaxed" style={{ borderColor: BORDER, color: MUTED }}>{useCase.proof}</div>
+          </Reveal>
+          <ProductStage className="mt-12" delay={0.12}><HeroWorkspace useCase={useCase} /></ProductStage>
+          <Reveal className="mt-4 rounded-lg border bg-white px-4 py-3 text-center text-[12px] leading-relaxed" style={{ borderColor: BORDER, color: MUTED }} delay={0.18} y={10}>{useCase.proof}</Reveal>
         </div>
       </section>
 
@@ -352,12 +356,13 @@ export default async function UseCasePage({ params }: PageProps) {
 
       <section className="border-t" style={{ borderColor: DARK_BORDER, background: DARK }}>
         <div className="mx-auto grid max-w-[1160px] gap-8 px-5 py-14 sm:px-6 sm:py-20 lg:grid-cols-[1fr_0.7fr] lg:items-center">
-          <div><SectionLabel label="Built for operators" dark /><h2 className="mt-5 max-w-[700px] text-[clamp(30px,4.5vw,54px)] font-bold leading-[1.04] text-white">{useCase.proof}</h2></div>
+          <Reveal><SectionLabel label="Operational outcome" dark /><h2 className="mt-5 max-w-[700px] text-[clamp(30px,4.5vw,54px)] font-bold leading-[1.04] text-white">{useCase.proof}</h2></Reveal>
           <Link href="/#cta" className="flex min-h-[52px] items-center justify-between rounded-lg border px-5 text-[12px] font-semibold" style={{ borderColor: DARK_BORDER, background: 'rgba(255,255,255,0.055)', color: '#fff' }}><span>Bring us your workflow</span><span className="grid h-8 w-8 place-items-center rounded-md" style={{ background: SIGNAL, color: DARK }}>→</span></Link>
         </div>
       </section>
 
       <RelatedUseCases useCase={useCase} />
     </main>
+    </MotionShell>
   )
 }

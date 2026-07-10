@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { MotionCard, MotionShell, ProductStage, Reveal } from '../components/motion-primitives'
 
 const ACCENT = '#18736A'
 const SIGNAL = '#9EE078'
@@ -1230,6 +1231,7 @@ export default function LandingPage() {
   }
 
   return (
+    <MotionShell>
     <main className="min-h-screen" style={{ background: BASE }}>
       <div className="fixed left-0 right-0 top-0 z-50 flex justify-center px-3 transition-all duration-300" style={{ paddingTop: scrolled ? 8 : 12 }}>
         <nav
@@ -1336,7 +1338,7 @@ export default function LandingPage() {
         <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(24,115,106,0.055) 1px, transparent 1px), linear-gradient(90deg, rgba(24,115,106,0.055) 1px, transparent 1px)', backgroundSize: '56px 56px', maskImage: 'linear-gradient(to bottom, black, transparent 76%)' }} />
         <div className="absolute inset-x-0 top-0 h-[620px] pointer-events-none" style={{ background: 'linear-gradient(140deg, rgba(158,224,120,0.18), transparent 34%, rgba(24,115,106,0.09) 72%, transparent)' }} />
         <div className="relative mx-auto max-w-[1180px] px-5 pb-16 sm:px-6 sm:pb-24">
-          <div className="mx-auto max-w-[920px] text-center">
+          <Reveal className="mx-auto max-w-[920px] text-center" y={18}>
             <a href="/audit" className="mb-7 inline-flex max-w-full flex-wrap items-center justify-center gap-2 rounded-lg border bg-white px-3 py-2" style={{ borderColor: '#cfe0d9', boxShadow: '0 10px 32px rgba(15,31,28,0.06)' }}>
               <span className="shrink-0 rounded-md px-2 py-0.5 text-[10px] font-bold" style={{ background: SIGNAL, color: DARK, fontFamily: M }}>FREE AUDIT</span>
               <span className="min-w-0 text-[10px] uppercase leading-[1.5] sm:text-[11px]" style={{ color: L_MUTED, fontFamily: M }}>Get quick feedback on any product page</span>
@@ -1358,13 +1360,13 @@ export default function LandingPage() {
                 onSubmit={() => handleSubmit(email, setStatus, setMessage, () => setEmail(''))}
               />
             </div>
-          </div>
+          </Reveal>
 
-          <div className="mt-12 sm:mt-14">
+          <ProductStage className="mt-12 sm:mt-14" delay={0.12}>
             <HeroConsole />
-          </div>
+          </ProductStage>
 
-          <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <Reveal className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4" delay={0.18} y={12}>
             {[
               ['184', 'SKU rows prepared'],
               ['8+', 'channels supported'],
@@ -1376,7 +1378,7 @@ export default function LandingPage() {
                 <div className="mt-1 text-[9px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>{label}</div>
               </div>
             ))}
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -1384,7 +1386,7 @@ export default function LandingPage() {
 
       <section id="product-flow" className="scroll-mt-[96px]" style={{ background: '#EAF1EE', borderTop: `1px solid ${L_BORDER}`, borderBottom: `1px solid ${L_BORDER}` }}>
         <div className="mx-auto max-w-[1160px] px-5 py-14 sm:px-6 sm:py-20">
-          <div className="mb-10 grid gap-6 lg:grid-cols-[0.88fr_1.12fr] lg:items-end">
+          <Reveal className="mb-10 grid gap-6 lg:grid-cols-[0.88fr_1.12fr] lg:items-end" y={16}>
             <div>
               <SectionLabel label="Explore the product" tone="light" />
               <h2 className="mt-6 max-w-[720px] text-[clamp(30px,4.2vw,52px)] font-bold leading-[1.06]" style={{ color: L_TEXT, fontFamily: D }}>
@@ -1394,14 +1396,14 @@ export default function LandingPage() {
             <p className="max-w-[560px] text-[15px] leading-[1.65] sm:text-[16px]" style={{ color: L_MUTED }}>
               Switch between the same views your catalog, merchandising, and inventory teams use.
             </p>
-          </div>
-          <ProductFlowWorkbench />
+          </Reveal>
+          <ProductStage><ProductFlowWorkbench /></ProductStage>
         </div>
       </section>
 
       <section id="enrichment" className="scroll-mt-[96px]" style={{ background: L_BG }}>
         <div className="mx-auto max-w-[1160px] px-5 py-16 sm:px-6 sm:py-24">
-          <div className="mb-10 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+          <Reveal className="mb-10 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-end" y={16}>
             <div>
               <SectionLabel label="SKU enrichment" tone="light" />
               <h2 className="mt-6 max-w-[700px] text-[clamp(30px,4vw,50px)] font-bold leading-[1.06]" style={{ color: L_TEXT, fontFamily: D }}>
@@ -1411,14 +1413,14 @@ export default function LandingPage() {
             <p className="max-w-[560px] text-[15px] leading-[1.65] sm:text-[16px]" style={{ color: L_MUTED }}>
               Compare the source record with the structured marketplace output.
             </p>
-          </div>
-          <EnrichmentSlider />
+          </Reveal>
+          <ProductStage><EnrichmentSlider /></ProductStage>
         </div>
       </section>
 
       <section id="use-cases" className="scroll-mt-[96px]" style={{ background: L_BG }}>
         <div className="mx-auto max-w-[1160px] px-5 py-16 sm:px-6 sm:py-24">
-          <div className="mb-10 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+          <Reveal className="mb-10 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-end" y={16}>
             <div>
               <SectionLabel label="Use cases" tone="light" />
               <h2 className="mt-6 max-w-[700px] text-[clamp(30px,4vw,50px)] font-bold leading-[1.06]" style={{ color: L_TEXT, fontFamily: D }}>
@@ -1428,22 +1430,24 @@ export default function LandingPage() {
             <p className="max-w-[560px] text-[15px] leading-[1.65] sm:text-[16px]" style={{ color: L_MUTED }}>
               Open a focused workspace for each operational job.
             </p>
-          </div>
+          </Reveal>
           <div className="grid gap-3 md:grid-cols-5">
             {HOME_USE_CASES.map((item, index) => (
-              <a key={item.href} href={item.href} className="group rounded-lg border bg-white p-4 transition-transform hover:-translate-y-0.5" style={{ borderColor: index === 0 ? '#b7dcbf' : L_BORDER, boxShadow: index === 0 ? '0 22px 60px rgba(29,122,109,0.12)' : 'none' }}>
-                <div className="mb-8 flex items-center justify-between gap-3">
-                  <span className="text-[10px] uppercase" style={{ color: index === 0 ? '#1D7A6D' : L_MUTED, fontFamily: M }}>{item.metric}</span>
-                  <span className="grid h-7 w-7 place-items-center rounded-md border transition-colors group-hover:bg-[#111] group-hover:text-white" style={{ borderColor: L_BORDER, color: L_TEXT }}>
-                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <path d="M3 8h10" />
-                      <path d="m9 4 4 4-4 4" />
-                    </svg>
-                  </span>
-                </div>
-                <h3 className="text-[19px] font-semibold leading-tight" style={{ color: L_TEXT, fontFamily: D }}>{item.title}</h3>
-                <p className="mt-3 text-[13px] leading-[1.55]" style={{ color: L_MUTED }}>{item.body}</p>
-              </a>
+              <MotionCard key={item.href} delay={index * 0.055}>
+                <a href={item.href} className="group block min-h-[210px] rounded-lg border bg-white p-4" style={{ borderColor: index === 0 ? '#b7dcbf' : L_BORDER, boxShadow: index === 0 ? '0 22px 60px rgba(29,122,109,0.12)' : 'none' }}>
+                  <div className="mb-8 flex items-center justify-between gap-3">
+                    <span className="text-[10px] uppercase" style={{ color: index === 0 ? '#1D7A6D' : L_MUTED, fontFamily: M }}>{item.metric}</span>
+                    <span className="grid h-7 w-7 place-items-center rounded-md border transition-colors group-hover:bg-[#111] group-hover:text-white" style={{ borderColor: L_BORDER, color: L_TEXT }}>
+                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M3 8h10" />
+                        <path d="m9 4 4 4-4 4" />
+                      </svg>
+                    </span>
+                  </div>
+                  <h3 className="text-[19px] font-semibold leading-tight" style={{ color: L_TEXT, fontFamily: D }}>{item.title}</h3>
+                  <p className="mt-3 text-[13px] leading-[1.55]" style={{ color: L_MUTED }}>{item.body}</p>
+                </a>
+              </MotionCard>
             ))}
           </div>
         </div>
@@ -1454,7 +1458,7 @@ export default function LandingPage() {
       <section id="cta" className="relative overflow-hidden" style={{ background: DARK, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
         <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(120deg, rgba(158,224,120,0.13), transparent 38%, rgba(255,255,255,0.04))' }} />
         <div className="relative mx-auto grid max-w-[1160px] gap-10 px-5 py-16 sm:px-6 sm:py-24 lg:grid-cols-[1fr_0.76fr] lg:items-center">
-          <div>
+          <Reveal>
             <SectionLabel label="Early access" />
             <h2 className="mt-6 max-w-[680px] text-[clamp(34px,5vw,60px)] font-bold leading-[1.02] text-white" style={{ fontFamily: D }}>
               Bring us your messiest workflow.
@@ -1462,8 +1466,8 @@ export default function LandingPage() {
             <p className="mt-5 max-w-[520px] text-[16px] leading-[1.65]" style={{ color: SOFT }}>
               We will turn it into a repeatable, approval-ready process.
             </p>
-          </div>
-          <div className="rounded-lg border p-4" style={{ borderColor: 'rgba(255,255,255,0.14)', background: GLASS, backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }}>
+          </Reveal>
+          <Reveal className="rounded-lg border p-4" style={{ borderColor: 'rgba(255,255,255,0.14)', background: GLASS, backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)' }} delay={0.1} x={18} y={8}>
             <WaitlistForm
               email={ctaEmail}
               setEmail={setCtaEmail}
@@ -1477,9 +1481,10 @@ export default function LandingPage() {
               <span>Setup help included</span>
               <span>Built around your current stack</span>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
     </main>
+    </MotionShell>
   )
 }

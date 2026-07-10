@@ -26,7 +26,7 @@ export const USE_CASES: UseCase[] = [
     headline: 'Turn messy product files into approved channel listings.',
     summary: 'Supplier invoices, item masters, product images, and marketplace templates become clean SKU rows with evidence attached for review.',
     appLabel: 'Template compile',
-    command: 'Build Namshi and 6th Street files for the new Beira Rio drop',
+    command: 'Build Namshi and 6th Street files for the new footwear drop',
     sources: ['supplier_invoice.xlsx', 'master_item_sheet.xlsx', 'imgbb_album.csv', 'namshi_template.xlsx'],
     metrics: [['184', 'SKU rows'], ['37', 'fields filled'], ['4', 'checks'], ['2', 'exports']],
     steps: ['Read source files', 'Match images', 'Fill channel fields', 'Check rules', 'Queue review'],
@@ -47,7 +47,7 @@ export const USE_CASES: UseCase[] = [
       { label: 'Listing intelligence', title: 'See the exact rows and attributes that need attention.', body: 'Amplify maps images, fills channel fields, checks template rules, and separates ready rows from review work.' },
       { label: 'Approved output', title: 'Ship the clean file, not another spreadsheet project.', body: 'Operators confirm uncertain values, then export Namshi, 6th Street, Centrepoint, or Amazon files with evidence attached.' },
     ],
-    proof: 'Used by Geoomnii to keep Beira Rio catalog, stock, and marketplace feeds moving across online channels.',
+    proof: 'Generate reviewed marketplace listings from the files your team already uses.',
   },
   {
     slug: 'company-brain',
@@ -96,11 +96,11 @@ export const USE_CASES: UseCase[] = [
     tableRows: [
       ['BR-772104-CAF', 'Amazon low stock', 'Buy 320 units', 'Review'],
       ['BR-9011-CRM', 'Healthy cover', 'Hold buy', 'Ready'],
-      ['PMUK-GUSTO-120', 'Bundle demand', 'Create bundle SKU', 'Ready'],
-      ['SM-TRAIN-001', 'Launch pack', 'Training ready', 'Ready'],
+      ['BND-120-DUO', 'Bundle demand', 'Create bundle SKU', 'Ready'],
+      ['FTW-LAUNCH-01', 'Launch pack', 'Training ready', 'Ready'],
     ],
     actions: [
-      ['Draft PO', 'AED 42K replenishment draft for Beira Rio.', 'Review'],
+      ['Draft PO', 'AED 42K replenishment draft by supplier.', 'Review'],
       ['Hold slow color', 'Size curve is below target for reorder.', 'Ready'],
       ['Push channel stock', 'Sync stock with channel caps applied.', 'Ready'],
     ],
@@ -109,7 +109,7 @@ export const USE_CASES: UseCase[] = [
       { label: 'Buy planning', title: 'Know what to buy, hold, bundle, or move.', body: 'Days of cover, velocity, size curves, return risk, and lead time create a recommendation operators can inspect.' },
       { label: 'Purchase action', title: 'Draft the PO without giving up control.', body: 'Amplify prepares quantities and value by supplier, while the merchandising manager reviews every proposed buy.' },
     ],
-    proof: 'PMUK-style inventory, bundle SKU, and ad-action work stays tied to manager approval.',
+    proof: 'Plan buys, stock moves, and purchase orders from a single channel ledger.',
   },
   {
     slug: 'approvals',
@@ -128,7 +128,7 @@ export const USE_CASES: UseCase[] = [
       ['Listing repair', 'BR-772105-PRE', 'Target price approval', 'Ready'],
       ['Pricing exception', 'BR-9011-CRM', 'Keep price steady', 'Review'],
       ['Replenishment RFQ', 'BR-772104-CAF', 'PO draft ready', 'Review'],
-      ['AI ads action', 'PMUK-GUSTO-120', 'Bundle ad copy', 'Ready'],
+      ['AI ads action', 'BND-120-DUO', 'Bundle ad copy', 'Ready'],
     ],
     actions: [
       ['Approve listing repair', 'Centrepoint export can ship after target price.', 'Ready'],
@@ -140,7 +140,7 @@ export const USE_CASES: UseCase[] = [
       { label: 'Evidence first', title: 'Review the diff, source, and expected impact.', body: 'Each action keeps its evidence and before-and-after state close, so approval never depends on a black box.' },
       { label: 'Controlled execution', title: 'Approve, edit, or hold before anything ships.', body: 'Every outcome is logged with the operator, timestamp, output, and rollback context.' },
     ],
-    proof: 'Non-technical operators stay in control while agents do the repetitive prep.',
+    proof: 'Keep every agent action evidence-backed, reviewable, and controlled by your team.',
   },
   {
     slug: 'marketplace-files',
@@ -171,7 +171,7 @@ export const USE_CASES: UseCase[] = [
       { label: 'Template validation', title: 'Check each channel before the upload fails.', body: 'Marketplace-specific fields and enums are validated against the active Namshi, 6th Street, Centrepoint, and Amazon templates.' },
       { label: 'Ready XLSX', title: 'Export the right file for every destination.', body: 'Operators download reviewed channel files while source inputs, approvals, and output history remain linked.' },
     ],
-    proof: 'The same surface supports Geoomnii marketplace work and PMUK bundle/catalog operations.',
+    proof: 'Move from supplier data to validated channel exports without rebuilding the workflow each time.',
   },
 ]
 
