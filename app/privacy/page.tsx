@@ -2,145 +2,193 @@ import Link from 'next/link'
 
 export const metadata = {
   title: 'Privacy Policy | Amplify',
-  description: 'Amplify privacy policy — how we collect, use, and protect your data.',
+  description: 'Amplify privacy policy: how we collect, use, and protect your data.',
+}
+
+const ACCENT = '#C5F135'
+const BASE = '#080808'
+const BORDER = 'rgba(255,255,255,0.12)'
+const GLASS = 'rgba(255,255,255,0.065)'
+const MUTED = 'rgba(255,255,255,0.58)'
+const SOFT = 'rgba(255,255,255,0.76)'
+const D = 'var(--font-display)'
+const M = 'var(--font-mono)'
+
+const SECTIONS = [
+  {
+    title: '1. Introduction',
+    body: [
+      'Amplify provides catalog, inventory, marketplace, and approval workflows for commerce operators. This Privacy Policy explains how we collect, use, disclose, and safeguard information when you use our platform and services.',
+    ],
+  },
+  {
+    title: '2. Information We Collect',
+    body: ['We collect the following types of information:'],
+    bullets: [
+      'Account information such as name, email address, and password when you create an account.',
+      'Business information such as store names, product catalog data, pricing, inventory levels, order data, return data, and supplier files that you connect to Amplify.',
+      'Third-party platform credentials, including OAuth tokens and API credentials for services you connect. These are encrypted at rest.',
+      'Usage data such as logs, device information, and analytics about how you interact with our platform.',
+    ],
+  },
+  {
+    title: '3. How We Use Your Information',
+    body: ['We use the information we collect to:'],
+    bullets: [
+      'Provide, maintain, and improve catalog, inventory, listing, and approval workflows.',
+      'Sync product and operational data across connected marketplace platforms.',
+      'Generate recommendations for listing improvements, replenishment planning, purchase order drafts, and operational actions.',
+      'Measure the impact of changes on return rates, sales, stock movement, and other business metrics.',
+      'Send service-related communications.',
+      'Detect and prevent fraud, abuse, and unauthorized access.',
+    ],
+  },
+  {
+    title: '4. Third-Party Integrations',
+    body: [
+      'Our platform connects to third-party services including Shopify, Amazon, marketplace templates, supplier files, ERP exports, and other operator tools. When you authorize a connection, we access only the data and permissions you explicitly authorize.',
+      'We do not sell, rent, or share your marketplace data with third parties for their own marketing or advertising purposes.',
+    ],
+    bullets: [
+      'API credentials are encrypted and stored securely.',
+      'We use your data solely to provide synchronization, workflow, and management services.',
+      'You can disconnect integrations from your settings or by contacting us.',
+    ],
+  },
+  {
+    title: '5. Data Security',
+    body: ['We implement security measures designed to protect your data:'],
+    bullets: [
+      'API tokens and credentials are encrypted at rest.',
+      'Data in transit is encrypted using TLS/HTTPS.',
+      'Database access is restricted and monitored.',
+      'We conduct regular security reviews of our infrastructure.',
+    ],
+  },
+  {
+    title: '6. Data Retention',
+    body: [
+      'We retain your data for as long as your account is active or as needed to provide the services. When you delete your account or disconnect an integration, we remove associated data within a reasonable period, unless retention is required for legal, security, or operational reasons.',
+    ],
+  },
+  {
+    title: '7. Your Rights',
+    body: ['You may request to:'],
+    bullets: [
+      'Access the personal data we hold about you.',
+      'Correct inaccurate data.',
+      'Delete your data.',
+      'Disconnect third-party integrations.',
+      'Export your data in a machine-readable format.',
+    ],
+  },
+  {
+    title: '8. Cookies',
+    body: [
+      'We use essential cookies for authentication and session management. We do not use third-party tracking cookies or advertising cookies.',
+    ],
+  },
+  {
+    title: '9. Changes to This Policy',
+    body: [
+      'We may update this Privacy Policy from time to time. We will post the updated policy on this page and update the last updated date when material changes are made.',
+    ],
+  },
+]
+
+function Logo({ size = 28 }: { size?: number }) {
+  return (
+    <div className="grid shrink-0 place-items-center rounded-lg bg-black" style={{ width: size, height: size }}>
+      <img src="/logo.png" alt="Amplify" className="h-[72%] w-[72%] object-contain" />
+    </div>
+  )
+}
+
+function SectionLabel({ label }: { label: string }) {
+  return (
+    <div className="flex items-center gap-3">
+      <span className="h-px w-9" style={{ background: ACCENT }} />
+      <span className="text-[11px] font-semibold uppercase tracking-[0.16em]" style={{ color: MUTED, fontFamily: M }}>
+        {label}
+      </span>
+    </div>
+  )
 }
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Nav */}
-      <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
-        <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="text-lg font-bold text-gray-900 font-[family-name:var(--font-display)]">
-            Amplify
+    <main className="min-h-screen" style={{ background: BASE }}>
+      <nav className="sticky top-0 z-50 border-b px-4 py-3 backdrop-blur-2xl" style={{ background: 'rgba(8,8,8,0.82)', borderColor: BORDER }}>
+        <div className="mx-auto flex max-w-[920px] items-center justify-between gap-4">
+          <Link href="/" className="flex items-center gap-2">
+            <Logo />
+            <span className="text-[14px] font-semibold text-white" style={{ fontFamily: D }}>Amplify</span>
           </Link>
-          <Link href="/" className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
-            Back to home
+          <Link href="/" className="rounded-lg px-3 py-2 text-[11px] font-bold uppercase transition-opacity hover:opacity-90" style={{ background: ACCENT, color: BASE, fontFamily: M }}>
+            Back home
           </Link>
         </div>
       </nav>
 
-      {/* Content */}
-      <main className="max-w-3xl mx-auto px-6 py-16">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2 font-[family-name:var(--font-display)]">
-          Privacy Policy
-        </h1>
-        <p className="text-sm text-gray-400 mb-12">Last updated: March 24, 2026</p>
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px)', backgroundSize: '54px 54px' }} />
+        <div className="absolute inset-x-0 top-0 h-[520px] pointer-events-none" style={{ background: 'linear-gradient(135deg, rgba(197,241,53,0.15), transparent 34%, rgba(86,142,255,0.08) 72%, transparent)' }} />
 
-        <div className="prose prose-gray max-w-none [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-gray-900 [&_h2]:mt-10 [&_h2]:mb-4 [&_p]:text-gray-600 [&_p]:leading-relaxed [&_p]:mb-4 [&_li]:text-gray-600 [&_li]:leading-relaxed [&_ul]:mb-4 [&_ul]:pl-5 [&_ul]:list-disc">
-
-          <h2>1. Introduction</h2>
-          <p>
-            Amplify (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) provides catalog management and
-            synchronization tools for e-commerce businesses. This Privacy Policy explains how we collect,
-            use, disclose, and safeguard your information when you use our platform and services.
+        <div className="relative mx-auto max-w-[920px] px-5 py-16 sm:px-6 sm:py-24">
+          <SectionLabel label="Legal" />
+          <h1 className="mt-7 max-w-[720px] text-[clamp(38px,7vw,78px)] font-bold leading-[0.98] text-white" style={{ fontFamily: D }}>
+            Privacy Policy
+          </h1>
+          <p className="mt-5 max-w-[620px] text-[16px] leading-[1.75]" style={{ color: SOFT }}>
+            How Amplify handles account data, connected commerce data, integrations, and operational workflows.
+          </p>
+          <p className="mt-4 text-[11px] uppercase" style={{ color: MUTED, fontFamily: M }}>
+            Last updated: March 24, 2026
           </p>
 
-          <h2>2. Information We Collect</h2>
-          <p>We collect the following types of information:</p>
-          <ul>
-            <li>
-              <strong>Account Information:</strong> Name, email address, and password when you create an account.
-            </li>
-            <li>
-              <strong>Business Information:</strong> Store names, product catalog data, pricing, inventory
-              levels, and order/return data that you connect to our platform.
-            </li>
-            <li>
-              <strong>Third-Party Platform Credentials:</strong> OAuth tokens and API credentials for
-              services you connect (e.g., Uber Eats, Shopify, Amazon). These are encrypted at rest
-              using AES-256-GCM encryption.
-            </li>
-            <li>
-              <strong>Usage Data:</strong> Log data, device information, and analytics about how you
-              interact with our platform.
-            </li>
-          </ul>
+          <div className="mt-10 overflow-hidden rounded-xl border" style={{ borderColor: BORDER, background: GLASS, boxShadow: '0 34px 110px rgba(0,0,0,0.32)' }}>
+            {SECTIONS.map((section) => (
+              <section key={section.title} className="border-b p-5 last:border-b-0 sm:p-7" style={{ borderColor: BORDER }}>
+                <h2 className="text-[20px] font-semibold text-white" style={{ fontFamily: D }}>{section.title}</h2>
+                <div className="mt-4 space-y-4">
+                  {section.body.map((paragraph) => (
+                    <p key={paragraph} className="text-[14px] leading-[1.8]" style={{ color: SOFT }}>
+                      {paragraph}
+                    </p>
+                  ))}
+                  {section.bullets && (
+                    <ul className="space-y-2">
+                      {section.bullets.map((item) => (
+                        <li key={item} className="flex gap-3 text-[14px] leading-[1.65]" style={{ color: SOFT }}>
+                          <span className="mt-[0.62em] h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: ACCENT }} />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </section>
+            ))}
 
-          <h2>3. How We Use Your Information</h2>
-          <p>We use the information we collect to:</p>
-          <ul>
-            <li>Provide, maintain, and improve our catalog synchronization services</li>
-            <li>Sync your product data across connected marketplace platforms</li>
-            <li>Generate recommendations for product listing improvements</li>
-            <li>Measure the impact of changes on return rates and other metrics</li>
-            <li>Send you service-related communications</li>
-            <li>Detect and prevent fraud or abuse</li>
-          </ul>
-
-          <h2>4. Third-Party Integrations</h2>
-          <p>
-            Our platform connects to third-party services including Uber Eats, Shopify, Amazon, and
-            other marketplace platforms. When you authorize a connection:
-          </p>
-          <ul>
-            <li>We access only the data and permissions you explicitly authorize</li>
-            <li>API credentials are encrypted and stored securely</li>
-            <li>We use your data solely to provide our synchronization and management services</li>
-            <li>You can disconnect any integration at any time from your Settings page</li>
-          </ul>
-          <p>
-            We do not sell, rent, or share your marketplace data with third parties for their own
-            marketing or advertising purposes.
-          </p>
-
-          <h2>5. Data Security</h2>
-          <p>
-            We implement industry-standard security measures to protect your data:
-          </p>
-          <ul>
-            <li>All API tokens and credentials are encrypted using AES-256-GCM at rest</li>
-            <li>Data in transit is encrypted using TLS/HTTPS</li>
-            <li>Database access is restricted and monitored</li>
-            <li>We conduct regular security reviews of our infrastructure</li>
-          </ul>
-
-          <h2>6. Data Retention</h2>
-          <p>
-            We retain your data for as long as your account is active. When you delete your account or
-            disconnect an integration, we remove the associated data within 30 days. Aggregated,
-            anonymized analytics data may be retained indefinitely.
-          </p>
-
-          <h2>7. Your Rights</h2>
-          <p>You have the right to:</p>
-          <ul>
-            <li>Access the personal data we hold about you</li>
-            <li>Request correction of inaccurate data</li>
-            <li>Request deletion of your data</li>
-            <li>Disconnect any third-party integration at any time</li>
-            <li>Export your data in a machine-readable format</li>
-          </ul>
-
-          <h2>8. Cookies</h2>
-          <p>
-            We use essential cookies for authentication and session management. We do not use
-            third-party tracking cookies or advertising cookies.
-          </p>
-
-          <h2>9. Changes to This Policy</h2>
-          <p>
-            We may update this Privacy Policy from time to time. We will notify you of any material
-            changes by posting the new policy on this page and updating the &quot;Last updated&quot; date.
-          </p>
-
-          <h2>10. Contact Us</h2>
-          <p>
-            If you have questions about this Privacy Policy or our data practices, contact us at:{' '}
-            <a href="mailto:svatsal64@gmail.com" className="text-gray-900 underline hover:text-lime-600 transition-colors">
-              svatsal64@gmail.com
-            </a>
-          </p>
+            <section className="p-5 sm:p-7">
+              <h2 className="text-[20px] font-semibold text-white" style={{ fontFamily: D }}>10. Contact Us</h2>
+              <p className="mt-4 text-[14px] leading-[1.8]" style={{ color: SOFT }}>
+                If you have questions about this Privacy Policy or our data practices, contact us at{' '}
+                <a href="mailto:svatsal64@gmail.com" className="font-semibold underline decoration-[rgba(197,241,53,0.45)] underline-offset-4 transition-opacity hover:opacity-80" style={{ color: ACCENT }}>
+                  svatsal64@gmail.com
+                </a>.
+              </p>
+            </section>
+          </div>
         </div>
-      </main>
+      </section>
 
-      {/* Footer */}
-      <footer className="border-t border-gray-100 py-8">
-        <div className="max-w-3xl mx-auto px-6 flex items-center justify-between text-xs text-gray-400">
+      <footer className="border-t py-8" style={{ borderColor: BORDER }}>
+        <div className="mx-auto flex max-w-[920px] items-center justify-between gap-4 px-5 text-[11px] sm:px-6" style={{ color: MUTED, fontFamily: M }}>
           <span>&copy; {new Date().getFullYear()} Amplify. All rights reserved.</span>
-          <Link href="/" className="hover:text-gray-600 transition-colors">Home</Link>
+          <Link href="/" className="transition-colors hover:text-white">Home</Link>
         </div>
       </footer>
-    </div>
+    </main>
   )
 }

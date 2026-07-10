@@ -161,8 +161,8 @@ function ProductCard({ product }: { product: ProductAudit }) {
       {expanded && (product.issues.length > 0 || product.aiSummary) && (
         <div className="px-3 pb-3 pt-1 space-y-1" style={{ borderTop: `1px solid ${BORDER}` }}>
           {product.aiSummary && (
-            <div className="flex items-start gap-2 py-1.5 px-2 rounded mb-1" style={{ background: 'rgba(139,92,246,0.06)', border: '1px solid rgba(139,92,246,0.15)' }}>
-              <span className="text-[10px] mt-0.5 flex-shrink-0" style={{ color: '#8b5cf6' }}>AI</span>
+            <div className="flex items-start gap-2 py-1.5 px-2 rounded mb-1" style={{ background: 'rgba(197,241,53,0.06)', border: '1px solid rgba(197,241,53,0.18)' }}>
+              <span className="text-[10px] mt-0.5 flex-shrink-0" style={{ color: ACCENT }}>AI</span>
               <span className="text-[12px]" style={{ color: SECONDARY }}>{product.aiSummary}</span>
             </div>
           )}
@@ -464,7 +464,7 @@ jobs:
                       </span>
                     )}
                     {result.aiPowered && (
-                      <span className="ml-2 px-1.5 py-0.5 rounded text-[9px] uppercase font-bold" style={{ background: 'rgba(139,92,246,0.1)', color: '#8b5cf6' }}>
+                      <span className="ml-2 px-1.5 py-0.5 rounded text-[9px] uppercase font-bold" style={{ background: 'rgba(197,241,53,0.1)', color: ACCENT }}>
                         AI-powered
                       </span>
                     )}
