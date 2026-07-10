@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { ConnectedWorkflow } from '../components/connected-workflow'
 import { MotionCard, MotionShell, ProductStage, Reveal } from '../components/motion-primitives'
 
 const ACCENT = '#18736A'
@@ -106,28 +107,6 @@ const ENRICHMENT_ROWS = [
     after: 'Men’s EU sizing. Select your usual boot size.',
     note: 'Operational notes become clear PDP guidance.',
   },
-]
-
-const INTEGRATIONS = [
-  { name: 'Shopify', src: '/logos/platforms/shopify.svg', detail: 'Products + orders' },
-  { name: 'Amazon', src: '/logos/platforms/amazon.svg', detail: 'Flat files + SP-API' },
-  { name: 'Noon', src: '/logos/platforms/noon.svg', detail: 'Catalog + stock' },
-  { name: 'Namshi', wordmark: 'namshi', detail: 'Seller templates' },
-  { name: '6th Street', src: '/logos/platforms/sixth-street.png', detail: 'Marketplace files', dark: true },
-  { name: 'Centrepoint', wordmark: 'centrepoint', detail: 'Retail feeds' },
-  { name: 'Flipkart', src: '/logos/platforms/flipkart.svg', detail: 'Seller ops' },
-  { name: 'Trendyol', src: '/logos/platforms/trendyol.svg', detail: 'Product feeds' },
-]
-
-const ORBIT = [
-  { x: '50%', y: '6%' },
-  { x: '82%', y: '21%' },
-  { x: '92%', y: '52%' },
-  { x: '77%', y: '82%' },
-  { x: '50%', y: '94%' },
-  { x: '23%', y: '82%' },
-  { x: '8%', y: '52%' },
-  { x: '18%', y: '21%' },
 ]
 
 const PRODUCT_FLOW_TABS = [
@@ -970,73 +949,6 @@ function EnrichmentSlider() {
   )
 }
 
-function IntegrationLogo({ item, small = false }: { item: (typeof INTEGRATIONS)[number]; small?: boolean }) {
-  const dark = 'dark' in item && item.dark
-  return (
-    <div
-      className={`${small ? 'h-[84px] w-[132px]' : 'h-[112px]'} rounded-lg border px-3 text-center`}
-      style={{
-        background: dark ? '#070707' : '#ffffff',
-        borderColor: dark ? 'rgba(255,255,255,0.09)' : L_BORDER,
-        boxShadow: small ? '0 16px 44px rgba(0,0,0,0.1)' : 'none',
-      }}
-    >
-      <div className="flex h-full flex-col items-center justify-center">
-        <div className="mb-2 flex h-8 items-center justify-center">
-          {'src' in item ? (
-            <img src={item.src} alt={`${item.name} logo`} className={`${small ? 'max-h-7 max-w-[104px]' : 'max-h-9 max-w-[124px]'} object-contain`} />
-          ) : (
-            <span className={`${small ? 'text-[17px]' : 'text-[21px]'} font-black`} style={{ color: dark ? '#fff' : L_TEXT, fontFamily: D }}>
-              {item.wordmark}
-            </span>
-          )}
-        </div>
-        <div className="text-[9px] uppercase leading-tight" style={{ color: dark ? 'rgba(255,255,255,0.68)' : L_MUTED, fontFamily: M }}>
-          {item.detail}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function IntegrationsOrbit() {
-  return (
-    <div className="relative mx-auto hidden h-[500px] max-w-[760px] lg:block">
-      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 760 500" aria-hidden="true">
-        <defs>
-          <linearGradient id="orbitGlow" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="0%" stopColor="#18736A" stopOpacity="0.26" />
-            <stop offset="52%" stopColor="#9EE078" stopOpacity="0.2" />
-            <stop offset="100%" stopColor="#18736A" stopOpacity="0.12" />
-          </linearGradient>
-        </defs>
-        <ellipse cx="380" cy="250" rx="304" ry="188" fill="#f0f6eb" />
-        <ellipse cx="380" cy="250" rx="226" ry="132" fill="#fff" />
-        <ellipse cx="380" cy="250" rx="136" ry="86" fill="none" stroke="url(#orbitGlow)" strokeWidth="38" />
-        <ellipse cx="380" cy="250" rx="286" ry="176" fill="none" stroke="rgba(0,0,0,0.08)" />
-        <ellipse cx="380" cy="250" rx="194" ry="112" fill="none" stroke="rgba(26,122,46,0.22)" strokeDasharray="6 9" />
-        {ORBIT.map((pos) => (
-          <line key={`${pos.x}-${pos.y}`} x1="380" y1="250" x2={pos.x} y2={pos.y} stroke="rgba(26,122,46,0.2)" strokeDasharray="5 8" />
-        ))}
-      </svg>
-
-      <div className="absolute left-1/2 top-1/2 flex h-[164px] w-[228px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-lg border bg-white px-5 text-center" style={{ borderColor: L_BORDER, boxShadow: '0 24px 70px rgba(0,0,0,0.12)' }}>
-        <Logo size={54} />
-        <div className="mt-3 text-[12px] font-bold uppercase" style={{ color: ACCENT, fontFamily: M }}>Amplify</div>
-        <div className="mt-1 text-[15px] leading-snug" style={{ color: L_TEXT, fontFamily: D }}>
-          One operating layer for every channel.
-        </div>
-      </div>
-
-      {INTEGRATIONS.map((item, index) => (
-        <div key={item.name} className="absolute -translate-x-1/2 -translate-y-1/2" style={{ left: ORBIT[index].x, top: ORBIT[index].y }}>
-          <IntegrationLogo item={item} small />
-        </div>
-      ))}
-    </div>
-  )
-}
-
 function IntegrationsSection() {
   return (
     <section id="integrations" className="scroll-mt-[96px]" style={{ background: L_BG, borderTop: `1px solid ${L_BORDER}` }}>
@@ -1051,15 +963,7 @@ function IntegrationsSection() {
           </p>
         </div>
 
-        <IntegrationsOrbit />
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:hidden">
-          {INTEGRATIONS.map((item) => <IntegrationLogo key={item.name} item={item} />)}
-        </div>
-        <div className="mt-5 flex flex-wrap justify-center gap-2 rounded-lg border px-4 py-3" style={{ borderColor: L_BORDER, background: L_SURFACE }}>
-          {['Shopify', 'Loop', 'Gorgias', 'ERP exports', 'Supplier PIs', 'ImgBB albums', 'Marketplace XLSX', 'Approval logs'].map((item) => (
-            <span key={item} className="text-[10px] uppercase" style={{ color: L_MUTED, fontFamily: M }}>{item}</span>
-          ))}
-        </div>
+        <ConnectedWorkflow />
       </div>
     </section>
   )
