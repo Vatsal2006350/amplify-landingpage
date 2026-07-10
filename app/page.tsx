@@ -322,7 +322,7 @@ function HeroConsole() {
   const [filmPhase, setFilmPhase] = useState(0)
   const [typedChars, setTypedChars] = useState(0)
   const [isDesktop, setIsDesktop] = useState(false)
-  const isFilmInView = useInView(filmRef, { amount: 0.15, margin: '0px 0px -60% 0px' })
+  const isFilmInView = useInView(filmRef, { amount: 0.15, margin: '0px 0px -400px 0px' })
   const brainQuery = 'Why did Amazon footwear sales grow last week?'
   const stages = [
     { label: 'Data', detail: '4 sources connected' },
