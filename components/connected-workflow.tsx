@@ -2,14 +2,7 @@
 
 import { useRef } from 'react'
 import { m, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react'
-
-const ACCENT = '#18736A'
-const SIGNAL = '#9EE078'
-const DARK = '#101613'
-const TEXT = '#17212B'
-const MUTED = '#66736F'
-const BORDER = 'rgba(23,33,29,0.12)'
-const M = 'var(--font-mono)'
+import { StatusBracket } from './doc/chrome'
 
 const SOURCES = [
   { name: 'Shopify', detail: 'Products + orders', src: '/logos/platforms/shopify.svg' },
@@ -18,24 +11,67 @@ const SOURCES = [
   { name: 'Product images', detail: '184 matched assets', mark: 'IM' },
 ]
 
-const OUTPUTS = [
+const OUTPUTS: Array<[string, string]> = [
   ['Namshi XLSX', 'Ready'],
   ['Amazon flat file', 'Ready'],
   ['Centrepoint UDA', 'Review'],
   ['Purchase order', 'Draft'],
 ]
 
+const PIPELINE: Array<[string, string]> = [
+  ['Normalize SKU identity', 'Complete'],
+  ['Resolve channel attributes', 'Complete'],
+  ['Check inventory cover', 'Running'],
+  ['Prepare approved outputs', 'Queued'],
+]
+
+function PunchedHoles() {
+  return (
+    <div className="flex gap-2" aria-hidden="true">
+      {[0, 1, 2].map((i) => (
+        <span
+          key={i}
+          className="h-2.5 w-2.5 rounded-full"
+          style={{ background: 'var(--paper)', boxShadow: 'inset 0 0 0 1px var(--ledger-strong)' }}
+        />
+      ))}
+    </div>
+  )
+}
+
+function PanelLabel({ children }: { children: string }) {
+  return (
+    <div className="border-b px-4 py-3" style={{ borderColor: 'var(--ledger)' }}>
+      <p className="type-mono-label" style={{ fontSize: 9, color: 'var(--ink-muted)' }}>
+        {children}
+      </p>
+    </div>
+  )
+}
+
 function SourceRow({ item, index }: { item: (typeof SOURCES)[number]; index: number }) {
   return (
-    <div className="flex items-center gap-3 border-b px-3 py-3 last:border-b-0" style={{ borderColor: BORDER }}>
-      <div className="grid h-9 w-9 shrink-0 place-items-center rounded-md border bg-white" style={{ borderColor: BORDER }}>
-        {item.src ? <img src={item.src} alt="" className="max-h-5 max-w-6 object-contain" /> : <span className="text-[9px] font-bold" style={{ color: ACCENT, fontFamily: M }}>{item.mark}</span>}
+    <div
+      className="flex items-center gap-3 border-b px-3 py-3 last:border-b-0"
+      style={{ borderColor: 'var(--ledger)' }}
+    >
+      <div
+        className="grid h-9 w-9 shrink-0 place-items-center rounded-doc border"
+        style={{ borderColor: 'var(--ledger)', background: 'var(--paper)' }}
+      >
+        {item.src ? (
+          <img src={item.src} alt="" className="max-h-5 max-w-6 object-contain" />
+        ) : (
+          <span className="type-mono-label" style={{ fontSize: 9, fontWeight: 700, color: 'var(--ink)' }}>
+            {item.mark}
+          </span>
+        )}
       </div>
       <div className="min-w-0 flex-1">
-        <div className="truncate text-[11px] font-semibold" style={{ color: TEXT }}>{item.name}</div>
-        <div className="mt-0.5 truncate text-[9px]" style={{ color: MUTED }}>{item.detail}</div>
+        <div className="truncate text-[11px] font-semibold" style={{ color: 'var(--ink)' }}>{item.name}</div>
+        <div className="mt-0.5 truncate text-[9px]" style={{ color: 'var(--ink-muted)' }}>{item.detail}</div>
       </div>
-      <span className="h-2 w-2 rounded-full" style={{ background: index === 2 ? '#f2b84b' : SIGNAL }} />
+      <StatusBracket status={index === 2 ? 'Review' : 'Synced'} className="shrink-0" />
     </div>
   )
 }
@@ -58,92 +94,188 @@ export function ConnectedWorkflow() {
     <div ref={containerRef} className="relative lg:min-h-[125vh]">
       <div className="lg:sticky lg:top-[82px] lg:flex lg:h-[calc(100vh-96px)] lg:min-h-[620px] lg:max-h-[760px] lg:items-center">
         <div className="relative w-full">
-          <m.div
+          {/* dashed ink routing line behind the panels */}
+          <m.svg
             aria-hidden="true"
-            className="absolute left-[18%] right-[18%] top-1/2 hidden h-px origin-left lg:block"
-            style={{ scaleX: reduceMotion ? 1 : connectionScale, background: 'linear-gradient(90deg, rgba(24,115,106,0.2), #18736A 50%, rgba(24,115,106,0.2))' }}
-          />
-          <div className="relative overflow-hidden rounded-xl border bg-white" style={{ borderColor: BORDER, boxShadow: '0 36px 110px rgba(15,31,28,0.14)' }}>
-            <div className="flex items-center justify-between gap-4 border-b px-4 py-3" style={{ borderColor: 'rgba(255,255,255,0.1)', background: DARK }}>
+            className="absolute left-[18%] right-[18%] top-1/2 hidden h-px w-[64%] origin-left lg:block"
+            style={{ scaleX: reduceMotion ? 1 : connectionScale }}
+            preserveAspectRatio="none"
+            viewBox="0 0 100 1"
+          >
+            <line
+              x1="0"
+              y1="0.5"
+              x2="100"
+              y2="0.5"
+              stroke="var(--ink)"
+              strokeWidth="1"
+              strokeDasharray="4 3"
+              vectorEffect="non-scaling-stroke"
+            />
+          </m.svg>
+
+          <div
+            className="relative overflow-hidden rounded-doc"
+            style={{ border: '1px solid var(--ink)', background: 'var(--paper)' }}
+          >
+            {/* document plate header */}
+            <div
+              className="flex items-center justify-between gap-4 border-b px-4 py-3"
+              style={{ borderColor: 'var(--ink)', background: 'var(--paper-shade)' }}
+            >
               <div className="flex min-w-0 items-center gap-3">
-                <div className="flex gap-1.5" aria-hidden="true"><span className="h-2.5 w-2.5 rounded-full bg-[#ff6b62]" /><span className="h-2.5 w-2.5 rounded-full bg-[#ffc34a]" /><span className="h-2.5 w-2.5 rounded-full bg-[#48c96c]" /></div>
-                <span className="hidden truncate rounded-md border px-3 py-1.5 text-[9px] sm:block" style={{ borderColor: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.58)', fontFamily: M }}>app.use-amplify.com/workspace/connected-run</span>
+                <PunchedHoles />
+                <span className="type-mono-label truncate" style={{ fontSize: 10, color: 'var(--ink-muted)' }}>
+                  PLATE 05 — CONNECTED RUN
+                </span>
               </div>
-              <span className="rounded-md px-2.5 py-1 text-[9px] font-bold uppercase" style={{ background: SIGNAL, color: DARK, fontFamily: M }}>Live run</span>
+              <span
+                className="type-mono-label flex shrink-0 items-center gap-2"
+                style={{ fontSize: 10, fontWeight: 700, color: 'var(--orange)' }}
+              >
+                <span className="h-1.5 w-1.5 rounded-full" style={{ background: 'var(--orange)' }} />
+                LIVE RUN
+              </span>
             </div>
 
-            <div className="grid bg-[#edf3f0] lg:grid-cols-[0.72fr_1.22fr_0.78fr]">
+            <div className="grid gap-3 p-3 lg:grid-cols-[0.72fr_1.22fr_0.78fr]" style={{ background: 'var(--paper-shade)' }}>
+              {/* ORIGIN */}
               <m.aside
-                className="border-b bg-[#f8fbf9] lg:border-b-0 lg:border-r"
-                style={{ borderColor: BORDER, x: reduceMotion ? 0 : sourceX, opacity: reduceMotion ? 1 : sourceOpacity }}
+                className="doc-shadow rounded-doc"
+                style={{
+                  border: '1px solid var(--ink)',
+                  background: 'var(--paper-raised)',
+                  x: reduceMotion ? 0 : sourceX,
+                  opacity: reduceMotion ? 1 : sourceOpacity,
+                }}
               >
-                <div className="border-b px-4 py-4" style={{ borderColor: BORDER }}>
-                  <div className="text-[9px] uppercase" style={{ color: ACCENT, fontFamily: M }}>Connected inputs</div>
-                  <h3 className="mt-1 text-[16px] font-semibold" style={{ color: TEXT }}>Source data</h3>
-                </div>
+                <PanelLabel>ORIGIN — SOURCE DOCUMENTS</PanelLabel>
                 <div>{SOURCES.map((item, index) => <SourceRow key={item.name} item={item} index={index} />)}</div>
-                <div className="m-3 rounded-lg border bg-white p-3" style={{ borderColor: BORDER }}>
-                  <div className="flex items-center justify-between text-[9px] uppercase" style={{ color: MUTED, fontFamily: M }}><span>Identity match</span><span style={{ color: ACCENT }}>96%</span></div>
-                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#e2ebe7]"><m.div className="h-full origin-left rounded-full" style={{ scaleX: reduceMotion ? 1 : runScale, background: ACCENT }} /></div>
+                <div
+                  className="m-3 rounded-doc border p-3"
+                  style={{ borderColor: 'var(--ledger)', background: 'var(--paper)' }}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="type-mono-label" style={{ fontSize: 9, color: 'var(--ink-muted)' }}>Identity match</span>
+                    <span className="type-mono-label tabular" style={{ fontSize: 9, fontWeight: 700, color: 'var(--ink)' }}>96%</span>
+                  </div>
+                  <div className="mt-2 h-1.5 overflow-hidden" style={{ background: 'var(--paper-shade)' }}>
+                    <m.div
+                      className="h-full origin-left"
+                      style={{ scaleX: reduceMotion ? 1 : runScale, background: 'var(--orange)' }}
+                    />
+                  </div>
                 </div>
               </m.aside>
 
+              {/* SORTING FACILITY */}
               <m.main
-                className="min-w-0 p-4 sm:p-5"
-                style={{ scale: reduceMotion ? 1 : coreScale, y: reduceMotion ? 0 : coreY }}
+                className="doc-shadow min-w-0 rounded-doc"
+                style={{
+                  border: '1px solid var(--ink)',
+                  background: 'var(--paper-raised)',
+                  scale: reduceMotion ? 1 : coreScale,
+                  y: reduceMotion ? 0 : coreY,
+                }}
               >
-                <div className="rounded-lg border bg-white" style={{ borderColor: BORDER, boxShadow: '0 18px 48px rgba(15,31,28,0.08)' }}>
-                  <div className="flex flex-col gap-3 border-b p-4 sm:flex-row sm:items-start sm:justify-between" style={{ borderColor: BORDER }}>
-                    <div><div className="text-[9px] uppercase" style={{ color: ACCENT, fontFamily: M }}>Amplify operating layer</div><h3 className="mt-1 text-[20px] font-semibold" style={{ color: TEXT }}>Catalog + inventory run</h3></div>
-                    <span className="w-fit rounded-md border px-2.5 py-1 text-[9px] font-semibold uppercase" style={{ borderColor: '#bde5dc', background: '#eaf8f5', color: ACCENT, fontFamily: M }}>Approval gated</span>
+                <PanelLabel>SORTING FACILITY — AMPLIFY OPERATING LAYER</PanelLabel>
+                <div className="flex flex-col gap-2 border-b px-4 py-3 sm:flex-row sm:items-start sm:justify-between" style={{ borderColor: 'var(--ledger)' }}>
+                  <h3 className="font-display text-[20px]" style={{ fontWeight: 540, color: 'var(--ink)' }}>
+                    Catalog + inventory run
+                  </h3>
+                  <StatusBracket status="Approval gated" className="shrink-0" />
+                </div>
+                <div className="p-4">
+                  <div className="grid grid-cols-3" style={{ border: '1px solid var(--ledger)' }}>
+                    {[['184', 'SKU rows'], ['37', 'Fields filled'], ['4', 'Review']].map(([value, label], index) => (
+                      <div key={label} className="px-3 py-3" style={{ borderLeft: index > 0 ? '1px solid var(--ledger)' : undefined }}>
+                        <div className="font-display tabular text-[22px] leading-none" style={{ fontWeight: 540, color: 'var(--ink)' }}>{value}</div>
+                        <p className="type-mono-label mt-1.5" style={{ fontSize: 8, color: 'var(--ink-muted)' }}>{label}</p>
+                      </div>
+                    ))}
                   </div>
-                  <div className="p-4">
-                    <div className="grid grid-cols-3 gap-2">
-                      {[['184', 'SKU rows'], ['37', 'fields filled'], ['4', 'review']].map(([value, label]) => <div key={label} className="rounded-lg border bg-[#f8fbf9] p-3" style={{ borderColor: BORDER }}><div className="text-[22px] font-semibold" style={{ color: TEXT }}>{value}</div><div className="mt-1 text-[8px] uppercase" style={{ color: MUTED, fontFamily: M }}>{label}</div></div>)}
-                    </div>
-                    <div className="mt-3 overflow-hidden rounded-lg border" style={{ borderColor: BORDER }}>
-                      {[['Normalize SKU identity', 'Complete'], ['Resolve channel attributes', 'Complete'], ['Check inventory cover', 'Running'], ['Prepare approved outputs', 'Queued']].map(([label, state], index) => (
-                        <div key={label} className="grid grid-cols-[28px_1fr_auto] items-center gap-3 border-b bg-white px-3 py-3 last:border-b-0" style={{ borderColor: BORDER }}>
-                          <span className="grid h-6 w-6 place-items-center rounded-full text-[9px] font-semibold" style={{ background: index < 2 ? ACCENT : index === 2 ? SIGNAL : '#e7eeeb', color: index < 2 ? '#fff' : TEXT }}>{index < 2 ? '✓' : index + 1}</span>
-                          <span className="text-[11px] font-semibold" style={{ color: TEXT }}>{label}</span>
-                          <span className="text-[8px] uppercase" style={{ color: index === 2 ? ACCENT : MUTED, fontFamily: M }}>{state}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="mt-3 rounded-lg border p-3" style={{ borderColor: '#b9dcd4', background: '#edf8f5' }}>
-                      <div className="text-[8px] uppercase" style={{ color: ACCENT, fontFamily: M }}>Operator decision</div>
-                      <div className="mt-1 text-[12px] font-semibold" style={{ color: TEXT }}>Publish ready listings and review four exceptions.</div>
+                  <div className="mt-3" style={{ border: '1px solid var(--ledger)' }}>
+                    {PIPELINE.map(([label, state], index) => (
+                      <div
+                        key={label}
+                        className="flex items-center gap-3 border-b px-3 py-2.5 last:border-b-0"
+                        style={{ borderColor: 'var(--ledger)' }}
+                      >
+                        <span
+                          className="type-mono-label shrink-0"
+                          style={{ color: index === 2 ? 'var(--orange)' : index < 2 ? 'var(--ink)' : 'var(--ink-faint)' }}
+                          aria-hidden="true"
+                        >
+                          {index < 2 ? '[x]' : index === 2 ? '[▸]' : '[ ]'}
+                        </span>
+                        <span className="min-w-0 flex-1 truncate text-[11px] font-semibold" style={{ color: 'var(--ink)' }}>{label}</span>
+                        <StatusBracket status={state} className="shrink-0" />
+                      </div>
+                    ))}
+                  </div>
+                  <div
+                    className="mt-3 px-3 py-3"
+                    style={{ borderLeft: '3px solid var(--orange)', background: 'var(--paper-shade)' }}
+                  >
+                    <p className="type-mono-label" style={{ fontSize: 8, color: 'var(--orange)' }}>Operator decision</p>
+                    <div className="mt-1 text-[12px] font-semibold" style={{ color: 'var(--ink)' }}>
+                      Publish ready listings and review four exceptions.
                     </div>
                   </div>
                 </div>
               </m.main>
 
+              {/* DESTINATIONS */}
               <m.aside
-                className="border-t bg-[#f8fbf9] lg:border-l lg:border-t-0"
-                style={{ borderColor: BORDER, x: reduceMotion ? 0 : outputX, opacity: reduceMotion ? 1 : outputOpacity }}
+                className="doc-shadow rounded-doc"
+                style={{
+                  border: '1px solid var(--ink)',
+                  background: 'var(--paper-raised)',
+                  x: reduceMotion ? 0 : outputX,
+                  opacity: reduceMotion ? 1 : outputOpacity,
+                }}
               >
-                <div className="border-b px-4 py-4" style={{ borderColor: BORDER }}>
-                  <div className="text-[9px] uppercase" style={{ color: ACCENT, fontFamily: M }}>Prepared actions</div>
-                  <h3 className="mt-1 text-[16px] font-semibold" style={{ color: TEXT }}>Approved outputs</h3>
-                </div>
+                <PanelLabel>DESTINATIONS — APPROVED OUTPUTS</PanelLabel>
                 <div className="p-3">
                   <div className="space-y-2">
                     {OUTPUTS.map(([name, status], index) => (
-                      <div key={name} className="rounded-lg border bg-white p-3" style={{ borderColor: index === 0 ? '#9bd9cd' : BORDER }}>
-                        <div className="flex items-center justify-between gap-3"><span className="text-[11px] font-semibold" style={{ color: TEXT }}>{name}</span><span className="text-[8px] uppercase" style={{ color: status === 'Ready' ? ACCENT : MUTED, fontFamily: M }}>{status}</span></div>
-                        <div className="mt-2 h-1 rounded-full" style={{ background: index < 2 ? SIGNAL : '#dfe7e3' }} />
+                      <div
+                        key={name}
+                        className="rounded-doc border p-3"
+                        style={{
+                          borderColor: index === 0 ? 'var(--ink)' : 'var(--ledger)',
+                          background: 'var(--paper)',
+                        }}
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="truncate text-[11px] font-semibold" style={{ color: 'var(--ink)' }}>{name}</span>
+                          <StatusBracket status={status} className="shrink-0" />
+                        </div>
+                        <div className="mt-2 h-1 overflow-hidden" style={{ background: 'var(--paper-shade)' }}>
+                          <div
+                            className="h-full"
+                            style={{ background: 'var(--orange)', width: index < 2 ? '100%' : index === 2 ? '45%' : '15%' }}
+                          />
+                        </div>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-3 rounded-lg p-3 text-white" style={{ background: DARK }}>
-                    <div className="text-[8px] uppercase" style={{ color: SIGNAL, fontFamily: M }}>Control stays with you</div>
-                    <div className="mt-2 text-[11px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.76)' }}>Evidence, impact, and rollback context stay attached to every action.</div>
+                  <div className="mt-3 rounded-doc p-3" style={{ background: 'var(--dk-bg)' }}>
+                    <p className="type-mono-label" style={{ fontSize: 8, color: 'var(--orange)' }}>Control stays with you</p>
+                    <div className="mt-2 text-[11px] leading-relaxed" style={{ color: 'var(--dk-muted)' }}>
+                      Evidence, impact, and rollback context stay attached to every action.
+                    </div>
                   </div>
                 </div>
               </m.aside>
             </div>
           </div>
-          <div className="mx-auto mt-4 flex max-w-[720px] items-center justify-center gap-3 text-center text-[9px] uppercase" style={{ color: MUTED, fontFamily: M }}><span className="h-px w-10" style={{ background: ACCENT }} />Scroll to follow the run<span className="h-px w-10" style={{ background: ACCENT }} /></div>
+
+          <div className="mx-auto mt-4 flex max-w-[720px] items-center justify-center gap-3 text-center">
+            <span aria-hidden="true" className="h-px w-10" style={{ background: 'var(--ledger-strong)' }} />
+            <span className="type-mono-label" style={{ fontSize: 9, color: 'var(--ink-faint)' }}>Scroll to follow the run</span>
+            <span aria-hidden="true" className="h-px w-10" style={{ background: 'var(--ledger-strong)' }} />
+          </div>
         </div>
       </div>
     </div>

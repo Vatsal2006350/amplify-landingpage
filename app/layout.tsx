@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { display, mono, sans } from './fonts'
+import { DocDefs } from '../components/doc/stamp'
 
 export const metadata: Metadata = {
   title: 'Amplify | AI Workspace for Brand Operators',
@@ -25,8 +27,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className={`scroll-smooth ${display.variable} ${sans.variable} ${mono.variable}`}>
       <body className="antialiased">
+        <DocDefs />
         {children}
       </body>
     </html>

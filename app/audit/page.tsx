@@ -1,13 +1,17 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { Barcode, Perforation } from '../../components/doc/chrome'
+import { SiteFooter } from '../../components/sections/footer'
 
-const ACCENT = '#C5F135'
-const BASE = '#080808'
-const SURFACE = '#111111'
-const BORDER = 'rgba(255,255,255,0.07)'
-const MUTED = 'rgba(255,255,255,0.55)'
-const SECONDARY = 'rgba(255,255,255,0.75)'
+const ACCENT = '#FF4D00'
+const GREEN = '#4a7c59'
+const RED = '#C8321E'
+const BASE = 'var(--dk-bg)'
+const SURFACE = 'var(--dk-raised)'
+const BORDER = 'var(--dk-rule)'
+const MUTED = 'var(--dk-muted)'
+const SECONDARY = 'rgba(244,241,234,0.78)'
 const D = 'var(--font-display)'
 const M = 'var(--font-mono)'
 
@@ -41,7 +45,7 @@ function AmplifyLogo({ size = 32 }: { size?: number }) {
     <img
       src="/logo.png"
       alt="Amplify"
-      style={{ width: size, height: size, borderRadius: 6, flexShrink: 0, objectFit: 'cover' }}
+      style={{ width: size, height: size, borderRadius: 2, flexShrink: 0, objectFit: 'cover' }}
     />
   )
 }
@@ -55,7 +59,7 @@ function GithubIcon({ size = 14 }: { size?: number }) {
 }
 
 function ScoreBadge({ score, size = 'md' }: { score: number; size?: 'sm' | 'md' | 'lg' }) {
-  const color = score >= 70 ? '#22c55e' : score >= 40 ? '#f59e0b' : '#ef4444'
+  const color = score >= 70 ? GREEN : score >= 40 ? ACCENT : RED
   const label = score >= 70 ? 'Good' : score >= 40 ? 'Needs Work' : 'Poor'
   const sizes = {
     sm: { w: 40, h: 40, font: 14, ring: 3 },
@@ -70,7 +74,7 @@ function ScoreBadge({ score, size = 'md' }: { score: number; size?: 'sm' | 'md' 
     <div className="flex flex-col items-center gap-1">
       <div className="relative" style={{ width: s.w, height: s.h }}>
         <svg width={s.w} height={s.h} viewBox={`0 0 ${s.w} ${s.h}`} style={{ transform: 'rotate(-90deg)' }}>
-          <circle cx={s.w / 2} cy={s.h / 2} r={(s.w - s.ring * 2) / 2} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={s.ring} />
+          <circle cx={s.w / 2} cy={s.h / 2} r={(s.w - s.ring * 2) / 2} fill="none" stroke="rgba(244,241,234,0.08)" strokeWidth={s.ring} />
           <circle cx={s.w / 2} cy={s.h / 2} r={(s.w - s.ring * 2) / 2} fill="none" stroke={color} strokeWidth={s.ring}
             strokeDasharray={circumference} strokeDashoffset={circumference - filled} strokeLinecap="round"
             style={{ transition: 'stroke-dashoffset 1s ease-out' }}
@@ -89,9 +93,9 @@ function ScoreBadge({ score, size = 'md' }: { score: number; size?: 'sm' | 'md' 
 
 function StatCard({ label, value, color }: { label: string; value: number | string; color?: string }) {
   return (
-    <div className="rounded-lg p-4" style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${BORDER}` }}>
-      <div className="text-[10px] uppercase tracking-wider mb-1" style={{ color: MUTED, fontFamily: M }}>{label}</div>
-      <div className="text-[28px] font-bold" style={{ color: color || '#fff', fontFamily: D }}>{value}</div>
+    <div className="rounded-doc p-4" style={{ background: 'rgba(244,241,234,0.03)', border: `1px solid ${BORDER}` }}>
+      <div className="type-mono-label mb-1" style={{ fontSize: 10, color: MUTED }}>{label}</div>
+      <div className="text-[28px] font-bold" style={{ color: color || 'var(--dk-text)', fontFamily: D }}>{value}</div>
     </div>
   )
 }
@@ -114,8 +118,8 @@ function IssueBar({ category, count, total, maxCount }: { category: string; coun
   return (
     <div className="flex items-center gap-3 py-2">
       <span className="w-40 text-[12px] truncate" style={{ color: SECONDARY }}>{labels[category] || category}</span>
-      <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
-        <div className="h-full rounded-full" style={{ width: `${barPct}%`, background: pct > 60 ? '#ef4444' : pct > 30 ? '#f59e0b' : ACCENT, transition: 'width 0.8s ease-out' }} />
+      <div className="flex-1 h-2 rounded-doc overflow-hidden" style={{ background: 'rgba(244,241,234,0.06)' }}>
+        <div className="h-full rounded-doc" style={{ width: `${barPct}%`, background: pct > 60 ? RED : pct > 30 ? ACCENT : GREEN, transition: 'width 0.8s ease-out' }} />
       </div>
       <span className="w-12 text-right text-[11px] font-bold" style={{ color: MUTED, fontFamily: M }}>{pct}%</span>
     </div>
@@ -124,16 +128,16 @@ function IssueBar({ category, count, total, maxCount }: { category: string; coun
 
 function ProductCard({ product }: { product: ProductAudit }) {
   const [expanded, setExpanded] = useState(false)
-  const scoreColor = product.qualityScore >= 70 ? '#22c55e' : product.qualityScore >= 40 ? '#f59e0b' : '#ef4444'
+  const scoreColor = product.qualityScore >= 70 ? GREEN : product.qualityScore >= 40 ? ACCENT : RED
 
   return (
     <div
-      className="rounded-lg overflow-hidden cursor-pointer transition-all duration-200"
+      className="rounded-doc overflow-hidden cursor-pointer transition-all duration-200"
       style={{ background: SURFACE, border: `1px solid ${expanded ? scoreColor + '44' : BORDER}` }}
       onClick={() => setExpanded(!expanded)}
     >
       <div className="flex items-center gap-3 p-3">
-        <div className="w-12 h-12 rounded flex-shrink-0 overflow-hidden" style={{ background: 'rgba(255,255,255,0.04)' }}>
+        <div className="w-12 h-12 rounded-doc flex-shrink-0 overflow-hidden" style={{ background: 'rgba(244,241,234,0.04)' }}>
           {product.image ? (
             <img src={product.image} alt="" className="w-full h-full object-cover" />
           ) : (
@@ -141,16 +145,16 @@ function ProductCard({ product }: { product: ProductAudit }) {
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <div className="text-[13px] font-medium text-white truncate">{product.title}</div>
+          <div className="text-[13px] font-medium text-dk-text truncate">{product.title}</div>
           <div className="flex items-center gap-2 mt-0.5">
             {product.price && <span className="text-[11px]" style={{ color: MUTED, fontFamily: M }}>${product.price}</span>}
             {product.issueCount.errors > 0 && (
-              <span className="text-[9px] px-1.5 py-0.5 rounded font-bold" style={{ background: 'rgba(239,68,68,0.12)', color: '#ef4444', fontFamily: M }}>
+              <span className="text-[9px] px-1.5 py-0.5 rounded-doc font-bold" style={{ background: 'rgba(200,50,30,0.16)', color: RED, fontFamily: M }}>
                 {product.issueCount.errors} error{product.issueCount.errors > 1 ? 's' : ''}
               </span>
             )}
             {product.issueCount.warnings > 0 && (
-              <span className="text-[9px] px-1.5 py-0.5 rounded font-bold" style={{ background: 'rgba(245,158,11,0.12)', color: '#f59e0b', fontFamily: M }}>
+              <span className="text-[9px] px-1.5 py-0.5 rounded-doc font-bold" style={{ background: 'rgba(255,77,0,0.12)', color: ACCENT, fontFamily: M }}>
                 {product.issueCount.warnings} warning{product.issueCount.warnings > 1 ? 's' : ''}
               </span>
             )}
@@ -161,14 +165,14 @@ function ProductCard({ product }: { product: ProductAudit }) {
       {expanded && (product.issues.length > 0 || product.aiSummary) && (
         <div className="px-3 pb-3 pt-1 space-y-1" style={{ borderTop: `1px solid ${BORDER}` }}>
           {product.aiSummary && (
-            <div className="flex items-start gap-2 py-1.5 px-2 rounded mb-1" style={{ background: 'rgba(197,241,53,0.06)', border: '1px solid rgba(197,241,53,0.18)' }}>
+            <div className="flex items-start gap-2 py-1.5 px-2 rounded-doc mb-1" style={{ background: 'rgba(255,77,0,0.06)', border: '1px solid rgba(255,77,0,0.2)' }}>
               <span className="text-[10px] mt-0.5 flex-shrink-0" style={{ color: ACCENT }}>AI</span>
               <span className="text-[12px]" style={{ color: SECONDARY }}>{product.aiSummary}</span>
             </div>
           )}
           {product.issues.map((issue, i) => (
             <div key={i} className="flex items-start gap-2 py-1">
-              <span style={{ color: issue.type === 'error' ? '#ef4444' : issue.type === 'warning' ? '#f59e0b' : MUTED, fontSize: 10, marginTop: 2 }}>
+              <span style={{ color: issue.type === 'error' ? RED : issue.type === 'warning' ? ACCENT : MUTED, fontSize: 10, marginTop: 2 }}>
                 {issue.type === 'error' ? '●' : issue.type === 'warning' ? '▲' : '○'}
               </span>
               <span className="text-[12px]" style={{ color: SECONDARY }}>{issue.message}</span>
@@ -199,10 +203,10 @@ function CodeBlock({ code, language }: { code: string; language: string }) {
   }
 
   return (
-    <div className="rounded-lg overflow-hidden" style={{ background: '#0a0a0a', border: `1px solid ${BORDER}` }}>
+    <div className="rounded-doc overflow-hidden" style={{ background: SURFACE, border: `1px solid ${BORDER}` }}>
       <div className="flex items-center justify-between px-4 py-2" style={{ borderBottom: `1px solid ${BORDER}` }}>
-        <span className="text-[10px] uppercase tracking-wider" style={{ color: MUTED, fontFamily: M }}>{language}</span>
-        <button onClick={handleCopy} className="text-[10px] px-2 py-1 rounded transition-all" style={{ color: copied ? ACCENT : MUTED, fontFamily: M, background: copied ? ACCENT + '14' : 'transparent' }}>
+        <span className="type-mono-label" style={{ fontSize: 10, color: MUTED }}>{language}</span>
+        <button onClick={handleCopy} className="text-[10px] px-2 py-1 rounded-doc transition-all" style={{ color: copied ? ACCENT : MUTED, fontFamily: M, background: copied ? ACCENT + '14' : 'transparent' }}>
           {copied ? 'Copied!' : 'Copy'}
         </button>
       </div>
@@ -305,18 +309,15 @@ jobs:
           maxWidth: 1200,
           height: 48,
           padding: '0 6px 0 16px',
-          background: 'rgba(18,18,18,0.85)',
-          backdropFilter: 'blur(24px)',
-          WebkitBackdropFilter: 'blur(24px)',
-          borderRadius: scrolled ? 9999 : 16,
-          border: `1px solid rgba(255,255,255,0.1)`,
-          boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
-          transition: 'border-radius 0.5s ease',
+          background: scrolled ? 'var(--dk-raised)' : 'var(--dk-bg)',
+          borderRadius: 2,
+          border: `1px solid ${BORDER}`,
+          transition: 'background 0.5s ease',
         }}>
           <a href="/" className="flex items-center gap-2">
             <AmplifyLogo size={22} />
-            <span className="text-[14px] font-semibold text-white" style={{ fontFamily: D }}>Amplify</span>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full hidden sm:inline" style={{ background: ACCENT + '14', color: ACCENT, fontFamily: M }}>AUDIT</span>
+            <span className="text-[14px] font-semibold text-dk-text" style={{ fontFamily: D }}>Amplify</span>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-doc hidden sm:inline" style={{ background: ACCENT + '14', color: ACCENT, fontFamily: M }}>AUDIT</span>
           </a>
           <div className="flex items-center gap-2 sm:gap-3">
             <a href="https://github.com/Vatsal2006350/amplify-audit" target="_blank" rel="noopener noreferrer"
@@ -324,7 +325,7 @@ jobs:
               <GithubIcon size={14} />
               <span className="hidden sm:inline">GitHub</span>
             </a>
-            <a href="/" className="text-[11px] font-bold px-3 sm:px-4 py-2 rounded-full" style={{ background: ACCENT, color: BASE, fontFamily: M }}>
+            <a href="/" className="text-[11px] font-bold px-3 sm:px-4 py-2 rounded-doc" style={{ background: ACCENT, color: 'var(--ink)', fontFamily: M }}>
               Get Amplify
             </a>
           </div>
@@ -341,15 +342,19 @@ jobs:
                 href="https://github.com/Vatsal2006350/amplify-audit"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 mb-5 sm:mb-6 px-3 py-1.5 rounded-full transition-all duration-200 hover:border-[rgba(255,255,255,0.2)]"
-                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+                className="inline-flex items-center gap-2 mb-5 sm:mb-6 px-3 py-1.5 rounded-doc transition-all duration-200 hover:border-[rgba(244,241,234,0.3)]"
+                style={{ background: 'rgba(244,241,234,0.04)', border: `1px solid ${BORDER}` }}
               >
                 <GithubIcon size={12} />
                 <span className="text-[11px]" style={{ color: SECONDARY, fontFamily: M }}>Open source on GitHub</span>
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ background: ACCENT + '14', color: ACCENT, fontFamily: M }}>MIT</span>
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-doc" style={{ background: ACCENT + '14', color: ACCENT, fontFamily: M }}>MIT</span>
               </a>
 
-              <h1 className="text-[clamp(28px,5vw,56px)] font-bold text-white mb-3 sm:mb-4 animate-fade-up" style={{ fontFamily: D, letterSpacing: '-0.04em', lineHeight: 1.1 }}>
+              <div className="mb-5 flex justify-center">
+                <Barcode seed="AMP-AUDIT" tone="ink" height={22} />
+              </div>
+
+              <h1 className="font-display text-[clamp(28px,5vw,56px)] text-dk-text mb-3 sm:mb-4 animate-fade-up" style={{ fontVariationSettings: "'opsz' 96", fontWeight: 540, letterSpacing: '-0.015em', lineHeight: 1.1 }}>
                 Audit any product listing.
               </h1>
               <p className="text-[15px] sm:text-[16px] mb-6 sm:mb-8 animate-fade-up" style={{ color: SECONDARY, animationDelay: '0.1s' }}>
@@ -366,15 +371,15 @@ jobs:
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="allbirds.com, amazon.ae/s?k=nike..."
                 disabled={status === 'loading'}
-                className="w-full h-[48px] sm:h-[56px] pl-4 sm:pl-5 pr-4 text-[14px] sm:text-[15px] rounded-lg focus:outline-none bg-transparent text-white placeholder:text-[rgba(255,255,255,0.3)] disabled:opacity-50"
-                style={{ border: `1px solid rgba(255,255,255,0.12)`, background: 'rgba(255,255,255,0.04)' }}
+                className="w-full h-[48px] sm:h-[56px] pl-4 sm:pl-5 pr-4 text-[14px] sm:text-[15px] rounded-doc focus:outline-none bg-transparent text-dk-text placeholder:text-[rgba(244,241,234,0.35)] disabled:opacity-50"
+                style={{ border: `1px solid rgba(244,241,234,0.2)`, background: 'rgba(244,241,234,0.04)' }}
               />
             </div>
             <button
               type="submit"
               disabled={status === 'loading' || !url.trim()}
-              className="h-[48px] sm:h-[56px] px-6 sm:px-8 rounded-lg text-[13px] font-bold whitespace-nowrap transition-opacity hover:opacity-90 disabled:opacity-50"
-              style={{ background: ACCENT, color: BASE, fontFamily: M }}
+              className="h-[48px] sm:h-[56px] px-6 sm:px-8 rounded-doc text-[13px] font-bold whitespace-nowrap transition-opacity hover:opacity-90 disabled:opacity-50"
+              style={{ background: ACCENT, color: 'var(--ink)', fontFamily: M }}
             >
               {status === 'loading' ? 'Scanning...' : 'Audit'}
             </button>
@@ -389,8 +394,8 @@ jobs:
           )}
 
           {status === 'error' && (
-            <div className="mt-6 px-5 py-3 rounded-lg inline-flex items-center gap-2" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)' }}>
-              <span className="text-[13px]" style={{ color: '#ef4444' }}>{error}</span>
+            <div className="mt-6 px-5 py-3 rounded-doc inline-flex items-center gap-2" style={{ background: 'rgba(200,50,30,0.14)', border: '1px solid rgba(200,50,30,0.3)' }}>
+              <span className="text-[13px]" style={{ color: RED }}>{error}</span>
             </div>
           )}
 
@@ -414,8 +419,8 @@ jobs:
                   <button
                     key={ex.label}
                     onClick={() => setUrl(ex.label)}
-                    className="px-3 py-1.5 rounded-lg text-[11px] transition-all hover:border-[rgba(255,255,255,0.15)]"
-                    style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${BORDER}`, color: SECONDARY, fontFamily: M }}
+                    className="px-3 py-1.5 rounded-doc text-[11px] transition-all hover:border-[rgba(244,241,234,0.3)]"
+                    style={{ background: 'rgba(244,241,234,0.03)', border: `1px solid ${BORDER}`, color: SECONDARY, fontFamily: M }}
                     title={ex.desc}
                   >
                     {ex.label}
@@ -435,45 +440,45 @@ jobs:
             {/* Mode indicator */}
             {result.mode === 'product' && (
               <div className="mb-4 text-center">
-                <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px]" style={{ background: 'rgba(255,255,255,0.04)', border: `1px solid ${BORDER}`, color: MUTED, fontFamily: M }}>
+                <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-doc text-[11px]" style={{ background: 'rgba(244,241,234,0.04)', border: `1px solid ${BORDER}`, color: MUTED, fontFamily: M }}>
                   Single product analysis — paste a store URL or use Brand Search for bulk analysis
                 </span>
               </div>
             )}
             {result.mode === 'brand' && (
               <div className="mb-4 text-center">
-                <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px]" style={{ background: 'rgba(197,241,53,0.06)', border: `1px solid ${ACCENT}22`, color: ACCENT, fontFamily: M }}>
+                <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-doc text-[11px]" style={{ background: 'rgba(255,77,0,0.08)', border: `1px solid ${ACCENT}22`, color: ACCENT, fontFamily: M }}>
                   Detected brand &quot;{result.storeName}&quot; — found {result.productCount} products on Amazon
                 </span>
               </div>
             )}
 
             {/* Overview bar */}
-            <div className="rounded-xl p-6 mb-6" style={{ background: SURFACE, border: `1px solid ${BORDER}` }}>
+            <div className="rounded-doc p-6 mb-6" style={{ background: SURFACE, border: `1px solid ${BORDER}` }}>
               <div className="flex items-center gap-8 flex-wrap">
                 <ScoreBadge score={result.averageScore} size="lg" />
                 <div className="flex-1 min-w-0">
-                  <h2 className="text-[20px] font-bold text-white mb-1" style={{ fontFamily: D }}>
+                  <h2 className="text-[20px] font-bold text-dk-text mb-1" style={{ fontFamily: D }}>
                     {result.storeName || (() => { try { return new URL(result.storeUrl).hostname } catch { return result.storeUrl } })()}
                   </h2>
                   <p className="text-[13px]" style={{ color: MUTED, fontFamily: M }}>
                     {result.productCount} product{result.productCount !== 1 ? 's' : ''} scanned
                     {result.platform !== 'unknown' && (
-                      <span className="ml-2 px-1.5 py-0.5 rounded text-[9px] uppercase" style={{ background: 'rgba(255,255,255,0.06)', color: MUTED }}>
+                      <span className="ml-2 px-1.5 py-0.5 rounded-doc text-[9px] uppercase" style={{ background: 'rgba(244,241,234,0.06)', color: MUTED }}>
                         {result.platform}
                       </span>
                     )}
                     {result.aiPowered && (
-                      <span className="ml-2 px-1.5 py-0.5 rounded text-[9px] uppercase font-bold" style={{ background: 'rgba(197,241,53,0.1)', color: ACCENT }}>
+                      <span className="ml-2 px-1.5 py-0.5 rounded-doc text-[9px] uppercase font-bold" style={{ background: 'rgba(255,77,0,0.12)', color: ACCENT }}>
                         AI-powered
                       </span>
                     )}
                   </p>
                 </div>
                 <div className="grid grid-cols-3 gap-3">
-                  <StatCard label="Good" value={result.scoreDistribution.good} color="#22c55e" />
-                  <StatCard label="Needs Work" value={result.scoreDistribution.needsWork} color="#f59e0b" />
-                  <StatCard label="Poor" value={result.scoreDistribution.poor} color="#ef4444" />
+                  <StatCard label="Good" value={result.scoreDistribution.good} color={GREEN} />
+                  <StatCard label="Needs Work" value={result.scoreDistribution.needsWork} color={ACCENT} />
+                  <StatCard label="Poor" value={result.scoreDistribution.poor} color={RED} />
                 </div>
               </div>
             </div>
@@ -481,18 +486,18 @@ jobs:
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Left: Top Issues */}
               <div className="lg:col-span-1">
-                <div className="rounded-xl p-5" style={{ background: SURFACE, border: `1px solid ${BORDER}` }}>
-                  <h3 className="text-[13px] font-bold text-white mb-4" style={{ fontFamily: D }}>Top Issues</h3>
+                <div className="rounded-doc p-5" style={{ background: SURFACE, border: `1px solid ${BORDER}` }}>
+                  <h3 className="text-[13px] font-bold text-dk-text mb-4" style={{ fontFamily: D }}>Top Issues</h3>
                   {result.topIssues.map((issue) => (
                     <IssueBar key={issue.category} category={issue.category} count={issue.count} total={result.productCount} maxCount={result.topIssues[0]?.count || 1} />
                   ))}
                 </div>
 
-                <div className="mt-4 rounded-xl p-5" style={{ background: 'rgba(197,241,53,0.04)', border: `1px solid ${ACCENT}22` }}>
+                <div className="mt-4 rounded-doc p-5" style={{ background: 'rgba(255,77,0,0.06)', border: `1px solid ${ACCENT}22` }}>
                   <p className="text-[13px] mb-3" style={{ color: SECONDARY }}>
-                    Want to <strong style={{ color: '#fff' }}>auto-fix</strong> these issues across your entire catalog?
+                    Want to <strong style={{ color: 'var(--dk-text)' }}>auto-fix</strong> these issues across your entire catalog?
                   </p>
-                  <a href="/" className="inline-block px-4 py-2 rounded-lg text-[12px] font-bold" style={{ background: ACCENT, color: BASE, fontFamily: M }}>
+                  <a href="/" className="inline-block px-4 py-2 rounded-doc text-[12px] font-bold" style={{ background: ACCENT, color: 'var(--ink)', fontFamily: M }}>
                     Try Amplify Platform
                   </a>
                 </div>
@@ -508,7 +513,7 @@ jobs:
                     { key: 'good', label: `Good (${result.scoreDistribution.good})` },
                   ] as const).map((tab) => (
                     <button key={tab.key} onClick={() => setFilter(tab.key)}
-                      className="px-3 py-1.5 rounded-full text-[11px] font-bold transition-all"
+                      className="px-3 py-1.5 rounded-doc text-[11px] font-bold transition-all"
                       style={{
                         background: filter === tab.key ? ACCENT + '14' : 'transparent',
                         color: filter === tab.key ? ACCENT : MUTED,
@@ -536,20 +541,22 @@ jobs:
         </div>
       )}
 
+      <Perforation tone="ink" />
+
       {/* Open Source + Developer Section */}
-      <div className="px-6 py-20" style={{ borderTop: `1px solid ${BORDER}` }}>
+      <div className="px-6 py-20">
         <div className="max-w-[1100px] mx-auto">
 
           {/* Section header */}
-          <div className="flex items-center gap-3 mb-12" style={{ fontFamily: M }}>
+          <div className="flex items-center gap-3 mb-12">
             <div style={{ width: 24, height: 1, background: ACCENT }} />
-            <span style={{ fontSize: 11, letterSpacing: '0.12em', color: MUTED }}>OPEN SOURCE</span>
+            <span className="type-mono-label" style={{ color: MUTED }}>OPEN SOURCE</span>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             {/* Left: text */}
             <div>
-              <h2 className="text-[clamp(28px,4vw,44px)] font-bold text-white mb-5" style={{ fontFamily: D, letterSpacing: '-0.03em', lineHeight: 1.1 }}>
+              <h2 className="font-display text-[clamp(28px,4vw,44px)] text-dk-text mb-5" style={{ fontVariationSettings: "'opsz' 96", fontWeight: 540, letterSpacing: '-0.015em', lineHeight: 1.1 }}>
                 Built for developers.<br />
                 <span style={{ color: ACCENT }}>Open source.</span>
               </h2>
@@ -581,10 +588,10 @@ jobs:
                   { name: 'SKU Health Scorer', desc: 'Shannon entropy-based fixability scoring for return-driving products' },
                   { name: 'Fix Recommender', desc: 'Deterministic recommendations by issue type — no API key required' },
                 ].map((mod) => (
-                  <div key={mod.name} className="flex items-start gap-3 p-3 rounded-lg" style={{ background: 'rgba(255,255,255,0.02)', border: `1px solid ${BORDER}` }}>
+                  <div key={mod.name} className="flex items-start gap-3 p-3 rounded-doc" style={{ background: 'rgba(244,241,234,0.02)', border: `1px solid ${BORDER}` }}>
                     <div className="w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0" style={{ background: ACCENT }} />
                     <div>
-                      <div className="text-[13px] font-medium text-white">{mod.name}</div>
+                      <div className="text-[13px] font-medium text-dk-text">{mod.name}</div>
                       <div className="text-[12px] mt-0.5" style={{ color: MUTED }}>{mod.desc}</div>
                     </div>
                   </div>
@@ -596,8 +603,8 @@ jobs:
                 <a
                   href="https://github.com/Vatsal2006350/amplify-audit"
                   target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-5 py-3 rounded-lg text-[12px] font-bold transition-opacity hover:opacity-90"
-                  style={{ background: '#fff', color: BASE, fontFamily: M }}
+                  className="flex items-center gap-2 px-5 py-3 rounded-doc text-[12px] font-bold transition-opacity hover:opacity-90"
+                  style={{ background: 'var(--dk-text)', color: 'var(--ink)', fontFamily: M }}
                 >
                   <GithubIcon size={16} />
                   Star on GitHub
@@ -608,14 +615,14 @@ jobs:
             {/* Right: code examples */}
             <div>
               {/* Install command */}
-              <div className="rounded-lg p-4 mb-4 flex items-center justify-between" style={{ background: '#0a0a0a', border: `1px solid ${ACCENT}33` }}>
+              <div className="rounded-doc p-4 mb-4 flex items-center justify-between" style={{ background: SURFACE, border: `1px solid ${ACCENT}33` }}>
                 <div className="flex items-center gap-3">
                   <span className="text-[11px]" style={{ color: ACCENT, fontFamily: M }}>$</span>
-                  <code className="text-[14px]" style={{ color: '#fff', fontFamily: M }}>npm install amplify-audit</code>
+                  <code className="text-[14px]" style={{ color: 'var(--dk-text)', fontFamily: M }}>npm install amplify-audit</code>
                 </div>
                 <button
                   onClick={() => { navigator.clipboard.writeText('npm install amplify-audit') }}
-                  className="text-[10px] px-2 py-1 rounded transition-all hover:opacity-80"
+                  className="text-[10px] px-2 py-1 rounded-doc transition-all hover:opacity-80"
                   style={{ color: MUTED, fontFamily: M }}
                 >
                   Copy
@@ -630,7 +637,7 @@ jobs:
                   { key: 'ci', label: 'CI/CD' },
                 ] as const).map((tab) => (
                   <button key={tab.key} onClick={() => setActiveTab(tab.key)}
-                    className="px-3 py-1.5 rounded text-[11px] font-bold transition-all"
+                    className="px-3 py-1.5 rounded-doc text-[11px] font-bold transition-all"
                     style={{
                       background: activeTab === tab.key ? ACCENT + '14' : 'transparent',
                       color: activeTab === tab.key ? ACCENT : MUTED,
@@ -645,10 +652,10 @@ jobs:
               <CodeBlock code={codeExamples[activeTab]} language={activeTab === 'ci' ? 'yaml' : activeTab === 'cli' ? 'bash' : 'typescript'} />
 
               {/* Architecture note */}
-              <div className="mt-6 p-4 rounded-lg" style={{ background: 'rgba(197,241,53,0.04)', border: `1px solid ${ACCENT}22` }}>
-                <div className="text-[11px] uppercase tracking-wider mb-2" style={{ color: ACCENT, fontFamily: M }}>Open-core model</div>
+              <div className="mt-6 p-4 rounded-doc" style={{ background: 'rgba(255,77,0,0.06)', border: `1px solid ${ACCENT}22` }}>
+                <div className="type-mono-label mb-2" style={{ color: ACCENT }}>Open-core model</div>
                 <p className="text-[12px] leading-relaxed" style={{ color: SECONDARY }}>
-                  The audit engine is free and open source. The full <a href="/" className="underline" style={{ color: '#fff' }}>Amplify platform</a> adds AI-powered auto-fixes, Shopify sync, return tracking, and multi-channel management.
+                  The audit engine is free and open source. The full <a href="/" className="underline" style={{ color: 'var(--dk-text)' }}>Amplify platform</a> adds AI-powered auto-fixes, Shopify sync, return tracking, and multi-channel management.
                 </p>
               </div>
             </div>
@@ -656,19 +663,10 @@ jobs:
         </div>
       </div>
 
+      <Perforation tone="ink" />
+
       {/* Footer */}
-      <div className="px-6 py-8 text-center" style={{ borderTop: `1px solid ${BORDER}` }}>
-        <div className="flex items-center justify-center gap-6 flex-wrap">
-          <a href="/" className="flex items-center gap-2">
-            <AmplifyLogo size={16} />
-            <span className="text-[11px] font-semibold text-white" style={{ fontFamily: D }}>Amplify</span>
-          </a>
-          <a href="https://github.com/Vatsal2006350/amplify-audit" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[11px] transition-opacity hover:opacity-80" style={{ color: MUTED, fontFamily: M }}>
-            <GithubIcon size={11} /> GitHub
-          </a>
-          <span className="text-[11px]" style={{ color: MUTED, fontFamily: M }}>MIT License</span>
-        </div>
-      </div>
+      <SiteFooter tone="ink" />
     </div>
   )
 }

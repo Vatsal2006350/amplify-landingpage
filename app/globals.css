@@ -3,14 +3,42 @@
 @tailwind utilities;
 
 :root {
-  --font-inter: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-display: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-mono: "SFMono-Regular", "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+  /* paper world */
+  --paper: #F4F1EA;
+  --paper-raised: #FBF9F4;
+  --paper-shade: #ECE8DE;
+  --ink: #141311;
+  --ink-muted: rgba(20, 19, 17, 0.64);
+  --ink-faint: rgba(20, 19, 17, 0.4);
+  --ledger: #D8D3C8;
+  --ledger-strong: #B8B2A4;
+  --orange: #FF4D00;
+  --stamp: #C8321E;
+  /* dark "stamp" sections */
+  --dk-bg: #141311;
+  --dk-raised: #1C1A17;
+  --dk-text: #F4F1EA;
+  --dk-muted: rgba(244, 241, 234, 0.6);
+  --dk-rule: rgba(244, 241, 234, 0.16);
+  /* type: --font-display / --font-sans / --font-mono come from next/font in layout.tsx */
+  --font-body: var(--font-sans);
+  --font-inter: var(--font-sans); /* legacy alias — older pages read this */
+  /* motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-thunk: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@property --spin {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
 }
 
 html,
 body {
-  font-family: var(--font-inter);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
 }
 
 * {
@@ -19,21 +47,123 @@ body {
 }
 
 ::selection {
-  background: rgba(24, 115, 106, 0.2);
-  color: #17212b;
+  background: rgba(255, 77, 0, 0.22);
+  color: var(--ink);
 }
 
-.amplify-email[data-tone="light"]::placeholder {
-  color: #8a9691;
+/* paper grain — single fixed overlay, never animated */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-.amplify-email[data-tone="dark"]::placeholder {
-  color: rgba(255, 255, 255, 0.46);
+/* type utilities */
+.type-hero {
+  font-family: var(--font-display), Georgia, serif;
+  font-variation-settings: 'opsz' 144, 'SOFT' 0, 'WONK' 1;
+  font-weight: 560;
+  letter-spacing: -0.015em;
+  line-height: 0.96;
+}
+
+.type-h2 {
+  font-family: var(--font-display), Georgia, serif;
+  font-variation-settings: 'opsz' 72, 'SOFT' 0, 'WONK' 0;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.02;
+}
+
+.type-h3 {
+  font-family: var(--font-display), Georgia, serif;
+  font-variation-settings: 'opsz' 28, 'SOFT' 0, 'WONK' 0;
+  font-weight: 520;
+  line-height: 1.15;
+}
+
+.type-hero em,
+.type-h2 em,
+.type-h3 em {
+  font-style: italic;
+  font-variation-settings: 'opsz' 144, 'SOFT' 30, 'WONK' 1;
+}
+
+.type-mono-label {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* letterpress buttons */
+.btn-press {
+  box-shadow: 3px 3px 0 var(--ink);
+  transition: transform 0.15s var(--ease-out), box-shadow 0.15s var(--ease-out);
+}
+.btn-press:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.btn-press:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+
+/* hard document shadow for raised cards */
+.doc-shadow {
+  box-shadow: 4px 4px 0 rgba(20, 19, 17, 0.9);
+}
+
+/* agent-activity conic ring */
+@keyframes spin-ring {
+  to {
+    --spin: 360deg;
+  }
+}
+.conic-ring {
+  background: conic-gradient(from var(--spin), var(--orange), transparent 70%);
+  animation: spin-ring 1.6s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .conic-ring {
+    animation: none;
+  }
+}
+
+/* ledger ruled-paper background */
+.ruled-lines {
+  background-image: repeating-linear-gradient(
+    transparent 0 31px,
+    var(--ledger) 31px 32px
+  );
+}
+
+.amplify-email[data-tone='light']::placeholder {
+  color: var(--ink-faint);
+}
+
+.amplify-email[data-tone='dark']::placeholder {
+  color: rgba(244, 241, 234, 0.46);
 }
 
 @keyframes hero-demo-progress {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 
 .hero-demo-progress {
@@ -54,26 +184,36 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 2px;
+  background: var(--ledger-strong);
+  border-radius: 0;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--ink-faint);
 }
 
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .animate-fade-up {
   opacity: 0;
-  animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fade-up 0.7s var(--ease-out) forwards;
 }
 
 .animate-fade-in {
@@ -81,29 +221,10 @@ body {
   animation: fade-in 0.6s ease-out forwards;
 }
 
-/* Testimonial futuristic styles */
-@keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-@keyframes glow-pulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 0.9; }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-
-.animate-float {
-  animation: float 4s ease-in-out infinite;
-}
-
-.testimonial-grid-bg {
-  background-image:
-    linear-gradient(rgba(29, 122, 109, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(29, 122, 109, 0.03) 1px, transparent 1px);
-  background-size: 48px 48px;
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-fade-in {
+    animation: none;
+    opacity: 1;
+  }
 }

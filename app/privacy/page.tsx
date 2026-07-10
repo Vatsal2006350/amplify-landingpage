@@ -1,18 +1,11 @@
 import Link from 'next/link'
+import { DocHeader, Rule } from '../../components/doc/chrome'
+import { SiteFooter } from '../../components/sections/footer'
 
 export const metadata = {
   title: 'Privacy Policy | Amplify',
   description: 'Amplify privacy policy: how we collect, use, and protect your data.',
 }
-
-const ACCENT = '#C5F135'
-const BASE = '#080808'
-const BORDER = 'rgba(255,255,255,0.12)'
-const GLASS = 'rgba(255,255,255,0.065)'
-const MUTED = 'rgba(255,255,255,0.58)'
-const SOFT = 'rgba(255,255,255,0.76)'
-const D = 'var(--font-display)'
-const M = 'var(--font-mono)'
 
 const SECTIONS = [
   {
@@ -98,97 +91,109 @@ const SECTIONS = [
 
 function Logo({ size = 28 }: { size?: number }) {
   return (
-    <div className="grid shrink-0 place-items-center rounded-lg bg-black" style={{ width: size, height: size }}>
+    <div
+      className="grid shrink-0 place-items-center rounded-doc"
+      style={{ width: size, height: size, background: 'var(--ink)' }}
+    >
       <img src="/logo.png" alt="Amplify" className="h-[72%] w-[72%] object-contain" />
     </div>
   )
 }
 
-function SectionLabel({ label }: { label: string }) {
+function SectionHeading({ index, title }: { index: number; title: string }) {
   return (
-    <div className="flex items-center gap-3">
-      <span className="h-px w-9" style={{ background: ACCENT }} />
-      <span className="text-[11px] font-semibold uppercase tracking-[0.16em]" style={{ color: MUTED, fontFamily: M }}>
-        {label}
+    <div className="flex items-baseline gap-4">
+      <span className="type-mono-label" style={{ color: 'var(--ink-faint)' }}>
+        § {String(index).padStart(2, '0')}
       </span>
+      <h2
+        className="font-display text-[22px]"
+        style={{ fontVariationSettings: "'opsz' 28", fontWeight: 520, lineHeight: 1.15, color: 'var(--ink)' }}
+      >
+        {title.replace(/^\d+\.\s*/, '')}
+      </h2>
     </div>
   )
 }
 
 export default function PrivacyPolicyPage() {
   return (
-    <main className="min-h-screen" style={{ background: BASE }}>
-      <nav className="sticky top-0 z-50 border-b px-4 py-3 backdrop-blur-2xl" style={{ background: 'rgba(8,8,8,0.82)', borderColor: BORDER }}>
+    <main className="min-h-screen" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
+      {/* Minimal paper header */}
+      <nav className="px-4 py-4 sm:px-6" style={{ borderBottom: '1px solid var(--ledger)', background: 'var(--paper)' }}>
         <div className="mx-auto flex max-w-[920px] items-center justify-between gap-4">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2.5">
             <Logo />
-            <span className="text-[14px] font-semibold text-white" style={{ fontFamily: D }}>Amplify</span>
+            <span className="font-display text-[17px]" style={{ fontVariationSettings: "'opsz' 28", fontWeight: 540 }}>
+              Amplify
+            </span>
           </Link>
-          <Link href="/" className="rounded-lg px-3 py-2 text-[11px] font-bold uppercase transition-opacity hover:opacity-90" style={{ background: ACCENT, color: BASE, fontFamily: M }}>
-            Back home
+          <Link href="/" className="type-mono-label transition-opacity hover:opacity-70" style={{ color: 'var(--ink-muted)' }}>
+            ← Back home
           </Link>
         </div>
       </nav>
 
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px)', backgroundSize: '54px 54px' }} />
-        <div className="absolute inset-x-0 top-0 h-[520px] pointer-events-none" style={{ background: 'linear-gradient(135deg, rgba(197,241,53,0.15), transparent 34%, rgba(86,142,255,0.08) 72%, transparent)' }} />
+      <section className="mx-auto max-w-[920px] px-5 py-12 sm:px-6 sm:py-16">
+        <DocHeader index="LEGAL / PRIVACY POLICY" meta={['LAST UPDATED 2026-03-24']} />
 
-        <div className="relative mx-auto max-w-[920px] px-5 py-16 sm:px-6 sm:py-24">
-          <SectionLabel label="Legal" />
-          <h1 className="mt-7 max-w-[720px] text-[clamp(38px,7vw,78px)] font-bold leading-[0.98] text-white" style={{ fontFamily: D }}>
-            Privacy Policy
-          </h1>
-          <p className="mt-5 max-w-[620px] text-[16px] leading-[1.75]" style={{ color: SOFT }}>
-            How Amplify handles account data, connected commerce data, integrations, and operational workflows.
-          </p>
-          <p className="mt-4 text-[11px] uppercase" style={{ color: MUTED, fontFamily: M }}>
-            Last updated: March 24, 2026
-          </p>
+        <h1 className="type-h2 mt-10 max-w-[720px] text-[clamp(38px,6vw,68px)]">Privacy Policy</h1>
+        <p className="mt-5 max-w-[620px] text-[16px]" style={{ fontFamily: 'var(--font-body)', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
+          How Amplify handles account data, connected commerce data, integrations, and operational workflows.
+        </p>
+        <p className="type-mono-label mt-4" style={{ color: 'var(--ink-faint)' }}>
+          Last updated: March 24, 2026
+        </p>
 
-          <div className="mt-10 overflow-hidden rounded-xl border" style={{ borderColor: BORDER, background: GLASS, boxShadow: '0 34px 110px rgba(0,0,0,0.32)' }}>
-            {SECTIONS.map((section) => (
-              <section key={section.title} className="border-b p-5 last:border-b-0 sm:p-7" style={{ borderColor: BORDER }}>
-                <h2 className="text-[20px] font-semibold text-white" style={{ fontFamily: D }}>{section.title}</h2>
-                <div className="mt-4 space-y-4">
-                  {section.body.map((paragraph) => (
-                    <p key={paragraph} className="text-[14px] leading-[1.8]" style={{ color: SOFT }}>
-                      {paragraph}
-                    </p>
-                  ))}
-                  {section.bullets && (
-                    <ul className="space-y-2">
-                      {section.bullets.map((item) => (
-                        <li key={item} className="flex gap-3 text-[14px] leading-[1.65]" style={{ color: SOFT }}>
-                          <span className="mt-[0.62em] h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: ACCENT }} />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              </section>
-            ))}
+        <div className="mt-12">
+          {SECTIONS.map((section, i) => (
+            <section key={section.title}>
+              <Rule variant="single" className="mb-8" />
+              <SectionHeading index={i + 1} title={section.title} />
+              <div className="mt-4 space-y-4 pb-10 sm:pl-14">
+                {section.body.map((paragraph) => (
+                  <p key={paragraph} className="max-w-[640px] text-[15px]" style={{ fontFamily: 'var(--font-body)', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
+                    {paragraph}
+                  </p>
+                ))}
+                {section.bullets && (
+                  <ul className="space-y-2">
+                    {section.bullets.map((item) => (
+                      <li key={item} className="flex max-w-[640px] gap-3 text-[15px]" style={{ fontFamily: 'var(--font-body)', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
+                        <span className="type-mono-label shrink-0" style={{ marginTop: '0.35em', color: 'var(--ink)' }} aria-hidden>
+                          —
+                        </span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </section>
+          ))}
 
-            <section className="p-5 sm:p-7">
-              <h2 className="text-[20px] font-semibold text-white" style={{ fontFamily: D }}>10. Contact Us</h2>
-              <p className="mt-4 text-[14px] leading-[1.8]" style={{ color: SOFT }}>
+          <section>
+            <Rule variant="single" className="mb-8" />
+            <SectionHeading index={10} title="10. Contact Us" />
+            <div className="mt-4 pb-10 sm:pl-14">
+              <p className="max-w-[640px] text-[15px]" style={{ fontFamily: 'var(--font-body)', lineHeight: 1.7, color: 'var(--ink-muted)' }}>
                 If you have questions about this Privacy Policy or our data practices, contact us at{' '}
-                <a href="mailto:svatsal64@gmail.com" className="font-semibold underline decoration-[rgba(197,241,53,0.45)] underline-offset-4 transition-opacity hover:opacity-80" style={{ color: ACCENT }}>
+                <a
+                  href="mailto:svatsal64@gmail.com"
+                  className="font-semibold underline underline-offset-4 transition-opacity hover:opacity-80"
+                  style={{ color: 'var(--ink)', textDecorationColor: 'var(--orange)' }}
+                >
                   svatsal64@gmail.com
                 </a>.
               </p>
-            </section>
-          </div>
+            </div>
+          </section>
+
+          <Rule variant="double" />
         </div>
       </section>
 
-      <footer className="border-t py-8" style={{ borderColor: BORDER }}>
-        <div className="mx-auto flex max-w-[920px] items-center justify-between gap-4 px-5 text-[11px] sm:px-6" style={{ color: MUTED, fontFamily: M }}>
-          <span>&copy; {new Date().getFullYear()} Amplify. All rights reserved.</span>
-          <Link href="/" className="transition-colors hover:text-white">Home</Link>
-        </div>
-      </footer>
+      <SiteFooter />
     </main>
   )
 }

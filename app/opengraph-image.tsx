@@ -19,45 +19,83 @@ export default async function Image() {
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: '#080808',
-          gap: 32,
+          background: '#F4F1EA',
+          color: '#141311',
+          padding: 56,
         }}
       >
-        <img
-          src={logoBase64}
-          width={180}
-          height={180}
-          style={{ borderRadius: 24 }}
-        />
+        {/* masthead rules */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+          <div style={{ height: 3, background: '#141311' }} />
+          <div style={{ height: 1, background: '#B8B2A4' }} />
+        </div>
         <div
           style={{
             display: 'flex',
-            flexDirection: 'column',
+            justifyContent: 'space-between',
             alignItems: 'center',
-            gap: 12,
+            marginTop: 14,
+            fontSize: 18,
+            letterSpacing: '0.1em',
+            color: 'rgba(20,19,17,0.55)',
           }}
         >
-          <div
+          <span>00 / MANIFEST OF GOODS</span>
+          <span>MANIFEST NO. AMP-2026-184</span>
+        </div>
+
+        <div
+          style={{
+            display: 'flex',
+            flex: 1,
+            alignItems: 'center',
+            gap: 48,
+            marginTop: 8,
+          }}
+        >
+          <img src={logoBase64} width={148} height={148} style={{ borderRadius: 4 }} />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div
+              style={{
+                fontSize: 96,
+                fontWeight: 700,
+                letterSpacing: '-0.02em',
+                color: '#141311',
+              }}
+            >
+              Amplify
+            </div>
+            <div style={{ fontSize: 30, color: 'rgba(20,19,17,0.64)' }}>
+              AI Workspace for Brand Operators
+            </div>
+          </div>
+        </div>
+
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderTop: '1px solid #B8B2A4',
+            paddingTop: 18,
+            fontSize: 18,
+            letterSpacing: '0.1em',
+          }}
+        >
+          <span style={{ color: 'rgba(20,19,17,0.55)' }}>
+            CONTENTS: LISTINGS · DECISIONS · ACTIONS
+          </span>
+          <span
             style={{
-              fontSize: 52,
+              color: '#C8321E',
+              border: '3px solid #C8321E',
+              padding: '6px 16px',
               fontWeight: 700,
-              color: '#C5F135',
-              letterSpacing: '-0.02em',
+              transform: 'rotate(-4deg)',
             }}
           >
-            Amplify
-          </div>
-          <div
-            style={{
-              fontSize: 26,
-              color: 'rgba(255,255,255,0.7)',
-              letterSpacing: '0.02em',
-            }}
-          >
-            AI Workspace for Brand Operators
-          </div>
+            APPROVED — HUMAN
+          </span>
         </div>
       </div>
     ),
