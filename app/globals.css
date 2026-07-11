@@ -41,6 +41,11 @@ body {
   color: var(--ink);
 }
 
+/* no element may create horizontal page scroll (stamps, rotated cards, marquees) */
+body {
+  overflow-x: clip;
+}
+
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

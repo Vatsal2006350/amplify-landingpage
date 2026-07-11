@@ -79,7 +79,7 @@ const NOTE: CSSProperties = {
 
 const columnHeader = (cols: [string, string][]) => (
   <div
-    className="grid grid-cols-12 gap-3 px-3 py-2"
+    className="grid min-w-[520px] grid-cols-12 gap-3 px-3 py-2"
     style={{ borderBottom: '1px solid var(--ledger-strong)' }}
   >
     {cols.map(([label, span]) => (
@@ -114,7 +114,7 @@ export function ProductFlowWorkbench() {
 
   const renderListingOps = () => (
     <div className="grid gap-4 xl:grid-cols-[0.9fr_1.1fr]">
-      <section className="rounded-doc p-4" style={PANEL}>
+      <section className="rounded-doc min-w-0 p-4" style={PANEL}>
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div>
             <div className="type-mono-label" style={{ color: 'var(--ink-muted)' }}>Template Generator</div>
@@ -129,7 +129,7 @@ export function ProductFlowWorkbench() {
           <Metric value="37" label="fields" />
           <Metric value="4" label="review" />
         </div>
-        <div className="mt-4 overflow-hidden rounded-doc" style={{ border: '1px solid var(--ledger)' }}>
+        <div className="mt-4 overflow-x-auto rounded-doc" style={{ border: '1px solid var(--ledger)' }}>
           {columnHeader([
             ['Field', 'col-span-4'],
             ['Source', 'col-span-3'],
@@ -144,7 +144,7 @@ export function ProductFlowWorkbench() {
           ].map(([field, source, value, status]) => (
             <div
               key={field}
-              className="grid grid-cols-12 gap-3 px-3 py-3 text-[12px] last:border-b-0"
+              className="grid min-w-[520px] grid-cols-12 gap-3 px-3 py-3 text-[12px] last:border-b-0"
               style={{ borderBottom: '1px solid var(--ledger)' }}
             >
               <span className="col-span-4 font-semibold" style={{ color: 'var(--ink)' }}>{field}</span>
@@ -156,7 +156,7 @@ export function ProductFlowWorkbench() {
         </div>
       </section>
 
-      <section className="rounded-doc p-4" style={PANEL}>
+      <section className="rounded-doc min-w-0 p-4" style={PANEL}>
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div>
             <div className="type-mono-label" style={{ color: 'var(--ink-muted)' }}>Workbook preview</div>
@@ -183,7 +183,7 @@ export function ProductFlowWorkbench() {
             ))}
           </div>
         </div>
-        <div className="overflow-hidden rounded-doc" style={{ border: '1px solid var(--ledger)' }}>
+        <div className="overflow-x-auto rounded-doc" style={{ border: '1px solid var(--ledger)' }}>
           {columnHeader([
             ['SKU', 'col-span-3'],
             ['Product', 'col-span-4'],
@@ -198,7 +198,7 @@ export function ProductFlowWorkbench() {
           ].map((row, index) => (
             <div
               key={row[0]}
-              className="grid grid-cols-12 gap-3 px-3 py-3 text-[12px] last:border-b-0"
+              className="grid min-w-[520px] grid-cols-12 gap-3 px-3 py-3 text-[12px] last:border-b-0"
               style={{
                 borderBottom: '1px solid var(--ledger)',
                 background: index === 0 ? 'var(--paper-shade)' : 'var(--paper-raised)',
@@ -223,7 +223,7 @@ export function ProductFlowWorkbench() {
 
   const renderCompanyBrain = () => (
     <div className="grid gap-4 xl:grid-cols-[0.95fr_1.05fr]">
-      <section className="rounded-doc p-4" style={PANEL}>
+      <section className="rounded-doc min-w-0 p-4" style={PANEL}>
         <div className="mb-4 flex items-center justify-between gap-3">
           <div>
             <div className="type-mono-label" style={{ color: 'var(--ink-muted)' }}>Company Brain</div>
@@ -275,7 +275,7 @@ export function ProductFlowWorkbench() {
         </div>
       </section>
 
-      <section className="rounded-doc p-4" style={PANEL}>
+      <section className="rounded-doc min-w-0 p-4" style={PANEL}>
         <div className="mb-4 flex items-center justify-between gap-3">
           <div>
             <div className="type-mono-label" style={{ color: 'var(--ink-muted)' }}>Action queue</div>
@@ -314,7 +314,7 @@ export function ProductFlowWorkbench() {
 
   const renderInventory = () => (
     <div className="grid gap-4 xl:grid-cols-[1fr_0.82fr]">
-      <section className="rounded-doc p-4" style={PANEL}>
+      <section className="rounded-doc min-w-0 p-4" style={PANEL}>
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div>
             <div className="type-mono-label" style={{ color: 'var(--ink-muted)' }}>Inventory ledger</div>
@@ -330,7 +330,7 @@ export function ProductFlowWorkbench() {
           <Metric value="18" label="days cover" />
           <Metric value="42K" label="PO draft" />
         </div>
-        <div className="mt-4 overflow-hidden rounded-doc" style={{ border: '1px solid var(--ledger)' }}>
+        <div className="mt-4 overflow-x-auto rounded-doc" style={{ border: '1px solid var(--ledger)' }}>
           {columnHeader([
             ['SKU', 'col-span-4'],
             ['Channel', 'col-span-2'],
@@ -345,7 +345,7 @@ export function ProductFlowWorkbench() {
           ].map((row, index) => (
             <div
               key={`${row[0]}-${row[1]}`}
-              className="grid grid-cols-12 gap-3 px-3 py-3 text-[12px] last:border-b-0"
+              className="grid min-w-[520px] grid-cols-12 gap-3 px-3 py-3 text-[12px] last:border-b-0"
               style={{
                 borderBottom: '1px solid var(--ledger)',
                 background: index === 0 ? 'var(--paper-shade)' : 'var(--paper-raised)',
@@ -360,7 +360,7 @@ export function ProductFlowWorkbench() {
         </div>
       </section>
 
-      <section className="rounded-doc p-4" style={PANEL}>
+      <section className="rounded-doc min-w-0 p-4" style={PANEL}>
         <div className="mb-4">
           <div className="type-mono-label" style={{ color: 'var(--ink-muted)' }}>Inventory Agent</div>
           <h3 className="font-display mt-1" style={{ fontSize: 20, fontWeight: 540, color: 'var(--ink)' }}>
@@ -396,7 +396,7 @@ export function ProductFlowWorkbench() {
 
   const renderApprovals = () => (
     <div className="grid gap-4 xl:grid-cols-[0.82fr_1.18fr]">
-      <section className="rounded-doc p-4" style={PANEL}>
+      <section className="rounded-doc min-w-0 p-4" style={PANEL}>
         <div className="mb-4">
           <div className="type-mono-label" style={{ color: 'var(--ink-muted)' }}>Approval inbox</div>
           <h3 className="font-display mt-1" style={{ fontSize: 24, fontWeight: 540, color: 'var(--ink)' }}>
@@ -417,7 +417,7 @@ export function ProductFlowWorkbench() {
         </div>
       </section>
 
-      <section className="rounded-doc p-4" style={PANEL}>
+      <section className="rounded-doc min-w-0 p-4" style={PANEL}>
         <div className="mb-4 flex items-center justify-between">
           <h3 className="font-display" style={{ fontSize: 20, fontWeight: 540, color: 'var(--ink)' }}>Pending decisions</h3>
           <StatusBracket status="seeded demo" />

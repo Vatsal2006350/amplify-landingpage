@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { m, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { Barcode, Rule, SizeRunGrid } from '../doc/chrome'
 import { Stamp } from '../doc/stamp'
@@ -82,6 +82,15 @@ function SpecCard() {
 export function Hero() {
   const sleeveRef = useRef<HTMLDivElement>(null)
   const reduced = useReducedMotion()
+  const [isDesktop, setIsDesktop] = useState(false)
+
+  useEffect(() => {
+    const media = window.matchMedia('(min-width: 768px)')
+    const update = () => setIsDesktop(media.matches)
+    update()
+    media.addEventListener('change', update)
+    return () => media.removeEventListener('change', update)
+  }, [])
   const { scrollYProgress } = useScroll({
     target: sleeveRef,
     offset: ['start end', 'start 25%'],
@@ -177,15 +186,26 @@ export function Hero() {
           >
             <m.span
               className="type-mono-label"
-              style={{ fontSize: 9, color: 'var(--ink-faint)', opacity: reduced ? 1 : sleeveOpacity }}
+              style={{
+                fontSize: 9,
+                color: 'var(--ink-faint)',
+                opacity: reduced || !isDesktop ? 1 : sleeveOpacity,
+              }}
             >
               ENCLOSURE: PLATE 01 — LIVE PRODUCT FILM
             </m.span>
           </div>
-          {reduced ? (
-            <div className="relative">
+          {reduced || !isDesktop ? (
+            /* mobile: plain in-view reveal — the clip-path sleeve scrub is desktop-only */
+            <m.div
+              className="relative"
+              initial={reduced ? false : { opacity: 0, y: 20 }}
+              whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            >
               <HeroConsole />
-            </div>
+            </m.div>
           ) : (
             <m.div
               className="relative"

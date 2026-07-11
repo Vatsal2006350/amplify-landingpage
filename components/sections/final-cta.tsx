@@ -7,7 +7,7 @@ import { WaitlistForm } from '../waitlist-form'
 
 export function FinalCta() {
   return (
-    <section id="cta" className="scroll-mt-[80px]">
+    <section id="cta" className="scroll-mt-[80px] overflow-x-clip">
       <Perforation label="— DETACH AND RETAIN —" />
       <div style={{ background: 'var(--dk-bg)', color: 'var(--dk-text)' }}>
         <div className="mx-auto grid max-w-[1200px] gap-12 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-12 lg:items-center">
@@ -20,8 +20,11 @@ export function FinalCta() {
               >
                 <MaskedWords text="Bring us your messiest workflow." em={['messiest']} />
               </h2>
-              <div className="pointer-events-none absolute -right-2 -top-10 sm:right-10 sm:-top-6">
+              <div className="pointer-events-none absolute right-4 -top-8 hidden sm:block lg:right-10 lg:-top-6">
                 <Stamp label="APPROVED — HUMAN" animated scale={1.35} rotate={-8} />
+              </div>
+              <div className="mt-6 sm:hidden">
+                <Stamp label="APPROVED — HUMAN" animated scale={0.8} rotate={-4} />
               </div>
             </div>
             <p className="mt-6 max-w-[480px] text-[16px] leading-[1.7]" style={{ color: 'var(--dk-muted)' }}>

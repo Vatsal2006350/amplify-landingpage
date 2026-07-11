@@ -324,11 +324,19 @@ export function ChipPile() {
     document.addEventListener('visibilitychange', onVisibility)
 
     const startDrag = (index: number) => (e: PointerEvent) => {
-      if (isMobile) return
+      const b = bodies.current[index]
+      if (isMobile) {
+        // tap-to-toss: impart an upward kick with a little sideways spin
+        const seed = CHIP_SEEDS[index % CHIP_SEEDS.length]
+        b.py = b.y + 14 + seed * 8
+        b.px = b.x - (seed - 0.5) * 12
+        b.vrot += (seed - 0.5) * 6
+        wake()
+        return
+      }
       e.preventDefault()
       dragIndex.current = index
       const rect = container.getBoundingClientRect()
-      const b = bodies.current[index]
       pointer.current = {
         x: e.clientX - rect.left - b.w / 2,
         y: e.clientY - rect.top - b.h / 2,
@@ -367,7 +375,7 @@ export function ChipPile() {
           </h2>
           {!reduced && (
             <p className="type-mono-label" style={{ fontSize: 10, color: 'var(--ink-faint)' }}>
-              {isMobile ? 'CONTENTS SETTLE ON ARRIVAL' : 'GO AHEAD — PICK ONE UP'}
+              {isMobile ? 'TAP A TAG TO TOSS IT' : 'GO AHEAD — PICK ONE UP'}
             </p>
           )}
         </div>
