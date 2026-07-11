@@ -145,7 +145,14 @@ export function MaskedWords({
           return (
             <span
               key={i}
-              style={{ display: 'inline-block', overflow: 'hidden', verticalAlign: 'bottom' }}
+              style={{
+                display: 'inline-block',
+                overflow: 'hidden',
+                verticalAlign: 'bottom',
+                // breathing room so italic descenders/overshoot (y, f) aren't clipped by the mask
+                padding: '0.08em 0.09em 0.14em 0.04em',
+                margin: '-0.08em -0.09em -0.14em -0.04em',
+              }}
             >
               <m.span
                 style={{ display: 'inline-block' }}

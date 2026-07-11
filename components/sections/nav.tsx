@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { AnimatePresence, m } from 'motion/react'
 import { NAV_LINKS, USE_CASE_LINKS } from '../../lib/home-data'
 import { MANIFEST_NO, ORIGIN } from '../../lib/manifest'
 import { Magnetic } from '../motion-primitives'
@@ -58,29 +59,60 @@ export function SiteNav({
       </div>
 
       <div
-        className="sticky top-0 z-50 transition-all duration-300"
+        className="sticky top-0 z-50"
         style={{
           background: 'rgba(244, 241, 234, 0.96)',
           borderBottom: '1px solid var(--ledger-strong)',
         }}
       >
-        <nav
-          className="mx-auto flex w-full max-w-[1200px] items-center justify-between px-4 transition-all duration-300 sm:px-6"
-          style={{ height: scrolled ? 52 : 60 }}
+        <m.nav
+          className="mx-auto flex w-full max-w-[1200px] items-center justify-between px-4 sm:px-6"
+          animate={{ height: scrolled ? 52 : 60 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         >
           <a href="/" className="flex min-w-0 items-center gap-2.5">
-            <Logo size={scrolled ? 24 : 28} />
+            <m.span
+              className="inline-flex"
+              animate={{ scale: scrolled ? 0.86 : 1, rotate: scrolled ? -4 : 0 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            >
+              <Logo size={28} />
+            </m.span>
             <span
               className="font-display text-[17px]"
               style={{ fontWeight: 560, color: 'var(--ink)' }}
             >
               Amplify
             </span>
-            <span
-              className="type-mono-label hidden lg:inline"
-              style={{ fontSize: 9, color: 'var(--ink-faint)' }}
-            >
-              · FREIGHT &amp; LISTING CO.
+            {/* the doc-strip stamps itself into the bar once it scrolls away */}
+            <span className="relative hidden h-4 w-[190px] overflow-hidden lg:block" aria-hidden>
+              <AnimatePresence mode="popLayout" initial={false}>
+                {scrolled ? (
+                  <m.span
+                    key="manifest"
+                    className="type-mono-label absolute left-0 top-0 whitespace-nowrap"
+                    style={{ fontSize: 9, color: 'var(--orange)', fontWeight: 700 }}
+                    initial={{ y: 14, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -14, opacity: 0 }}
+                    transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+                  >
+                    · {MANIFEST_NO}
+                  </m.span>
+                ) : (
+                  <m.span
+                    key="tagline"
+                    className="type-mono-label absolute left-0 top-0 whitespace-nowrap"
+                    style={{ fontSize: 9, color: 'var(--ink-faint)' }}
+                    initial={{ y: 14, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -14, opacity: 0 }}
+                    transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+                  >
+                    · FREIGHT &amp; LISTING CO.
+                  </m.span>
+                )}
+              </AnimatePresence>
             </span>
           </a>
 
@@ -221,7 +253,15 @@ export function SiteNav({
               </svg>
             </button>
           </div>
-        </nav>
+        </m.nav>
+        {/* thick rule draws itself across the bar on first scroll — thick-thin masthead effect */}
+        <m.div
+          aria-hidden
+          className="h-[2px] origin-left"
+          style={{ background: 'var(--ink)' }}
+          animate={{ scaleX: scrolled ? 1 : 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        />
       </div>
 
       {mobileOpen && (

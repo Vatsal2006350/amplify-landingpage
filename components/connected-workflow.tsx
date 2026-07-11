@@ -1,13 +1,12 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   animate,
   m,
+  useInView,
   useMotionValue,
   useReducedMotion,
-  useScroll,
-  useSpring,
   useTransform,
 } from 'motion/react'
 import { StatusBracket } from './doc/chrome'
@@ -87,25 +86,32 @@ function SourceRow({ item, index }: { item: (typeof SOURCES)[number]; index: num
 export function ConnectedWorkflow() {
   const containerRef = useRef<HTMLDivElement>(null)
   const reduceMotion = useReducedMotion()
-  const { scrollYProgress } = useScroll({ target: containerRef, offset: ['start end', 'end start'] })
-  const scrollProgress = useSpring(scrollYProgress, { stiffness: 105, damping: 28, restDelta: 0.001 })
-  // manual replay: the RUN button drives this from 0 → 1; the scene follows whichever is further
-  const manual = useMotionValue(0)
+  // one time-based progress value drives the whole route: it plays automatically
+  // when the section enters the viewport, and the RUN button replays it
+  const progress = useMotionValue(0)
   const [running, setRunning] = useState(false)
-  const progress = useTransform([scrollProgress, manual] as const, (values) =>
-    Math.max(values[0] as number, values[1] as number),
-  )
+  const inView = useInView(containerRef, { once: true, amount: 0.3 })
 
   const runRoute = () => {
     if (running) return
     setRunning(true)
-    manual.jump(0.04)
-    animate(manual, 1, {
-      duration: 2.8,
+    progress.jump(0)
+    animate(progress, 1, {
+      duration: 3.2,
       ease: [0.22, 1, 0.36, 1],
       onComplete: () => setRunning(false),
     })
   }
+
+  useEffect(() => {
+    if (!inView) return
+    if (reduceMotion) {
+      progress.jump(1)
+      return
+    }
+    runRoute()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView, reduceMotion])
   const sourceX = useTransform(progress, [0.04, 0.3], [-30, 0])
   const sourceOpacity = useTransform(progress, [0.04, 0.25], [0.35, 1])
   const coreScale = useTransform(progress, [0.12, 0.45, 0.82], [0.97, 1, 1.012])
@@ -116,8 +122,8 @@ export function ConnectedWorkflow() {
   const runScale = useTransform(progress, [0.2, 0.72], [0.12, 1])
 
   return (
-    <div ref={containerRef} className="relative lg:min-h-[125vh]">
-      <div className="lg:sticky lg:top-[82px] lg:flex lg:h-[calc(100vh-96px)] lg:min-h-[620px] lg:max-h-[760px] lg:items-center">
+    <div ref={containerRef} className="relative">
+      <div>
         <div className="relative w-full">
           {/* dashed ink routing line behind the panels */}
           <m.svg
@@ -317,7 +323,7 @@ export function ConnectedWorkflow() {
 
           <div className="mx-auto mt-4 flex max-w-[720px] items-center justify-center gap-3 text-center">
             <span aria-hidden="true" className="h-px w-10" style={{ background: 'var(--ledger-strong)' }} />
-            <span className="type-mono-label" style={{ fontSize: 9, color: 'var(--ink-faint)' }}>Scroll — or press run — to follow the route</span>
+            <span className="type-mono-label" style={{ fontSize: 9, color: 'var(--ink-faint)' }}>Sources in · agents sort · approved files out — press run to replay</span>
             <span aria-hidden="true" className="h-px w-10" style={{ background: 'var(--ledger-strong)' }} />
           </div>
         </div>
