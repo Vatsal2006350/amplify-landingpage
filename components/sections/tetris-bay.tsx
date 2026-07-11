@@ -10,15 +10,32 @@ const TICK_MS = 520
 
 type PieceType = 'I' | 'O' | 'T' | 'S' | 'Z' | 'J' | 'L'
 
-const PIECE_STYLE: Record<PieceType, { label: string; fill: string; text: string; border: string }> = {
-  I: { label: 'XLSX', fill: 'var(--orange)', text: 'var(--paper)', border: 'var(--ink)' },
-  O: { label: 'SKU', fill: 'var(--paper-raised)', text: 'var(--ink)', border: 'var(--ink)' },
-  T: { label: 'PO', fill: 'var(--ink)', text: 'var(--paper)', border: 'var(--ink)' },
-  S: { label: 'IMG', fill: 'var(--paper-shade)', text: 'var(--ink)', border: 'var(--ink)' },
-  Z: { label: 'CSV', fill: '#FFFFFF', text: 'var(--ink)', border: 'var(--ink)' },
-  J: { label: 'ERP', fill: 'rgba(29,122,109,0.24)', text: 'var(--ink)', border: 'var(--ink)' },
-  L: { label: 'API', fill: 'rgba(20,19,17,0.14)', text: 'var(--ink)', border: 'var(--ink)' },
+const PIECE_STYLE: Record<PieceType, { fill: string; border: string }> = {
+  I: { fill: 'var(--orange)', border: 'var(--ink)' },
+  O: { fill: 'var(--paper-raised)', border: 'var(--ink)' },
+  T: { fill: 'var(--ink)', border: 'var(--ink)' },
+  S: { fill: 'var(--paper-shade)', border: 'var(--ink)' },
+  Z: { fill: '#FFFFFF', border: 'var(--ink)' },
+  J: { fill: 'rgba(29,122,109,0.24)', border: 'var(--ink)' },
+  L: { fill: 'rgba(20,19,17,0.14)', border: 'var(--ink)' },
 }
+
+/* one big readable identity per falling piece — logos and bold badges, not per-cell micro text */
+const PIECE_IDENTITY: Record<
+  PieceType,
+  { kind: 'logo'; src: string; alt: string } | { kind: 'badge'; label: string } | { kind: 'photo'; src: string }
+> = {
+  I: { kind: 'logo', src: '/logos/platforms/amazon.svg', alt: 'Amazon' },
+  O: { kind: 'photo', src: '/images/products/customer-shoe-boot.jpg' },
+  T: { kind: 'badge', label: 'PO' },
+  S: { kind: 'logo', src: '/logos/platforms/shopify.svg', alt: 'Shopify' },
+  Z: { kind: 'badge', label: 'CSV' },
+  J: { kind: 'logo', src: '/logos/platforms/noon.svg', alt: 'Noon' },
+  L: { kind: 'badge', label: 'XLSX' },
+}
+
+/* every cleared row ships somewhere — the story under the board */
+const SHIP_CHANNELS = ['NAMSHI', 'AMAZON', 'NOON', '6TH STREET', 'CENTREPOINT', 'SHOPIFY']
 
 /* base shapes as [row, col] offsets; rotations computed */
 const BASE_SHAPES: Record<PieceType, [number, number][]> = {
@@ -145,6 +162,7 @@ export function TetrisBay() {
     shipped: 0,
     best: 0,
     over: false,
+    shipLog: [] as { id: number; channel: string }[],
   })
 
   useEffect(() => {
@@ -178,6 +196,10 @@ export function TetrisBay() {
     if (!g.piece) return
     const { board, cleared } = settle(g.board, g.piece)
     g.board = board
+    for (let i = 0; i < cleared; i++) {
+      g.shipLog.unshift({ id: g.shipped + i + 1, channel: SHIP_CHANNELS[(g.shipped + i) % SHIP_CHANNELS.length] })
+    }
+    g.shipLog = g.shipLog.slice(0, 3)
     g.shipped += cleared
     g.best = Math.max(g.best, g.shipped)
     g.piece = null
@@ -373,28 +395,65 @@ export function TetrisBay() {
                     r >= 0 ? (
                       <div
                         key={`p-${i}`}
-                        className="absolute flex items-center justify-center"
+                        className="absolute"
                         style={{
                           left: `${(c / COLS) * 100}%`,
                           top: `${(r / ROWS) * 100}%`,
                           width: `${100 / COLS}%`,
                           height: `${100 / ROWS}%`,
-                          background: PIECE_STYLE[g.piece!.type].fill,
+                          background:
+                            PIECE_IDENTITY[g.piece!.type].kind === 'photo'
+                              ? undefined
+                              : PIECE_STYLE[g.piece!.type].fill,
+                          backgroundImage:
+                            PIECE_IDENTITY[g.piece!.type].kind === 'photo'
+                              ? `url(${(PIECE_IDENTITY[g.piece!.type] as { src: string }).src})`
+                              : undefined,
+                          backgroundSize: '200%',
+                          backgroundPosition: 'center',
                           border: `1px solid ${PIECE_STYLE[g.piece!.type].border}`,
                           transition: 'left 80ms linear, top 80ms linear',
                         }}
-                      >
-                        {i === 1 && (
-                          <span
-                            className="type-mono-label hidden sm:inline"
-                            style={{ fontSize: 8, fontWeight: 700, color: PIECE_STYLE[g.piece!.type].text }}
-                          >
-                            {PIECE_STYLE[g.piece!.type].label}
-                          </span>
-                        )}
-                      </div>
+                      />
                     ) : null,
                   )}
+                {/* one big readable identity riding on the piece */}
+                {g.piece &&
+                  (() => {
+                    const cells = cellsOf(g.piece).filter(([r]) => r >= 0)
+                    if (cells.length === 0) return null
+                    const identity = PIECE_IDENTITY[g.piece.type]
+                    if (identity.kind === 'photo') return null
+                    const minR = Math.min(...cells.map(([r]) => r))
+                    const maxR = Math.max(...cells.map(([r]) => r))
+                    const minC = Math.min(...cells.map(([, c]) => c))
+                    const maxC = Math.max(...cells.map(([, c]) => c))
+                    return (
+                      <div
+                        className="pointer-events-none absolute flex items-center justify-center"
+                        style={{
+                          left: `${(minC / COLS) * 100}%`,
+                          top: `${(minR / ROWS) * 100}%`,
+                          width: `${((maxC - minC + 1) / COLS) * 100}%`,
+                          height: `${((maxR - minR + 1) / ROWS) * 100}%`,
+                          transition: 'left 80ms linear, top 80ms linear',
+                        }}
+                      >
+                        <span
+                          className="rounded-doc flex items-center justify-center px-2 py-1"
+                          style={{ background: 'var(--paper)', border: '1px solid var(--ink)', boxShadow: '2px 2px 0 rgba(20,19,17,0.6)' }}
+                        >
+                          {identity.kind === 'logo' ? (
+                            <img src={identity.src} alt={identity.alt} className="h-4 w-auto max-w-[64px] object-contain sm:h-5" />
+                          ) : (
+                            <span className="font-mono text-[11px] font-bold sm:text-[13px]" style={{ color: 'var(--ink)' }}>
+                              {identity.label}
+                            </span>
+                          )}
+                        </span>
+                      </div>
+                    )
+                  })()}
                 {/* bay full stamp */}
                 {g.over && (
                   <div className="absolute inset-0 grid place-items-center">
@@ -457,12 +516,23 @@ export function TetrisBay() {
 
         <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
           <p className="type-mono-label" style={{ fontSize: 9, color: 'var(--ink-faint)' }}>
-            PIECES: XLSX FILES · SKU BATCHES · PURCHASE ORDERS · IMAGES · CSV EXPORTS · ERP SYNCS · API CALLS
+            FALLING: SUPPLIER XLSX · CSV EXPORTS · PURCHASE ORDERS · PRODUCT SHOTS · AMAZON · SHOPIFY · NOON
           </p>
           <p className="type-mono-label" style={{ fontSize: 9, color: 'var(--ink-faint)' }}>
             {manual ? '[ MANUAL ]' : '[ AUTOPILOT — AMPLIFY IS STACKING ]'}
           </p>
         </div>
+        {/* the story: every cleared row ships to a channel */}
+        {mounted && !reduced && g.shipLog.length > 0 && (
+          <div className="type-mono-label mt-2 flex flex-wrap items-center gap-x-5 gap-y-1" style={{ fontSize: 10 }}>
+            {g.shipLog.map((event) => (
+              <span key={event.id} className="tabular flex items-center gap-2" style={{ color: 'var(--ink)' }}>
+                <span style={{ color: 'var(--orange)', fontWeight: 700 }}>[ SHIPPED ]</span>
+                ROW {String(event.id).padStart(2, '0')} → {event.channel}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )
