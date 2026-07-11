@@ -2,7 +2,7 @@
 
 import { Perforation } from '../components/doc/chrome'
 import { MotionShell } from '../components/motion-primitives'
-import { ChipPile } from '../components/sections/chip-pile'
+import { TetrisBay } from '../components/sections/tetris-bay'
 import { Customers } from '../components/sections/customers'
 import { Enrichment } from '../components/sections/enrichment'
 import { FinalCta } from '../components/sections/final-cta'
@@ -27,7 +27,7 @@ export default function LandingPage() {
         <Enrichment />
         <Perforation className="mx-auto max-w-[1200px] px-4 sm:px-6" />
         <UseCaseLines />
-        <ChipPile />
+        <TetrisBay />
         <Integrations />
         <FinalCta />
         <SiteFooter />
