@@ -89,16 +89,18 @@ function RecordCard({
   const rule = dark ? 'var(--dk-rule)' : 'var(--ledger)'
 
   return (
-    <m.article
-      className={`rounded-doc ${className}`}
-      style={{
-        background: dark ? 'var(--dk-bg)' : 'var(--paper-raised)',
-        border: `1px solid ${dark ? 'var(--ink)' : 'var(--ledger-strong)'}`,
-        ...style,
-      }}
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-    >
+    /* stagger offset + rotation live on this static wrapper — the hover spring animates
+       the inner article's transform, so the two never fight */
+    <div className={className} style={style}>
+      <m.article
+        className="rounded-doc"
+        style={{
+          background: dark ? 'var(--dk-bg)' : 'var(--paper-raised)',
+          border: `1px solid ${dark ? 'var(--ink)' : 'var(--ledger-strong)'}`,
+        }}
+        whileHover={{ y: -6 }}
+        transition={{ type: 'spring', stiffness: 260, damping: 22, mass: 0.7 }}
+      >
       <div
         className="flex items-baseline justify-between gap-3 px-5 py-3"
         style={{ borderBottom: `1px solid ${rule}` }}
@@ -146,7 +148,8 @@ function RecordCard({
           ))}
         </div>
       </div>
-    </m.article>
+      </m.article>
+    </div>
   )
 }
 

@@ -9,9 +9,9 @@ import { WaitlistForm } from '../waitlist-form'
 import { HeroConsole } from './hero-console'
 
 const STATS = [
-  { value: '184', label: 'SKU rows prepared' },
+  { value: '35K', label: 'SKU rows enriched' },
   { value: '8+', label: 'channels supported' },
-  { value: '4', label: 'fields to review' },
+  { value: '45K', label: 'sales rows analyzed' },
   { value: '0', label: 'unapproved writes' },
 ]
 

@@ -3,11 +3,10 @@
 import { Marquee } from '../motion-primitives'
 
 const ROW_1 = [
-  '184 SKU ROWS PREPARED',
+  '35K SKU ROWS ENRICHED',
   '8+ CHANNELS SUPPORTED',
-  '4 FIELDS TO REVIEW',
   '0 UNAPPROVED WRITES',
-  '45K SALES ROWS CONNECTED',
+  '45K SALES ROWS ANALYZED',
   '$42K PO DRAFTED',
   '96% IDENTITY MATCH',
 ]
