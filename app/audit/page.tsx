@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Barcode, Perforation } from '../../components/doc/chrome'
 import { SiteFooter } from '../../components/sections/footer'
 
-const ACCENT = '#FF4D00'
+const ACCENT = '#1D7A6D'
 const GREEN = '#4a7c59'
 const RED = '#C8321E'
 const BASE = 'var(--dk-bg)'
@@ -154,7 +154,7 @@ function ProductCard({ product }: { product: ProductAudit }) {
               </span>
             )}
             {product.issueCount.warnings > 0 && (
-              <span className="text-[9px] px-1.5 py-0.5 rounded-doc font-bold" style={{ background: 'rgba(255,77,0,0.12)', color: ACCENT, fontFamily: M }}>
+              <span className="text-[9px] px-1.5 py-0.5 rounded-doc font-bold" style={{ background: 'rgba(29,122,109,0.12)', color: ACCENT, fontFamily: M }}>
                 {product.issueCount.warnings} warning{product.issueCount.warnings > 1 ? 's' : ''}
               </span>
             )}
@@ -165,7 +165,7 @@ function ProductCard({ product }: { product: ProductAudit }) {
       {expanded && (product.issues.length > 0 || product.aiSummary) && (
         <div className="px-3 pb-3 pt-1 space-y-1" style={{ borderTop: `1px solid ${BORDER}` }}>
           {product.aiSummary && (
-            <div className="flex items-start gap-2 py-1.5 px-2 rounded-doc mb-1" style={{ background: 'rgba(255,77,0,0.06)', border: '1px solid rgba(255,77,0,0.2)' }}>
+            <div className="flex items-start gap-2 py-1.5 px-2 rounded-doc mb-1" style={{ background: 'rgba(29,122,109,0.06)', border: '1px solid rgba(29,122,109,0.2)' }}>
               <span className="text-[10px] mt-0.5 flex-shrink-0" style={{ color: ACCENT }}>AI</span>
               <span className="text-[12px]" style={{ color: SECONDARY }}>{product.aiSummary}</span>
             </div>
@@ -325,7 +325,7 @@ jobs:
               <GithubIcon size={14} />
               <span className="hidden sm:inline">GitHub</span>
             </a>
-            <a href="/" className="text-[11px] font-bold px-3 sm:px-4 py-2 rounded-doc" style={{ background: ACCENT, color: 'var(--ink)', fontFamily: M }}>
+            <a href="/" className="text-[11px] font-bold px-3 sm:px-4 py-2 rounded-doc" style={{ background: ACCENT, color: 'var(--paper)', fontFamily: M }}>
               Get Amplify
             </a>
           </div>
@@ -379,7 +379,7 @@ jobs:
               type="submit"
               disabled={status === 'loading' || !url.trim()}
               className="h-[48px] sm:h-[56px] px-6 sm:px-8 rounded-doc text-[13px] font-bold whitespace-nowrap transition-opacity hover:opacity-90 disabled:opacity-50"
-              style={{ background: ACCENT, color: 'var(--ink)', fontFamily: M }}
+              style={{ background: ACCENT, color: 'var(--paper)', fontFamily: M }}
             >
               {status === 'loading' ? 'Scanning...' : 'Audit'}
             </button>
@@ -447,7 +447,7 @@ jobs:
             )}
             {result.mode === 'brand' && (
               <div className="mb-4 text-center">
-                <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-doc text-[11px]" style={{ background: 'rgba(255,77,0,0.08)', border: `1px solid ${ACCENT}22`, color: ACCENT, fontFamily: M }}>
+                <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-doc text-[11px]" style={{ background: 'rgba(29,122,109,0.08)', border: `1px solid ${ACCENT}22`, color: ACCENT, fontFamily: M }}>
                   Detected brand &quot;{result.storeName}&quot; — found {result.productCount} products on Amazon
                 </span>
               </div>
@@ -469,7 +469,7 @@ jobs:
                       </span>
                     )}
                     {result.aiPowered && (
-                      <span className="ml-2 px-1.5 py-0.5 rounded-doc text-[9px] uppercase font-bold" style={{ background: 'rgba(255,77,0,0.12)', color: ACCENT }}>
+                      <span className="ml-2 px-1.5 py-0.5 rounded-doc text-[9px] uppercase font-bold" style={{ background: 'rgba(29,122,109,0.12)', color: ACCENT }}>
                         AI-powered
                       </span>
                     )}
@@ -493,11 +493,11 @@ jobs:
                   ))}
                 </div>
 
-                <div className="mt-4 rounded-doc p-5" style={{ background: 'rgba(255,77,0,0.06)', border: `1px solid ${ACCENT}22` }}>
+                <div className="mt-4 rounded-doc p-5" style={{ background: 'rgba(29,122,109,0.06)', border: `1px solid ${ACCENT}22` }}>
                   <p className="text-[13px] mb-3" style={{ color: SECONDARY }}>
                     Want to <strong style={{ color: 'var(--dk-text)' }}>auto-fix</strong> these issues across your entire catalog?
                   </p>
-                  <a href="/" className="inline-block px-4 py-2 rounded-doc text-[12px] font-bold" style={{ background: ACCENT, color: 'var(--ink)', fontFamily: M }}>
+                  <a href="/" className="inline-block px-4 py-2 rounded-doc text-[12px] font-bold" style={{ background: ACCENT, color: 'var(--paper)', fontFamily: M }}>
                     Try Amplify Platform
                   </a>
                 </div>
@@ -652,7 +652,7 @@ jobs:
               <CodeBlock code={codeExamples[activeTab]} language={activeTab === 'ci' ? 'yaml' : activeTab === 'cli' ? 'bash' : 'typescript'} />
 
               {/* Architecture note */}
-              <div className="mt-6 p-4 rounded-doc" style={{ background: 'rgba(255,77,0,0.06)', border: `1px solid ${ACCENT}22` }}>
+              <div className="mt-6 p-4 rounded-doc" style={{ background: 'rgba(29,122,109,0.06)', border: `1px solid ${ACCENT}22` }}>
                 <div className="type-mono-label mb-2" style={{ color: ACCENT }}>Open-core model</div>
                 <p className="text-[12px] leading-relaxed" style={{ color: SECONDARY }}>
                   The audit engine is free and open source. The full <a href="/" className="underline" style={{ color: 'var(--dk-text)' }}>Amplify platform</a> adds AI-powered auto-fixes, Shopify sync, return tracking, and multi-channel management.

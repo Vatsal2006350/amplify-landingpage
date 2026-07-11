@@ -1,7 +1,15 @@
 'use client'
 
-import { useRef } from 'react'
-import { m, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react'
+import { useRef, useState } from 'react'
+import {
+  animate,
+  m,
+  useMotionValue,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from 'motion/react'
 import { StatusBracket } from './doc/chrome'
 
 const SOURCES = [
@@ -18,11 +26,11 @@ const OUTPUTS: Array<[string, string]> = [
   ['Purchase order', 'Draft'],
 ]
 
-const PIPELINE: Array<[string, string]> = [
-  ['Normalize SKU identity', 'Complete'],
-  ['Resolve channel attributes', 'Complete'],
-  ['Check inventory cover', 'Running'],
-  ['Prepare approved outputs', 'Queued'],
+const PIPELINE: Array<[string, string, string]> = [
+  ['Normalize SKU identity', 'Complete', 'LISTING AGENT'],
+  ['Resolve channel attributes', 'Complete', 'LISTING AGENT'],
+  ['Check inventory cover', 'Running', 'INVENTORY AGENT'],
+  ['Prepare approved outputs', 'Queued', 'PROCUREMENT AGENT'],
 ]
 
 function PunchedHoles() {
@@ -80,7 +88,24 @@ export function ConnectedWorkflow() {
   const containerRef = useRef<HTMLDivElement>(null)
   const reduceMotion = useReducedMotion()
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ['start end', 'end start'] })
-  const progress = useSpring(scrollYProgress, { stiffness: 105, damping: 28, restDelta: 0.001 })
+  const scrollProgress = useSpring(scrollYProgress, { stiffness: 105, damping: 28, restDelta: 0.001 })
+  // manual replay: the RUN button drives this from 0 → 1; the scene follows whichever is further
+  const manual = useMotionValue(0)
+  const [running, setRunning] = useState(false)
+  const progress = useTransform([scrollProgress, manual] as const, (values) =>
+    Math.max(values[0] as number, values[1] as number),
+  )
+
+  const runRoute = () => {
+    if (running) return
+    setRunning(true)
+    manual.jump(0.04)
+    animate(manual, 1, {
+      duration: 2.8,
+      ease: [0.22, 1, 0.36, 1],
+      onComplete: () => setRunning(false),
+    })
+  }
   const sourceX = useTransform(progress, [0.04, 0.3], [-30, 0])
   const sourceOpacity = useTransform(progress, [0.04, 0.25], [0.35, 1])
   const coreScale = useTransform(progress, [0.12, 0.45, 0.82], [0.97, 1, 1.012])
@@ -129,13 +154,22 @@ export function ConnectedWorkflow() {
                   PLATE 05 — CONNECTED RUN
                 </span>
               </div>
-              <span
-                className="type-mono-label flex shrink-0 items-center gap-2"
-                style={{ fontSize: 10, fontWeight: 700, color: 'var(--orange)' }}
+              <button
+                type="button"
+                onClick={runRoute}
+                disabled={running}
+                className="btn-press type-mono-label flex h-8 shrink-0 items-center gap-2 rounded-doc px-3 disabled:opacity-70"
+                style={{ fontSize: 10, fontWeight: 700, background: 'var(--orange)', color: 'var(--paper)' }}
               >
-                <span className="h-1.5 w-1.5 rounded-full" style={{ background: 'var(--orange)' }} />
-                LIVE RUN
-              </span>
+                {running ? (
+                  <>
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full" style={{ background: 'var(--paper)' }} />
+                    ROUTING…
+                  </>
+                ) : (
+                  '▸ RUN THE ROUTE'
+                )}
+              </button>
             </div>
 
             <div className="grid gap-3 p-3 lg:grid-cols-[0.72fr_1.22fr_0.78fr]" style={{ background: 'var(--paper-shade)' }}>
@@ -180,9 +214,14 @@ export function ConnectedWorkflow() {
               >
                 <PanelLabel>SORTING FACILITY — AMPLIFY OPERATING LAYER</PanelLabel>
                 <div className="flex flex-col gap-2 border-b px-4 py-3 sm:flex-row sm:items-start sm:justify-between" style={{ borderColor: 'var(--ledger)' }}>
-                  <h3 className="font-display text-[20px]" style={{ fontWeight: 540, color: 'var(--ink)' }}>
-                    Catalog + inventory run
-                  </h3>
+                  <div>
+                    <h3 className="font-display text-[20px]" style={{ fontWeight: 540, color: 'var(--ink)' }}>
+                      Catalog + inventory run
+                    </h3>
+                    <p className="type-mono-label mt-1" style={{ fontSize: 8, color: 'var(--ink-muted)' }}>
+                      3 AGENTS ON DUTY · EVERY WRITE APPROVAL-GATED
+                    </p>
+                  </div>
                   <StatusBracket status="Approval gated" className="shrink-0" />
                 </div>
                 <div className="p-4">
@@ -195,7 +234,7 @@ export function ConnectedWorkflow() {
                     ))}
                   </div>
                   <div className="mt-3" style={{ border: '1px solid var(--ledger)' }}>
-                    {PIPELINE.map(([label, state], index) => (
+                    {PIPELINE.map(([label, state, agent], index) => (
                       <div
                         key={label}
                         className="flex items-center gap-3 border-b px-3 py-2.5 last:border-b-0"
@@ -208,7 +247,12 @@ export function ConnectedWorkflow() {
                         >
                           {index < 2 ? '[x]' : index === 2 ? '[▸]' : '[ ]'}
                         </span>
-                        <span className="min-w-0 flex-1 truncate text-[11px] font-semibold" style={{ color: 'var(--ink)' }}>{label}</span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-[11px] font-semibold" style={{ color: 'var(--ink)' }}>{label}</span>
+                          <span className="type-mono-label block" style={{ fontSize: 7, color: index === 2 ? 'var(--orange)' : 'var(--ink-faint)' }}>
+                            {agent}
+                          </span>
+                        </span>
                         <StatusBracket status={state} className="shrink-0" />
                       </div>
                     ))}
@@ -273,7 +317,7 @@ export function ConnectedWorkflow() {
 
           <div className="mx-auto mt-4 flex max-w-[720px] items-center justify-center gap-3 text-center">
             <span aria-hidden="true" className="h-px w-10" style={{ background: 'var(--ledger-strong)' }} />
-            <span className="type-mono-label" style={{ fontSize: 9, color: 'var(--ink-faint)' }}>Scroll to follow the run</span>
+            <span className="type-mono-label" style={{ fontSize: 9, color: 'var(--ink-faint)' }}>Scroll — or press run — to follow the route</span>
             <span aria-hidden="true" className="h-px w-10" style={{ background: 'var(--ledger-strong)' }} />
           </div>
         </div>

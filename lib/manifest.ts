@@ -1,7 +1,7 @@
 // Deterministic document ephemera — never Math.random()/Date.now() in render.
 export const MANIFEST_NO = 'MANIFEST NO. AMP-2026-184'
 export const DOC_REV = 'REV. 2026-07'
-export const ORIGIN = 'ORIGIN: DUBAI, AE'
+export const ORIGIN = 'ORIGIN: SAN FRANCISCO, USA'
 export const CARRIER = 'CARRIER: AMPLIFY'
 export const NAV_HEIGHT = 60
 export const NAV_HEIGHT_SCROLLED = 52

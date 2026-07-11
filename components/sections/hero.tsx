@@ -204,7 +204,7 @@ export function Hero() {
               label: s.label,
               note:
                 s.value === '0' ? (
-                  <span className="absolute right-3 top-3">
+                  <span className="absolute right-3 top-3 hidden lg:inline-block">
                     <Stamp label="NO AUTO-WRITES" scale={0.5} rotate={6} />
                   </span>
                 ) : undefined,

@@ -16,7 +16,7 @@ const config: Config = {
           faint: 'rgba(20,19,17,0.40)',
         },
         ledger: { DEFAULT: '#D8D3C8', strong: '#B8B2A4' },
-        safety: '#FF4D00',
+        safety: '#1D7A6D',
         stamp: '#C8321E',
         dk: {
           DEFAULT: '#141311',

@@ -12,7 +12,7 @@
   --ink-faint: rgba(20, 19, 17, 0.4);
   --ledger: #D8D3C8;
   --ledger-strong: #B8B2A4;
-  --orange: #FF4D00;
+  --orange: #1D7A6D;
   --stamp: #C8321E;
   /* dark "stamp" sections */
   --dk-bg: #141311;
@@ -47,7 +47,7 @@ body {
 }
 
 ::selection {
-  background: rgba(255, 77, 0, 0.22);
+  background: rgba(29, 122, 109, 0.22);
   color: var(--ink);
 }
 

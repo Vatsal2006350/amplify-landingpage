@@ -182,7 +182,7 @@ export function SiteNav({
                 className="btn-press type-mono-label flex h-9 items-center rounded-doc px-4"
                 style={{
                   background: 'var(--orange)',
-                  color: 'var(--ink)',
+                  color: 'var(--paper)',
                   fontSize: 11,
                   fontWeight: 700,
                 }}

@@ -250,7 +250,7 @@ export function ProductFlowWorkbench() {
             ))}
             <path
               d="M18 114 L104 94 L190 102 L276 70 L362 48 L442 35 L442 138 L18 138 Z"
-              fill="rgba(255,77,0,0.08)"
+              fill="rgba(29,122,109,0.08)"
             />
             <path
               d="M18 114 L104 94 L190 102 L276 70 L362 48 L442 35"
@@ -371,7 +371,7 @@ export function ProductFlowWorkbench() {
           {[
             ['Reorder carryover boots', '320 units, 21 day lead time', 'Approve'],
             ['Hold slow color', 'size curve under target', 'Hold'],
-            ['Generate PO draft', 'AED 42K to Beira Rio', 'Review'],
+            ['Generate PO draft', '$42K to Beira Rio', 'Review'],
             ['Push channel stock', 'single pool with caps', 'Ready'],
           ].map((item) => (
             <div
@@ -486,7 +486,7 @@ export function ProductFlowWorkbench() {
           <button
             type="button"
             className="type-mono-label rounded-doc px-3 py-1.5"
-            style={{ background: 'var(--orange)', color: 'var(--ink)', fontWeight: 700 }}
+            style={{ background: 'var(--orange)', color: 'var(--paper)', fontWeight: 700 }}
           >
             Run
           </button>
@@ -613,7 +613,7 @@ export function ProductFlowWorkbench() {
                     <button
                       type="button"
                       className="btn-press type-mono-label rounded-doc px-4 py-2.5"
-                      style={{ background: 'var(--orange)', color: 'var(--ink)', fontWeight: 700 }}
+                      style={{ background: 'var(--orange)', color: 'var(--paper)', fontWeight: 700 }}
                     >
                       {flow.action}
                     </button>

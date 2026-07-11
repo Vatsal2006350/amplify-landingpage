@@ -100,7 +100,7 @@ export const USE_CASES: UseCase[] = [
       ['FTW-LAUNCH-01', 'Launch pack', 'Training ready', 'Ready'],
     ],
     actions: [
-      ['Draft PO', 'AED 42K replenishment draft by supplier.', 'Review'],
+      ['Draft PO', '$42K replenishment draft by supplier.', 'Review'],
       ['Hold slow color', 'Size curve is below target for reorder.', 'Ready'],
       ['Push channel stock', 'Sync stock with channel caps applied.', 'Ready'],
     ],

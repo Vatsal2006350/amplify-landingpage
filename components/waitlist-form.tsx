@@ -101,7 +101,7 @@ export function WaitlistForm({
           className="btn-press type-mono-label flex h-[50px] shrink-0 items-center justify-center gap-2 rounded-doc px-6 disabled:opacity-55"
           style={{
             background: 'var(--orange)',
-            color: 'var(--ink)',
+            color: 'var(--paper)',
             fontSize: 12,
             fontWeight: 700,
           }}

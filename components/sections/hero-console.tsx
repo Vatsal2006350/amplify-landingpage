@@ -138,7 +138,7 @@ export function HeroConsole() {
             {['Overview', 'Listing', 'Company Brain', 'Inventory', 'Approvals'].map((item) => {
               const selected = filmPhase === 4 ? item === 'Listing' : filmPhase >= 1 ? item === 'Company Brain' : item === 'Listing'
               return (
-                <button key={item} type="button" onClick={() => item === 'Company Brain' ? setFilmPhase(2) : item === 'Listing' ? setFilmPhase(0) : undefined} className="rounded-doc relative w-full border px-3 py-2.5 text-left text-[11px] font-semibold" style={{ borderColor: selected ? 'var(--dk-rule)' : 'transparent', background: selected ? 'var(--dk-raised)' : 'transparent', color: selected ? 'var(--dk-text)' : 'var(--dk-muted)', boxShadow: filmPhase === 1 && item === 'Company Brain' ? '0 0 0 1px rgba(255,77,0,0.42), 0 0 34px rgba(255,77,0,0.16)' : 'none' }}>
+                <button key={item} type="button" onClick={() => item === 'Company Brain' ? setFilmPhase(2) : item === 'Listing' ? setFilmPhase(0) : undefined} className="rounded-doc relative w-full border px-3 py-2.5 text-left text-[11px] font-semibold" style={{ borderColor: selected ? 'var(--dk-rule)' : 'transparent', background: selected ? 'var(--dk-raised)' : 'transparent', color: selected ? 'var(--dk-text)' : 'var(--dk-muted)', boxShadow: filmPhase === 1 && item === 'Company Brain' ? '0 0 0 1px rgba(29,122,109,0.42), 0 0 34px rgba(29,122,109,0.16)' : 'none' }}>
                   {selected && <span aria-hidden className="absolute inset-y-0 left-0 w-[2px]" style={{ background: 'var(--orange)' }} />}
                   {item}
                   {filmPhase === 1 && item === 'Company Brain' && <m.span className="absolute right-3 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full" initial={{ scale: 0 }} animate={{ scale: [0, 1.4, 1] }} style={{ background: 'var(--orange)' }} />}
@@ -171,7 +171,7 @@ export function HeroConsole() {
                 <h3 className="font-display mt-1 text-[24px] leading-tight sm:text-[28px]" style={{ fontWeight: 520, color: 'var(--ink)' }}>Prepare this week&apos;s listings</h3>
                 <p className="mt-1 text-[12px] sm:text-[13px]" style={{ color: 'var(--ink-muted)' }}>Supplier data in. Review workbook out.</p>
               </div>
-              <button type="button" className="rounded-doc h-9 px-3 text-[11px] font-semibold" style={{ background: 'var(--orange)', color: 'var(--ink)' }}>
+              <button type="button" className="rounded-doc h-9 px-3 text-[11px] font-semibold" style={{ background: 'var(--orange)', color: 'var(--paper)' }}>
                 {activeStep === 0 && 'Add source files'}
                 {activeStep === 1 && 'Scanning 8 channels'}
                 {activeStep === 2 && 'Open review workbook'}
@@ -215,7 +215,7 @@ export function HeroConsole() {
                   <span>Platform</span><span>Rows</span><span>Review</span><span className="text-right">Status</span>
                 </div>
                 {platforms.map((row, index) => (
-                  <div key={row[0]} className="grid grid-cols-[1.2fr_0.8fr_0.8fr_0.7fr] items-center border-b px-3.5 py-3 text-[10px] last:border-b-0 sm:text-[11px]" style={{ borderColor: 'var(--ledger)', background: activeStep === 2 && index === 2 ? 'rgba(255,77,0,0.08)' : 'var(--paper-raised)' }}>
+                  <div key={row[0]} className="grid grid-cols-[1.2fr_0.8fr_0.8fr_0.7fr] items-center border-b px-3.5 py-3 text-[10px] last:border-b-0 sm:text-[11px]" style={{ borderColor: 'var(--ledger)', background: activeStep === 2 && index === 2 ? 'rgba(29,122,109,0.08)' : 'var(--paper-raised)' }}>
                     <span className="font-semibold" style={{ color: 'var(--ink)' }}>{row[0]}</span>
                     <span className="tabular" style={{ color: 'var(--ink)' }}>{row[1]}</span>
                     <span className="tabular" style={{ color: row[2] === '0 review' ? 'var(--ink-muted)' : 'var(--orange)' }}>{row[2]}</span>
@@ -288,7 +288,7 @@ export function HeroConsole() {
                         </div>
                         <div className="mt-2 flex items-center justify-between">
                           <span className="type-mono-label" style={{ fontSize: 8, color: 'var(--ink-muted)' }}>45K sales rows connected</span>
-                          <m.span animate={filmPhase === 2 && typedChars === brainQuery.length ? { scale: [1, 1.08, 1] } : { scale: 1 }} className="type-mono-label rounded-doc px-2.5 py-1.5" style={{ fontSize: 8, fontWeight: 700, background: 'var(--orange)', color: 'var(--ink)' }}>Run analysis</m.span>
+                          <m.span animate={filmPhase === 2 && typedChars === brainQuery.length ? { scale: [1, 1.08, 1] } : { scale: 1 }} className="type-mono-label rounded-doc px-2.5 py-1.5" style={{ fontSize: 8, fontWeight: 700, background: 'var(--orange)', color: 'var(--paper)' }}>Run analysis</m.span>
                         </div>
                       </div>
                     </div>
@@ -301,7 +301,7 @@ export function HeroConsole() {
                           <div className="type-mono-label" style={{ fontSize: 9, color: 'var(--ink)' }}>Company Brain is working</div>
                           <h3 className="font-display mt-2 text-[20px]" style={{ fontWeight: 520, color: 'var(--ink)' }}>Joining sales, stock, and returns.</h3>
                           <div className="mt-5 space-y-2.5">
-                            {[82, 64, 91].map((width, index) => <div key={width} className="rounded-doc h-9 overflow-hidden" style={{ background: 'var(--paper-shade)' }}><m.div className="h-full" initial={{ x: '-100%' }} animate={{ x: '100%' }} transition={{ repeat: Infinity, duration: 1.4, delay: index * 0.16 }} style={{ width: `${width}%`, background: 'linear-gradient(90deg, transparent, rgba(255,77,0,0.12), transparent)' }} /></div>)}
+                            {[82, 64, 91].map((width, index) => <div key={width} className="rounded-doc h-9 overflow-hidden" style={{ background: 'var(--paper-shade)' }}><m.div className="h-full" initial={{ x: '-100%' }} animate={{ x: '100%' }} transition={{ repeat: Infinity, duration: 1.4, delay: index * 0.16 }} style={{ width: `${width}%`, background: 'linear-gradient(90deg, transparent, rgba(29,122,109,0.12), transparent)' }} /></div>)}
                           </div>
                           <div className="type-mono-label mt-4 flex items-center gap-2" style={{ fontSize: 9, color: 'var(--ink-muted)' }}><span className="h-2 w-2 rounded-full" style={{ background: 'var(--orange)' }} />Checking channel movement</div>
                         </m.div>
@@ -319,7 +319,7 @@ export function HeroConsole() {
                           <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.75 }} className="rounded-doc mt-3 border p-3" style={{ borderColor: 'var(--ledger)', background: 'var(--paper-shade)' }}>
                             <div className="type-mono-label" style={{ fontSize: 8, color: 'var(--ink)' }}>Recommended action</div>
                             <div className="mt-1 text-[11px] font-semibold" style={{ color: 'var(--ink)' }}>Keep price steady and move stock toward Amazon.</div>
-                            <div className="mt-2 flex gap-2"><span className="type-mono-label rounded-doc border px-2 py-1" style={{ fontSize: 8, borderColor: 'var(--ledger)', background: 'var(--paper-raised)', color: 'var(--ink)' }}>Evidence attached</span><span className="type-mono-label rounded-doc px-2 py-1" style={{ fontSize: 8, background: 'var(--orange)', color: 'var(--ink)' }}>Send to sales agent</span></div>
+                            <div className="mt-2 flex gap-2"><span className="type-mono-label rounded-doc border px-2 py-1" style={{ fontSize: 8, borderColor: 'var(--ledger)', background: 'var(--paper-raised)', color: 'var(--ink)' }}>Evidence attached</span><span className="type-mono-label rounded-doc px-2 py-1" style={{ fontSize: 8, background: 'var(--orange)', color: 'var(--paper)' }}>Send to sales agent</span></div>
                           </m.div>
                         </m.div>
                       )}
@@ -376,7 +376,7 @@ export function HeroConsole() {
                   <section className="rounded-doc flex min-h-[270px] flex-col border p-3 sm:min-h-[280px] sm:p-3.5" style={{ borderColor: 'var(--ledger)', background: 'var(--paper-raised)' }}>
                     <div className="flex items-start justify-between gap-3">
                       <div><div className="type-mono-label" style={{ fontSize: 9, color: 'var(--ink)' }}>One approved publish</div><h3 className="font-display tabular mt-1 text-[17px]" style={{ fontWeight: 520, color: 'var(--ink)' }}>184 products, all channels</h3></div>
-                      <m.span initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 1.25 }} className="type-mono-label rounded-doc shrink-0 px-2.5 py-2" style={{ fontSize: 8, fontWeight: 700, background: 'var(--orange)', color: 'var(--ink)' }}>Publish 184</m.span>
+                      <m.span initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 1.25 }} className="type-mono-label rounded-doc shrink-0 px-2.5 py-2" style={{ fontSize: 8, fontWeight: 700, background: 'var(--orange)', color: 'var(--paper)' }}>Publish 184</m.span>
                     </div>
 
                     <div className="relative my-3 h-1 overflow-hidden" style={{ background: 'var(--ledger)' }}>

@@ -172,7 +172,7 @@ export function CountUp({
   className = '',
   duration = 1.2,
 }: {
-  /** e.g. "184", "8+", "45K", "+18%", "1,240", "AED 42K" */
+  /** e.g. "184", "8+", "45K", "+18%", "1,240", "$42K" */
   value: string
   className?: string
   duration?: number

@@ -330,7 +330,7 @@ function ActionsScene({ useCase }: { useCase: UseCase }) {
             </span>
             <span
               className="btn-press type-mono-label flex h-9 flex-1 items-center justify-center rounded-doc"
-              style={{ fontSize: 10, fontWeight: 700, background: 'var(--orange)', color: 'var(--ink)' }}
+              style={{ fontSize: 10, fontWeight: 700, background: 'var(--orange)', color: 'var(--paper)' }}
             >
               Approve
             </span>
@@ -446,7 +446,7 @@ export default async function UseCasePage({ params }: PageProps) {
               <a
                 href="#source-data"
                 className="btn-press type-mono-label flex h-11 items-center rounded-doc px-5"
-                style={{ background: 'var(--orange)', color: 'var(--ink)', fontWeight: 700 }}
+                style={{ background: 'var(--orange)', color: 'var(--paper)', fontWeight: 700 }}
               >
                 See the workflow
               </a>

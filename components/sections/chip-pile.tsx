@@ -29,7 +29,7 @@ const CHIPS: ChipDef[] = [
   { id: 'f6', kind: 'file', label: 'amazon_flatfile_FINAL.xlsx' },
   { id: 'f7', kind: 'file', label: 'approval_log.json' },
   { id: 'o1', kind: 'ops', label: '184 SKU ROWS' },
-  { id: 'o2', kind: 'ops', label: 'AED 42K PO' },
+  { id: 'o2', kind: 'ops', label: '$42K PO' },
   { id: 'o3', kind: 'ops', label: '+18% AMAZON' },
   { id: 'o4', kind: 'ops', label: 'EU 38–39' },
   { id: 'o5', kind: 'stamp', label: '[ APPROVED ]' },

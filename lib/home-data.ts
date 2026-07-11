@@ -144,7 +144,7 @@ export const PRODUCT_FLOW_TABS = [
     metrics: [
       ['18', 'days cover'],
       ['1,240', 'units suggested'],
-      ['AED 42K', 'PO value'],
+      ['$42K', 'PO value'],
     ],
     steps: ['Read sell-through', 'Check cover', 'Apply lead time', 'Protect margin', 'Draft buy'],
     rows: [
@@ -173,7 +173,7 @@ export const PRODUCT_FLOW_TABS = [
     steps: ['Review evidence', 'Check impact', 'Approve or edit', 'Apply', 'Measure'],
     rows: [
       ['Inventory Agent', 'Shift 220 units', 'Approve'],
-      ['Procurement Agent', 'Draft AED 42K PO', 'Review'],
+      ['Procurement Agent', 'Draft $42K PO', 'Review'],
       ['Merchandising Agent', 'Move weekend budget', 'Approve'],
       ['Listing Ops', 'Add fit copy to 12 SKUs', 'Approve'],
       ['Audit trail', 'Before/after logged', 'On'],
