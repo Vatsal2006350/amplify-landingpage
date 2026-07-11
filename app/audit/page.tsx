@@ -267,7 +267,7 @@ export default function AuditPage() {
 
   const codeExamples = {
     cli: `# Install globally
-npm install -g amplify-audit
+npm install -g github:Vatsal2006350/amplify-audit
 
 # Audit a Shopify store
 amplify-audit https://allbirds.com
@@ -294,7 +294,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm install -g amplify-audit
+      - run: npm install -g github:Vatsal2006350/amplify-audit
       - run: amplify-audit $STORE_URL --json --min-score 60
         env:
           STORE_URL: \${{ secrets.STORE_URL }}`,
@@ -561,7 +561,7 @@ jobs:
                 <span style={{ color: ACCENT }}>Open source.</span>
               </h2>
               <p className="text-[16px] leading-relaxed mb-8" style={{ color: SECONDARY }}>
-                The same scoring engine that powers this tool is available as an npm package. Run audits from your terminal, integrate into CI/CD, or build custom tooling on top.
+                The same scoring engine that powers this tool is available on GitHub. Run audits from your terminal, integrate into CI/CD, or build custom tooling on top.
               </p>
 
               {/* Quick stats */}
@@ -618,10 +618,10 @@ jobs:
               <div className="rounded-doc p-4 mb-4 flex items-center justify-between" style={{ background: SURFACE, border: `1px solid ${ACCENT}33` }}>
                 <div className="flex items-center gap-3">
                   <span className="text-[11px]" style={{ color: ACCENT, fontFamily: M }}>$</span>
-                  <code className="text-[14px]" style={{ color: 'var(--dk-text)', fontFamily: M }}>npm install amplify-audit</code>
+                  <code className="text-[14px]" style={{ color: 'var(--dk-text)', fontFamily: M }}>npm install github:Vatsal2006350/amplify-audit</code>
                 </div>
                 <button
-                  onClick={() => { navigator.clipboard.writeText('npm install amplify-audit') }}
+                  onClick={() => { navigator.clipboard.writeText('npm install github:Vatsal2006350/amplify-audit') }}
                   className="text-[10px] px-2 py-1 rounded-doc transition-all hover:opacity-80"
                   style={{ color: MUTED, fontFamily: M }}
                 >

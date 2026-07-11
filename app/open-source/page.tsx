@@ -69,7 +69,7 @@ const DEMO_RESULT = {
 function DemoTerminal() {
   const [step, setStep] = useState(0)
   const [typing, setTyping] = useState('')
-  const fullCommand = 'npx amplify-audit https://amazon.com/dp/B09V3KXJPB'
+  const fullCommand = 'npx github:Vatsal2006350/amplify-audit https://amazon.com/dp/B09V3KXJPB'
 
   useEffect(() => {
     if (step === 0) {
@@ -396,7 +396,7 @@ export default function OpenSourcePage() {
               style={{ background: 'rgba(244,241,234,0.04)', border: `1px solid ${BORDER}` }}
             >
               <span style={{ color: ACCENT, fontFamily: M, fontSize: 13 }}>$</span>
-              <code className="text-[12px] sm:text-[14px] whitespace-nowrap" style={{ color: 'var(--dk-text)', fontFamily: M }}>npx amplify-audit {'<product-url>'}</code>
+              <code className="text-[12px] sm:text-[14px] whitespace-nowrap" style={{ color: 'var(--dk-text)', fontFamily: M }}>npx github:Vatsal2006350/amplify-audit {'<product-url>'}</code>
             </div>
             <a
               href="https://github.com/Vatsal2006350/amplify-audit"
@@ -473,7 +473,7 @@ export default function OpenSourcePage() {
           <div className="mb-16">
             <h2 className="font-display text-[clamp(28px,4vw,48px)] leading-[1.06] text-dk-text mb-5"
               style={{ fontVariationSettings: "'opsz' 96", letterSpacing: '-0.015em', fontWeight: 540 }}>
-              npm install. Import. Ship.
+              Clone. Import. Ship.
             </h2>
           </div>
 
@@ -483,15 +483,15 @@ export default function OpenSourcePage() {
               <CodeBlock
                 language="bash"
                 code={`# Audit a single product
-npx amplify-audit https://amazon.com/dp/B09V3KXJPB
+npx github:Vatsal2006350/amplify-audit https://amazon.com/dp/B09V3KXJPB
 
 # Audit with return data
-npx amplify-audit \\
+npx github:Vatsal2006350/amplify-audit \\
   --product ./product.json \\
   --returns ./returns.csv
 
 # Output as JSON for CI/CD
-npx amplify-audit <url> --format json`}
+npx github:Vatsal2006350/amplify-audit <url> --format json`}
               />
             </div>
 
@@ -602,12 +602,12 @@ console.log(report.fixes)        // [{ field, before, after }]`}
               {
                 title: 'Shopify Store Audit',
                 desc: 'Run amplify-audit on your entire Shopify catalog. Get a prioritized list of listings that need attention — sorted by return risk.',
-                cmd: 'npx amplify-audit --shopify mystore.myshopify.com',
+                cmd: 'npx github:Vatsal2006350/amplify-audit --shopify mystore.myshopify.com',
               },
               {
                 title: 'Amazon Listing Check',
                 desc: 'Paste any Amazon product URL and get instant scoring. Compare your listings against category benchmarks.',
-                cmd: 'npx amplify-audit https://amazon.com/dp/...',
+                cmd: 'npx github:Vatsal2006350/amplify-audit https://amazon.com/dp/...',
               },
               {
                 title: 'CI/CD Quality Gate',
@@ -646,7 +646,7 @@ console.log(report.fixes)        // [{ field, before, after }]`}
               style={{ background: 'rgba(244,241,234,0.04)', border: `1px solid ${BORDER}` }}
             >
               <span style={{ color: ACCENT, fontFamily: M, fontSize: 16 }}>$</span>
-              <code className="text-[16px]" style={{ color: 'var(--dk-text)', fontFamily: M }}>npx amplify-audit {'<your-product-url>'}</code>
+              <code className="text-[16px]" style={{ color: 'var(--dk-text)', fontFamily: M }}>npx github:Vatsal2006350/amplify-audit {'<your-product-url>'}</code>
             </div>
 
             <div className="flex items-center gap-4">
