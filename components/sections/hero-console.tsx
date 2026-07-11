@@ -17,34 +17,57 @@ function SparkIcon() {
   )
 }
 
+/* Film phases:
+   0 listing sheet compiles (fast)   1 zoom toward sidebar
+   2 brain typing                    3 brain answer
+   4 inventory multi-warehouse sync  5 publish everywhere */
+const DURATIONS = [5200, 2400, 5200, 6800, 7600, 8000]
+const LAST_PHASE = DURATIONS.length - 1
+
+const SHEET_ROWS: [string, string, string, string, string][] = [
+  ['BR-772104-CAF', 'Leather Lace-Up Boot', '5 imgs', 'Leather', '$79'],
+  ['BR-9011-CRM', 'Carryover Sandal', '3 imgs', 'Leather', '$49'],
+  ['BR-772105-PRE', 'Patent Mary Jane', '4 imgs', 'Patent PU', '$59'],
+  ['BR-772106-NDE', 'Comfort Mule', '3 imgs', 'Textile', '$45'],
+  ['BR-772107-BLK', 'Chelsea Boot', '5 imgs', 'Suede', '$85'],
+  ['BR-9012-TAN', 'Slide Sandal', '2 imgs', 'EVA', '$29'],
+]
+
+const WAREHOUSES: [string, string, string, string][] = [
+  ['Dubai DIP warehouse', '2,140 units', '31 days', 'Healthy'],
+  ['Sharjah warehouse', '860 units', '19 days', 'Healthy'],
+  ['Amazon FBA', '1,120 units', '12 days', 'Watch'],
+  ['Retail floor — Shoe Mart', '410 units', '9 days', 'Low'],
+]
+
+const SYNC_TARGETS: { name: string; detail: string; status: string; delay: number }[] = [
+  { name: 'Google Sheets', detail: 'stock_snapshot — live tab', status: 'SYNCED 2S AGO', delay: 0.9 },
+  { name: 'Logic ERP', detail: 'positions pushed nightly + on change', status: 'SYNCED 8S AGO', delay: 1.4 },
+  { name: 'Shopify', detail: 'sellable qty, single pool with caps', status: 'LIVE', delay: 1.9 },
+  { name: 'Namshi / Noon', detail: 'channel stock feeds', status: 'QUEUED', delay: 2.4 },
+]
+
 export function HeroConsole() {
   const filmRef = useRef<HTMLDivElement>(null)
-  const [activeStep, setActiveStep] = useState(0)
+  const [sheetTick, setSheetTick] = useState(0)
   const [filmPhase, setFilmPhase] = useState(0)
   const [typedChars, setTypedChars] = useState(0)
   const [isDesktop, setIsDesktop] = useState(false)
   const isFilmInView = useInView(filmRef, { amount: 0.15, margin: '0px 0px -400px 0px' })
   const brainQuery = 'Why did Amazon footwear sales grow last week?'
-  const stages = [
-    { label: 'Data', detail: '4 sources connected' },
-    { label: 'Scan', detail: '8 channels checked' },
-    { label: 'Review', detail: '4 fields need review' },
-    { label: 'Export', detail: 'Workbook ready' },
-  ]
-  const platforms = [
-    ['Namshi', '182 ready', '2 review', 'Ready'],
-    ['6th Street', '184 ready', '0 review', 'Ready'],
-    ['Centrepoint', '180 ready', '4 review', 'Review'],
-    ['Amazon', '184 ready', '0 review', 'Ready'],
-  ]
 
+  // fast row-compile ticker for the sheet scene
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setSheetTick(SHEET_ROWS.length + 2)
+      return
+    }
     if (!isFilmInView) return
     if (filmPhase !== 0) return
-    const interval = window.setInterval(() => setActiveStep((step) => Math.min(step + 1, stages.length - 1)), 2300)
+    setSheetTick(0)
+    const interval = window.setInterval(() => setSheetTick((t) => Math.min(t + 1, SHEET_ROWS.length + 2)), 420)
     return () => window.clearInterval(interval)
-  }, [filmPhase, isFilmInView, stages.length])
+  }, [filmPhase, isFilmInView])
 
   useEffect(() => {
     const media = window.matchMedia('(min-width: 768px)')
@@ -57,17 +80,16 @@ export function HeroConsole() {
   useEffect(() => {
     if (!isFilmInView) {
       setFilmPhase(0)
-      setActiveStep(0)
+      setSheetTick(0)
       setTypedChars(0)
       return
     }
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setFilmPhase(4)
+      setFilmPhase(LAST_PHASE)
       setTypedChars(brainQuery.length)
       return
     }
-    const durations = [9600, 2400, 5200, 6800, 8000]
-    const timeout = window.setTimeout(() => setFilmPhase((phase) => (phase + 1) % durations.length), durations[filmPhase])
+    const timeout = window.setTimeout(() => setFilmPhase((phase) => (phase + 1) % DURATIONS.length), DURATIONS[filmPhase])
     return () => window.clearTimeout(timeout)
   }, [brainQuery.length, filmPhase, isFilmInView])
 
@@ -93,9 +115,26 @@ export function HeroConsole() {
     return () => window.clearInterval(interval)
   }, [brainQuery.length, filmPhase, isFilmInView])
 
-  useEffect(() => {
-    if (filmPhase === 0) setActiveStep(0)
-  }, [filmPhase])
+  const breadcrumb =
+    filmPhase === LAST_PHASE
+      ? 'listing-ops/publish'
+      : filmPhase === 4
+        ? 'inventory/sync'
+        : filmPhase >= 2
+          ? 'company-brain/ask'
+          : 'listing-ops/sheet'
+
+  const sidebarSelected = (item: string) =>
+    filmPhase === LAST_PHASE
+      ? item === 'Listing'
+      : filmPhase === 4
+        ? item === 'Inventory'
+        : filmPhase >= 1
+          ? item === 'Company Brain'
+          : item === 'Listing'
+
+  const compiled = Math.min(sheetTick, SHEET_ROWS.length)
+  const sheetDone = sheetTick >= SHEET_ROWS.length + 1
 
   return (
     <div ref={filmRef} className="doc-shadow rounded-doc relative overflow-hidden text-left" style={{ background: 'var(--paper-raised)', border: '1px solid var(--ink)' }}>
@@ -106,11 +145,11 @@ export function HeroConsole() {
             <span className="h-2 w-2 rounded-full" style={{ background: 'var(--paper-shade)', border: '1px solid var(--ledger-strong)' }} />
             <span className="h-2 w-2 rounded-full" style={{ background: 'var(--paper-shade)', border: '1px solid var(--ledger-strong)' }} />
           </div>
-          <span className="type-mono-label hidden sm:inline" style={{ color: 'var(--ink-faint)' }}>app.use-amplify.com/workspace/{filmPhase === 4 ? 'listing-ops/publish' : filmPhase >= 2 ? 'company-brain/ask' : 'listing-ops/overview'}</span>
+          <span className="type-mono-label hidden sm:inline" style={{ color: 'var(--ink-faint)' }}>app.use-amplify.com/workspace/{breadcrumb}</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="hidden gap-1 sm:flex" aria-label={`Product film scene ${filmPhase + 1} of 5`}>
-            {[0, 1, 2, 3, 4].map((phase) => (
+          <div className="hidden gap-1 sm:flex" aria-label={`Product film scene ${filmPhase + 1} of ${DURATIONS.length}`}>
+            {DURATIONS.map((_, phase) => (
               <button key={phase} type="button" onClick={() => setFilmPhase(phase)} aria-label={`Show product film scene ${phase + 1}`} className="h-1 w-5 overflow-hidden rounded-full" style={{ background: 'var(--ledger)' }}>
                 <m.span className="block h-full origin-left" animate={{ scaleX: phase <= filmPhase ? 1 : 0 }} style={{ background: 'var(--orange)' }} />
               </button>
@@ -136,9 +175,9 @@ export function HeroConsole() {
           </div>
           <div className="space-y-1.5">
             {['Overview', 'Listing', 'Company Brain', 'Inventory', 'Approvals'].map((item) => {
-              const selected = filmPhase === 4 ? item === 'Listing' : filmPhase >= 1 ? item === 'Company Brain' : item === 'Listing'
+              const selected = sidebarSelected(item)
               return (
-                <button key={item} type="button" onClick={() => item === 'Company Brain' ? setFilmPhase(2) : item === 'Listing' ? setFilmPhase(0) : undefined} className="rounded-doc relative w-full border px-3 py-2.5 text-left text-[11px] font-semibold" style={{ borderColor: selected ? 'var(--dk-rule)' : 'transparent', background: selected ? 'var(--dk-raised)' : 'transparent', color: selected ? 'var(--dk-text)' : 'var(--dk-muted)', boxShadow: filmPhase === 1 && item === 'Company Brain' ? '0 0 0 1px rgba(29,122,109,0.42), 0 0 34px rgba(29,122,109,0.16)' : 'none' }}>
+                <button key={item} type="button" onClick={() => (item === 'Company Brain' ? setFilmPhase(2) : item === 'Listing' ? setFilmPhase(0) : item === 'Inventory' ? setFilmPhase(4) : undefined)} className="rounded-doc relative w-full border px-3 py-2.5 text-left text-[11px] font-semibold" style={{ borderColor: selected ? 'var(--dk-rule)' : 'transparent', background: selected ? 'var(--dk-raised)' : 'transparent', color: selected ? 'var(--dk-text)' : 'var(--dk-muted)', boxShadow: filmPhase === 1 && item === 'Company Brain' ? '0 0 0 1px rgba(29,122,109,0.42), 0 0 34px rgba(29,122,109,0.16)' : 'none' }}>
                   {selected && <span aria-hidden className="absolute inset-y-0 left-0 w-[2px]" style={{ background: 'var(--orange)' }} />}
                   {item}
                   {filmPhase === 1 && item === 'Company Brain' && <m.span className="absolute right-3 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full" initial={{ scale: 0 }} animate={{ scale: [0, 1.4, 1] }} style={{ background: 'var(--orange)' }} />}
@@ -156,8 +195,9 @@ export function HeroConsole() {
         </aside>
 
         <div className="relative min-w-0 overflow-hidden" style={{ background: 'var(--paper-shade)' }}>
+          {/* ---------- base scene: the sheet, compiling fast ---------- */}
           <div className="flex min-h-[54px] items-center justify-between border-b px-4 sm:px-5" style={{ borderColor: 'var(--ledger)', background: 'var(--paper-raised)' }}>
-            <div className="text-[11px]" style={{ color: 'var(--ink-muted)' }}><span className="font-semibold" style={{ color: 'var(--ink)' }}>Listing</span> / Overview</div>
+            <div className="text-[11px]" style={{ color: 'var(--ink-muted)' }}><span className="font-semibold" style={{ color: 'var(--ink)' }}>Listing</span> / supplier_master_sheet.xlsx</div>
             <div className="type-mono-label flex items-center gap-2" style={{ fontSize: 10, color: 'var(--ink-muted)' }}>
               <span className="h-2 w-2 rounded-full" style={{ background: 'var(--ink)' }} />
               SYNCED 2M AGO
@@ -168,81 +208,80 @@ export function HeroConsole() {
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <div className="type-mono-label" style={{ fontSize: 10, color: 'var(--ink)' }}>Marketplace readiness</div>
-                <h3 className="font-display mt-1 text-[24px] leading-tight sm:text-[28px]" style={{ fontWeight: 520, color: 'var(--ink)' }}>Prepare this week&apos;s listings</h3>
-                <p className="mt-1 text-[12px] sm:text-[13px]" style={{ color: 'var(--ink-muted)' }}>Supplier data in. Review workbook out.</p>
+                <h3 className="font-display mt-1 text-[24px] leading-tight sm:text-[28px]" style={{ fontWeight: 520, color: 'var(--ink)' }}>Supplier sheet in. Channel files out.</h3>
+                <p className="mt-1 text-[12px] sm:text-[13px]" style={{ color: 'var(--ink-muted)' }}>Watch the raw workbook become 8 marketplace files.</p>
               </div>
-              <button type="button" className="rounded-doc h-9 px-3 text-[11px] font-semibold" style={{ background: 'var(--orange)', color: 'var(--paper)' }}>
-                {activeStep === 0 && 'Add source files'}
-                {activeStep === 1 && 'Scanning 8 channels'}
-                {activeStep === 2 && 'Open review workbook'}
-                {activeStep === 3 && 'Export files'}
+              <button type="button" className="rounded-doc tabular h-9 px-3 text-[11px] font-semibold" style={{ background: 'var(--orange)', color: 'var(--paper)' }}>
+                {sheetDone ? 'Queue for review' : `Compiling ${Math.min(compiled * 31, 184)} / 184 rows`}
               </button>
             </div>
 
-            <div className="mt-5 grid grid-cols-2 gap-2 lg:grid-cols-4">
-              {stages.map((stage, index) => {
-                const selected = index === activeStep
-                const complete = index < activeStep
-                return (
-                  <button
-                    key={stage.label}
-                    type="button"
-                    onClick={() => setActiveStep(index)}
-                    className="rounded-doc relative min-h-[72px] overflow-hidden border px-3 py-2.5 text-left transition-colors"
-                    style={{ borderColor: selected ? 'var(--ink)' : 'var(--ledger)', background: 'var(--paper-raised)' }}
-                  >
-                    <span className="flex items-center gap-2 text-[11px] font-semibold" style={{ color: 'var(--ink)' }}>
-                      <span className="tabular grid h-5 w-5 place-items-center rounded-full text-[9px]" style={{ background: complete || selected ? 'var(--orange)' : 'var(--paper-shade)', color: complete || selected ? 'var(--ink)' : 'var(--ink-muted)' }}>{complete ? '✓' : index + 1}</span>
-                      {stage.label}
-                    </span>
-                    <span className="type-mono-label mt-1.5 block" style={{ fontSize: 9, color: 'var(--ink-muted)' }}>{stage.detail}</span>
-                    {selected && <span className="hero-demo-progress absolute inset-x-0 bottom-0 h-[2px]" style={{ background: 'var(--orange)' }} />}
-                  </button>
-                )
-              })}
-            </div>
-
-            <div className="mt-4 grid gap-3 xl:grid-cols-[minmax(0,1.25fr)_minmax(240px,0.75fr)]">
-              <section className="rounded-doc overflow-hidden border" style={{ borderColor: 'var(--ledger)', background: 'var(--paper-raised)' }}>
-                <div className="flex items-center justify-between border-b px-3.5 py-3" style={{ borderColor: 'var(--ledger)' }}>
-                  <div>
-                    <div className="text-[11px] font-semibold" style={{ color: 'var(--ink)' }}>Launch board</div>
-                    <div className="type-mono-label" style={{ fontSize: 9, color: 'var(--ink-muted)' }}>8 marketplace outputs</div>
-                  </div>
-                  <span className="type-mono-label" style={{ fontSize: 9, color: 'var(--ink)' }}>184 ready</span>
+            <div className="mt-4 grid gap-3 xl:grid-cols-[minmax(0,1.35fr)_minmax(220px,0.65fr)]">
+              {/* spreadsheet plate */}
+              <section className="rounded-doc relative overflow-hidden border" style={{ borderColor: 'var(--ledger)', background: '#fff' }}>
+                <div className="type-mono-label grid grid-cols-[0.95fr_1.25fr_0.55fr_0.75fr_0.45fr_0.7fr] border-b px-3 py-2" style={{ fontSize: 8, borderColor: 'var(--ledger-strong)', color: 'var(--ink-muted)', background: 'var(--paper-shade)' }}>
+                  <span>SKU</span><span>PRODUCT</span><span>IMAGES</span><span>MATERIAL</span><span>PRICE</span><span className="text-right">STATUS</span>
                 </div>
-                <div className="type-mono-label grid grid-cols-[1.2fr_0.8fr_0.8fr_0.7fr] border-b px-3.5 py-2" style={{ fontSize: 8, borderColor: 'var(--ledger)', color: 'var(--ink-muted)' }}>
-                  <span>Platform</span><span>Rows</span><span>Review</span><span className="text-right">Status</span>
+                {SHEET_ROWS.map((row, index) => {
+                  const filled = index < compiled
+                  const filling = index === compiled && !sheetDone
+                  return (
+                    <m.div
+                      key={row[0]}
+                      className="relative grid grid-cols-[0.95fr_1.25fr_0.55fr_0.75fr_0.45fr_0.7fr] items-center border-b px-3 py-2.5 text-[10px] last:border-b-0 sm:text-[10.5px]"
+                      animate={{ backgroundColor: filling ? 'rgba(29,122,109,0.10)' : filled ? 'rgba(29,122,109,0.03)' : '#ffffff' }}
+                      transition={{ duration: 0.25 }}
+                      style={{ borderColor: 'var(--ledger)' }}
+                    >
+                      <span className="truncate font-mono" style={{ color: 'var(--ink)' }}>{row[0]}</span>
+                      {filled || filling ? (
+                        <m.span initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} className="truncate font-medium" style={{ color: 'var(--ink)' }}>{row[1]}</m.span>
+                      ) : (
+                        <span style={{ color: 'var(--ink-faint)' }}>—</span>
+                      )}
+                      {(['2', '3', '4'] as const).map((_, cellIndex) => (
+                        <span key={cellIndex} className="tabular truncate" style={{ color: filled ? 'var(--ink)' : 'var(--ink-faint)' }}>
+                          {filled ? row[(cellIndex + 2) as 2 | 3 | 4] : '—'}
+                        </span>
+                      ))}
+                      <span className="text-right">
+                        <span className="type-mono-label whitespace-nowrap" style={{ fontSize: 8, color: filled ? 'var(--ink)' : filling ? 'var(--orange)' : 'var(--ink-faint)' }}>
+                          {filled ? '[ READY ]' : filling ? '[ FILLING ]' : '[ RAW ]'}
+                        </span>
+                      </span>
+                      {filling && (
+                        <m.span aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-10" style={{ background: 'linear-gradient(90deg, transparent, rgba(29,122,109,0.2), transparent)' }} animate={{ x: [0, 340] }} transition={{ repeat: Infinity, duration: 0.55, ease: 'linear' }} />
+                      )}
+                    </m.div>
+                  )
+                })}
+                <div className="flex items-center justify-between px-3 py-2" style={{ background: 'var(--paper-shade)' }}>
+                  <span className="type-mono-label" style={{ fontSize: 8, color: 'var(--ink-faint)' }}>+ 178 MORE ROWS</span>
+                  <span className="type-mono-label tabular" style={{ fontSize: 8, color: sheetDone ? 'var(--ink)' : 'var(--orange)' }}>{sheetDone ? 'ALL FIELDS MAPPED' : 'AGENT FILLING FIELDS…'}</span>
                 </div>
-                {platforms.map((row, index) => (
-                  <div key={row[0]} className="grid grid-cols-[1.2fr_0.8fr_0.8fr_0.7fr] items-center border-b px-3.5 py-3 text-[10px] last:border-b-0 sm:text-[11px]" style={{ borderColor: 'var(--ledger)', background: activeStep === 2 && index === 2 ? 'rgba(29,122,109,0.08)' : 'var(--paper-raised)' }}>
-                    <span className="font-semibold" style={{ color: 'var(--ink)' }}>{row[0]}</span>
-                    <span className="tabular" style={{ color: 'var(--ink)' }}>{row[1]}</span>
-                    <span className="tabular" style={{ color: row[2] === '0 review' ? 'var(--ink-muted)' : 'var(--orange)' }}>{row[2]}</span>
-                    <span className="text-right"><StatusBracket status={row[3]} className="!text-[9px]" /></span>
-                  </div>
-                ))}
               </section>
 
+              {/* compile rail */}
               <section className="rounded-doc border p-3.5" style={{ borderColor: 'var(--ledger)', background: 'var(--paper-raised)' }}>
-                <div className="type-mono-label" style={{ fontSize: 9, color: 'var(--ink)' }}>Current run</div>
-                <div className="font-display mt-2 text-[17px] leading-snug" style={{ fontWeight: 520, color: 'var(--ink)' }}>{stages[activeStep].detail}</div>
-                <div className="mt-4 space-y-2">
+                <div className="type-mono-label" style={{ fontSize: 9, color: 'var(--ink)' }}>This run</div>
+                <div className="mt-3 space-y-3">
                   {[
-                    ['Supplier PI', 'Synced'],
-                    ['Product images', activeStep > 0 ? '184 matched' : 'Queued'],
-                    ['Channel templates', activeStep > 1 ? 'Checked' : 'Waiting'],
-                    ['Review workbook', activeStep === 3 ? 'Ready' : 'Preparing'],
-                  ].map(([label, value], index) => (
-                    <div key={label} className="rounded-doc flex items-center justify-between gap-3 px-2.5 py-2" style={{ background: index <= activeStep ? 'var(--paper-shade)' : 'transparent', border: '1px solid var(--ledger)' }}>
-                      <span className="truncate text-[10px]" style={{ color: 'var(--ink)' }}>{label}</span>
-                      <span className="type-mono-label shrink-0" style={{ fontSize: 9, color: index <= activeStep ? 'var(--ink)' : 'var(--ink-muted)' }}>{value}</span>
+                    ['184', 'SKU rows'],
+                    ['37', 'fields filled per row'],
+                    ['8', 'channel files'],
+                  ].map(([value, label]) => (
+                    <div key={label} className="flex items-baseline justify-between gap-2 border-b pb-2" style={{ borderColor: 'var(--ledger)' }}>
+                      <span className="font-display tabular text-[22px] leading-none" style={{ fontWeight: 540, color: 'var(--ink)' }}>{value}</span>
+                      <span className="type-mono-label text-right" style={{ fontSize: 8, color: 'var(--ink-muted)' }}>{label}</span>
                     </div>
                   ))}
                 </div>
+                <div className="mt-3 h-1 overflow-hidden" style={{ background: 'var(--paper-shade)' }}>
+                  <m.div className="h-full origin-left" animate={{ scaleX: Math.min(sheetTick / (SHEET_ROWS.length + 1), 1) }} transition={{ duration: 0.3 }} style={{ background: 'var(--orange)' }} />
+                </div>
                 <div className="rounded-doc mt-3 border p-3" style={{ borderColor: 'var(--ledger)', background: 'var(--paper-shade)' }}>
                   <div className="type-mono-label flex items-center gap-2" style={{ fontSize: 9, color: 'var(--ink)' }}><SparkIcon /> Next action</div>
-                  <p className="mt-1.5 text-[11px] leading-relaxed" style={{ color: 'var(--ink-muted)' }}>{activeStep < 2 ? 'Amplify is preparing the review queue.' : activeStep === 2 ? 'Confirm four Centrepoint material fields.' : 'Approved marketplace files are ready.'}</p>
+                  <p className="mt-1.5 text-[11px] leading-relaxed" style={{ color: 'var(--ink-muted)' }}>{sheetDone ? 'Namshi, 6th Street, Centrepoint, and Amazon files are queued for review.' : 'Listing Agent is matching images and filling channel attributes.'}</p>
                 </div>
               </section>
             </div>
@@ -328,7 +367,102 @@ export function HeroConsole() {
                 </div>
               </m.div>
             )}
+
+            {/* ---------- NEW scene: inventory multi-warehouse sync ---------- */}
             {filmPhase === 4 && (
+              <m.div
+                key="inventory-film"
+                className="absolute inset-0 z-20 flex flex-col"
+                style={{ background: 'var(--paper-shade)' }}
+                initial={{ opacity: 0, x: 70, scale: 0.985 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, x: 42, scale: 0.99 }}
+                transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <div className="flex min-h-[54px] items-center justify-between border-b px-4 sm:px-5" style={{ borderColor: 'var(--ledger)', background: 'var(--paper-raised)' }}>
+                  <div className="text-[11px]" style={{ color: 'var(--ink-muted)' }}><span className="font-semibold" style={{ color: 'var(--ink)' }}>Inventory</span> / Multi-warehouse sync</div>
+                  <div className="type-mono-label flex items-center gap-2" style={{ fontSize: 9, color: 'var(--ink)' }}>
+                    <m.span className="h-2 w-2 rounded-full" animate={{ opacity: [0.35, 1, 0.35] }} transition={{ repeat: Infinity, duration: 1.4 }} style={{ background: 'var(--orange)' }} />
+                    AUTO-SYNC ON
+                  </div>
+                </div>
+
+                <div className="grid min-h-0 flex-1 content-start gap-3 p-3 sm:p-4 lg:grid-cols-[1.15fr_0.85fr] lg:content-stretch">
+                  {/* stock by location */}
+                  <section className="rounded-doc overflow-hidden border" style={{ borderColor: 'var(--ledger)', background: 'var(--paper-raised)' }}>
+                    <div className="flex items-center justify-between border-b px-3.5 py-3" style={{ borderColor: 'var(--ledger)' }}>
+                      <div>
+                        <div className="type-mono-label" style={{ fontSize: 9, color: 'var(--ink)' }}>One stock pool</div>
+                        <h3 className="font-display tabular mt-1 text-[17px]" style={{ fontWeight: 520, color: 'var(--ink)' }}>4,530 units across 4 locations</h3>
+                      </div>
+                      <StatusBracket status="Synced" className="shrink-0" />
+                    </div>
+                    <div className="type-mono-label grid grid-cols-[1.5fr_0.7fr_0.6fr_0.6fr] border-b px-3.5 py-2" style={{ fontSize: 8, borderColor: 'var(--ledger)', color: 'var(--ink-muted)' }}>
+                      <span>Location</span><span>Units</span><span>Cover</span><span className="text-right">Status</span>
+                    </div>
+                    {WAREHOUSES.map(([name, units, cover, status], index) => (
+                      <m.div
+                        key={name}
+                        initial={{ opacity: 0, x: -14 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.35 + index * 0.16, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                        className="grid grid-cols-[1.5fr_0.7fr_0.6fr_0.6fr] items-center border-b px-3.5 py-2.5 text-[10px] last:border-b-0 sm:text-[11px]"
+                        style={{ borderColor: 'var(--ledger)', background: status === 'Low' ? 'rgba(200,50,30,0.05)' : 'var(--paper-raised)' }}
+                      >
+                        <span className="truncate font-semibold" style={{ color: 'var(--ink)' }}>{name}</span>
+                        <span className="tabular" style={{ color: 'var(--ink)' }}>{units}</span>
+                        <span className="tabular" style={{ color: 'var(--ink-muted)' }}>{cover}</span>
+                        <span className="text-right"><StatusBracket status={status === 'Low' ? 'Blocked' : status === 'Watch' ? 'Review' : 'Ready'} className="!text-[8px]" /></span>
+                      </m.div>
+                    ))}
+                    <m.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.6 }} className="m-3 rounded-doc border p-3" style={{ borderColor: 'var(--ledger)', background: 'var(--paper-shade)' }}>
+                      <div className="type-mono-label flex items-center gap-2" style={{ fontSize: 8, color: 'var(--ink)' }}><SparkIcon /> Inventory Agent</div>
+                      <div className="mt-1 text-[11px] font-semibold" style={{ color: 'var(--ink)' }}>Move 220 units to FBA and draft a 320-unit reorder — $42K PO ready.</div>
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        <span className="type-mono-label rounded-doc border px-2 py-1" style={{ fontSize: 8, borderColor: 'var(--ledger)', background: 'var(--paper-raised)', color: 'var(--ink)' }}>Evidence attached</span>
+                        <span className="type-mono-label rounded-doc px-2 py-1" style={{ fontSize: 8, background: 'var(--orange)', color: 'var(--paper)' }}>Needs approval</span>
+                      </div>
+                    </m.div>
+                  </section>
+
+                  {/* sync destinations */}
+                  <section className="rounded-doc flex flex-col border p-3.5" style={{ borderColor: 'var(--ledger)', background: 'var(--paper-raised)' }}>
+                    <div className="type-mono-label" style={{ fontSize: 9, color: 'var(--ink)' }}>Synced everywhere, automatically</div>
+                    <h3 className="font-display mt-1 text-[15px] leading-snug" style={{ fontWeight: 520, color: 'var(--ink)' }}>Every stock move lands in your tools.</h3>
+                    <div className="mt-3 flex-1 space-y-2">
+                      {SYNC_TARGETS.map((target) => (
+                        <m.div
+                          key={target.name}
+                          initial={{ opacity: 0, x: 16 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: target.delay, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                          className="rounded-doc border p-2.5"
+                          style={{ borderColor: 'var(--ledger)', background: 'var(--paper-raised)' }}
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="text-[11px] font-semibold" style={{ color: 'var(--ink)' }}>{target.name}</span>
+                            <span className="type-mono-label flex items-center gap-1.5 whitespace-nowrap" style={{ fontSize: 7, color: target.status === 'QUEUED' ? 'var(--ink-muted)' : 'var(--ink)' }}>
+                              <m.span className="h-1.5 w-1.5 rounded-full" animate={target.status === 'QUEUED' ? {} : { opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1.6, delay: target.delay }} style={{ background: target.status === 'QUEUED' ? 'var(--ledger-strong)' : 'var(--orange)' }} />
+                              [ {target.status} ]
+                            </span>
+                          </div>
+                          <div className="mt-1 text-[9.5px]" style={{ color: 'var(--ink-muted)' }}>{target.detail}</div>
+                        </m.div>
+                      ))}
+                    </div>
+                    <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3.2 }} className="rounded-doc mt-2 flex items-center justify-between gap-3 border px-3 py-2.5" style={{ borderColor: 'var(--ink)', background: 'var(--paper-shade)' }}>
+                      <div>
+                        <div className="text-[9px] font-semibold" style={{ color: 'var(--ink)' }}>No more copy-paste stock updates.</div>
+                        <div className="mt-0.5 text-[8px]" style={{ color: 'var(--ink-muted)' }}>Sheets, ERP, and channels stay current on every change.</div>
+                      </div>
+                      <m.span animate={{ opacity: [0.35, 1, 0.35] }} transition={{ repeat: Infinity, duration: 1.8 }} className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: 'var(--orange)' }} />
+                    </m.div>
+                  </section>
+                </div>
+              </m.div>
+            )}
+
+            {filmPhase === LAST_PHASE && (
               <m.div
                 key="publish-film"
                 className="absolute inset-0 z-20 flex flex-col"
