@@ -196,18 +196,15 @@ export function Hero() {
             </m.span>
           </div>
           {reduced || !isDesktop ? (
-            /* mobile: plain in-view reveal — the clip-path sleeve scrub is desktop-only */
-            <m.div
-              className="relative"
-              initial={reduced ? false : { opacity: 0, y: 20 }}
-              whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            >
+            /* mobile / reduced-motion: always visible — the clip-path sleeve scrub is desktop-only.
+               Must never set opacity here: this branch renders first on desktop too (isDesktop
+               starts false), and a stale inline opacity would survive the branch swap. */
+            <div key="console-static" className="relative">
               <HeroConsole />
-            </m.div>
+            </div>
           ) : (
             <m.div
+              key="console-scrub"
               className="relative"
               style={{ y: consoleY, rotate: consoleRotate, clipPath: consoleClip }}
             >
