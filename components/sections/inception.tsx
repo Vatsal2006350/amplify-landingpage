@@ -26,7 +26,7 @@ export function InceptionMembership() {
               className="font-display text-[16px] leading-tight sm:text-[18px]"
               style={{ color: 'var(--ink)', fontWeight: 560 }}
             >
-              Amplify is supported through the NVIDIA Inception program.
+              Amplify is backed by NVIDIA.
             </h2>
           </div>
         </div>
