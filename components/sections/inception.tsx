@@ -19,14 +19,14 @@ export function InceptionMembership() {
               className="type-mono-label"
               style={{ fontSize: 9, color: 'var(--ink-faint)' }}
             >
-              STARTUP PROGRAM MEMBERSHIP
+              NVIDIA INCEPTION PROGRAM MEMBER
             </p>
             <h2
               id="nvidia-inception-heading"
               className="font-display text-[16px] leading-tight sm:text-[18px]"
               style={{ color: 'var(--ink)', fontWeight: 560 }}
             >
-              Amplify is a member of NVIDIA Inception.
+              Amplify is supported through the NVIDIA Inception program.
             </h2>
           </div>
         </div>
