@@ -21,23 +21,13 @@ export function Ticker() {
       }}
     >
       <div className="mx-auto max-w-[1200px] px-4 py-8 sm:px-6 sm:py-10">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <p className="type-mono-label" style={{ fontSize: 9, color: 'var(--ink-faint)' }}>
-              WORKING RELATIONSHIPS / 2026
-            </p>
-            <h2
-              id="partner-logos-heading"
-              className="font-display mt-1 text-[24px] leading-tight sm:text-[28px]"
-              style={{ color: 'var(--ink)', fontWeight: 550 }}
-            >
-              Partnering with
-            </h2>
-          </div>
-          <p className="type-mono-label" style={{ fontSize: 9, color: 'var(--ink-faint)' }}>
-            BRAND + OPERATING PARTNERS
-          </p>
-        </div>
+        <h2
+          id="partner-logos-heading"
+          className="font-display max-w-[760px] text-[28px] leading-[1.08] sm:text-[36px]"
+          style={{ color: 'var(--ink)', fontWeight: 550 }}
+        >
+          Leading retailers and ecommerce brands use Amplify.
+        </h2>
 
         <div
           className="mt-5 grid gap-px overflow-hidden rounded-doc sm:grid-cols-3"
