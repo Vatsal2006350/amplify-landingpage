@@ -8,6 +8,7 @@ import { Enrichment } from '../components/sections/enrichment'
 import { FinalCta } from '../components/sections/final-cta'
 import { SiteFooter } from '../components/sections/footer'
 import { Hero } from '../components/sections/hero'
+import { InceptionMembership } from '../components/sections/inception'
 import { Integrations } from '../components/sections/integrations'
 import { SiteNav } from '../components/sections/nav'
 import { Ticker } from '../components/sections/ticker'
@@ -19,6 +20,7 @@ export default function LandingPage() {
     <MotionShell>
       <main className="min-h-screen" style={{ background: 'var(--paper)' }}>
         <SiteNav />
+        <InceptionMembership />
         <Hero />
         <Ticker />
         <Customers />

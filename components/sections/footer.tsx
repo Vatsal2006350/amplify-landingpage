@@ -95,22 +95,33 @@ export function SiteFooter({ tone = 'paper' }: { tone?: 'paper' | 'ink' }) {
       </div>
 
       <div
-        className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-4 sm:px-6"
+        className="px-4 py-4 sm:px-6"
         style={{
           background: ink ? 'rgba(0,0,0,0.3)' : 'var(--ink)',
           color: 'var(--dk-text)',
         }}
       >
-        <p className="type-mono-label" style={{ fontSize: 9, color: 'rgba(244,241,234,0.6)' }}>
-          © {new Date().getFullYear()} AMPLIFY — ALL FREIGHT F.O.B. ORIGIN
-        </p>
-        <p
-          className="type-mono-label hidden md:block"
-          style={{ fontSize: 9, color: 'rgba(244,241,234,0.6)' }}
-        >
-          {MANIFEST_NO}
-        </p>
-        <Barcode seed="AMP-2026-184" height={18} tone="ink" />
+        <div className="mx-auto max-w-[1200px]">
+          <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+            <p className="type-mono-label" style={{ fontSize: 9, color: 'rgba(244,241,234,0.6)' }}>
+              © {new Date().getFullYear()} AMPLIFY — ALL FREIGHT F.O.B. ORIGIN
+            </p>
+            <p
+              className="type-mono-label hidden md:block"
+              style={{ fontSize: 9, color: 'rgba(244,241,234,0.6)' }}
+            >
+              {MANIFEST_NO}
+            </p>
+            <Barcode seed="AMP-2026-184" height={18} tone="ink" />
+          </div>
+          <p
+            className="mt-3 max-w-[900px] text-[9px] leading-[1.5]"
+            style={{ color: 'rgba(244,241,234,0.42)' }}
+          >
+            © 2025 NVIDIA, the NVIDIA logo, and NVIDIA Inception are trademarks and/or registered
+            trademarks of NVIDIA Corporation in the U.S. and other countries.
+          </p>
+        </div>
       </div>
     </footer>
   )
