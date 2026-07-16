@@ -67,6 +67,30 @@ function Sparkline({ data }: { data: number[] }) {
 
 const SOURCE_FILES = ['master_item_sheet.xlsx', 'stock_snapshot.csv', 'confirmed_sales.xlsx', 'namshi_template.xlsx']
 
+/* [field, source, value, status] */
+const FIELD_ROWS: [string, string, string, string][] = [
+  ['Product image', 'ImgBB album', '184 matched', 'ready'],
+  ['Closure', 'image review', 'lace-up', 'ready'],
+  ['Material', 'master sheet', 'needs check', 'review'],
+  ['Target price', 'pricing sheet', 'manager approval', 'blocked'],
+]
+
+/* [sku, product, assets, status] */
+const PREVIEW_ROWS: [string, string, string, string][] = [
+  ['BR-772104-CAF', 'Leather Lace-Up Boot', '5 images', 'Ready'],
+  ['BR-9011-CRM', 'Carryover Sandal', '3 images', 'Ready'],
+  ['BR-772105-PRE', 'Patent Mary Jane', 'price approval', 'Review'],
+  ['BR-772106-NDE', 'Comfort Mule', 'material check', 'Review'],
+]
+
+/* [sku, channel, status, action] */
+const INVENTORY_ROWS: [string, string, string, string][] = [
+  ['BR-772104-CAF', 'Amazon', 'low', '320 buy'],
+  ['BR-9011-CRM', 'Noon', 'in stock', 'hold'],
+  ['PMUK-GUSTO-120', 'Shopify', 'low', 'bundle SKU'],
+  ['SM-TRAIN-001', 'Retail', 'ready', 'training pack'],
+]
+
 const PANEL: CSSProperties = {
   border: '1px solid var(--ledger)',
   background: 'var(--paper-raised)',
@@ -124,35 +148,48 @@ export function ProductFlowWorkbench() {
           </div>
           <StatusBracket status="export ready" />
         </div>
-        <div className="grid gap-2 sm:grid-cols-3">
+        <div className="grid grid-cols-3 gap-2">
           <Metric value="184" label="rows" />
           <Metric value="37" label="fields" />
           <Metric value="4" label="review" />
         </div>
-        <div className="mt-4 overflow-x-auto rounded-doc" style={{ border: '1px solid var(--ledger)' }}>
-          {columnHeader([
-            ['Field', 'col-span-4'],
-            ['Source', 'col-span-3'],
-            ['Value', 'col-span-3'],
-            ['Status', 'col-span-2 text-right'],
-          ])}
-          {[
-            ['Product image', 'ImgBB album', '184 matched', 'ready'],
-            ['Closure', 'image review', 'lace-up', 'ready'],
-            ['Material', 'master sheet', 'needs check', 'review'],
-            ['Target price', 'pricing sheet', 'manager approval', 'blocked'],
-          ].map(([field, source, value, status]) => (
-            <div
-              key={field}
-              className="grid min-w-[520px] grid-cols-12 gap-3 px-3 py-3 text-[12px] last:border-b-0"
-              style={{ borderBottom: '1px solid var(--ledger)' }}
-            >
-              <span className="col-span-4 font-semibold" style={{ color: 'var(--ink)' }}>{field}</span>
-              <span className="col-span-3 truncate" style={{ color: 'var(--ink-muted)' }}>{source}</span>
-              <span className="col-span-3 truncate" style={{ color: 'var(--ink)' }}>{value}</span>
-              <span className="col-span-2 text-right"><StatusBracket status={status} /></span>
-            </div>
-          ))}
+        <div className="mt-4 rounded-doc" style={{ border: '1px solid var(--ledger)' }}>
+          {/* desktop / tablet: ledger grid */}
+          <div className="hidden overflow-x-auto sm:block">
+            {columnHeader([
+              ['Field', 'col-span-4'],
+              ['Source', 'col-span-3'],
+              ['Value', 'col-span-3'],
+              ['Status', 'col-span-2 text-right'],
+            ])}
+            {FIELD_ROWS.map(([field, source, value, status]) => (
+              <div
+                key={field}
+                className="grid min-w-[520px] grid-cols-12 gap-3 px-3 py-3 text-[12px] last:border-b-0"
+                style={{ borderBottom: '1px solid var(--ledger)' }}
+              >
+                <span className="col-span-4 font-semibold" style={{ color: 'var(--ink)' }}>{field}</span>
+                <span className="col-span-3 truncate" style={{ color: 'var(--ink-muted)' }}>{source}</span>
+                <span className="col-span-3 truncate" style={{ color: 'var(--ink)' }}>{value}</span>
+                <span className="col-span-2 text-right"><StatusBracket status={status} /></span>
+              </div>
+            ))}
+          </div>
+          {/* mobile: stacked ledger rows — every value stays visible */}
+          <div className="sm:hidden">
+            {FIELD_ROWS.map(([field, source, value, status]) => (
+              <div key={field} className="px-3 py-3 last:border-b-0" style={{ borderBottom: '1px solid var(--ledger)' }}>
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="text-[13px] font-semibold" style={{ color: 'var(--ink)' }}>{field}</span>
+                  <StatusBracket status={status} className="shrink-0" />
+                </div>
+                <div className="mt-1 text-[12px] leading-snug">
+                  <span style={{ color: 'var(--ink-muted)' }}>{source} → </span>
+                  <span style={{ color: 'var(--ink)' }}>{value}</span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -183,33 +220,53 @@ export function ProductFlowWorkbench() {
             ))}
           </div>
         </div>
-        <div className="overflow-x-auto rounded-doc" style={{ border: '1px solid var(--ledger)' }}>
-          {columnHeader([
-            ['SKU', 'col-span-3'],
-            ['Product', 'col-span-4'],
-            ['Assets', 'col-span-3'],
-            ['Status', 'col-span-2 text-right'],
-          ])}
-          {[
-            ['BR-772104-CAF', 'Leather Lace-Up Boot', '5 images', 'Ready'],
-            ['BR-9011-CRM', 'Carryover Sandal', '3 images', 'Ready'],
-            ['BR-772105-PRE', 'Patent Mary Jane', 'price approval', 'Review'],
-            ['BR-772106-NDE', 'Comfort Mule', 'material check', 'Review'],
-          ].map((row, index) => (
-            <div
-              key={row[0]}
-              className="grid min-w-[520px] grid-cols-12 gap-3 px-3 py-3 text-[12px] last:border-b-0"
-              style={{
-                borderBottom: '1px solid var(--ledger)',
-                background: index === 0 ? 'var(--paper-shade)' : 'var(--paper-raised)',
-              }}
-            >
-              <span className="col-span-3 truncate font-mono font-semibold" style={{ color: 'var(--ink)' }}>{row[0]}</span>
-              <span className="col-span-4 truncate" style={{ color: 'var(--ink)' }}>{row[1]}</span>
-              <span className="col-span-3 truncate" style={{ color: 'var(--ink-muted)' }}>{row[2]}</span>
-              <span className="col-span-2 text-right"><StatusBracket status={row[3]} /></span>
-            </div>
-          ))}
+        <div className="rounded-doc" style={{ border: '1px solid var(--ledger)' }}>
+          {/* desktop / tablet: ledger grid */}
+          <div className="hidden overflow-x-auto sm:block">
+            {columnHeader([
+              ['SKU', 'col-span-3'],
+              ['Product', 'col-span-4'],
+              ['Assets', 'col-span-3'],
+              ['Status', 'col-span-2 text-right'],
+            ])}
+            {PREVIEW_ROWS.map((row, index) => (
+              <div
+                key={row[0]}
+                className="grid min-w-[520px] grid-cols-12 gap-3 px-3 py-3 text-[12px] last:border-b-0"
+                style={{
+                  borderBottom: '1px solid var(--ledger)',
+                  background: index === 0 ? 'var(--paper-shade)' : 'var(--paper-raised)',
+                }}
+              >
+                <span className="col-span-3 truncate font-mono font-semibold" style={{ color: 'var(--ink)' }}>{row[0]}</span>
+                <span className="col-span-4 truncate" style={{ color: 'var(--ink)' }}>{row[1]}</span>
+                <span className="col-span-3 truncate" style={{ color: 'var(--ink-muted)' }}>{row[2]}</span>
+                <span className="col-span-2 text-right"><StatusBracket status={row[3]} /></span>
+              </div>
+            ))}
+          </div>
+          {/* mobile: stacked ledger rows */}
+          <div className="sm:hidden">
+            {PREVIEW_ROWS.map(([sku, product, assets, status], index) => (
+              <div
+                key={sku}
+                className="px-3 py-3 last:border-b-0"
+                style={{
+                  borderBottom: '1px solid var(--ledger)',
+                  background: index === 0 ? 'var(--paper-shade)' : 'var(--paper-raised)',
+                }}
+              >
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="truncate font-mono text-[12px] font-semibold" style={{ color: 'var(--ink)' }}>{sku}</span>
+                  <StatusBracket status={status} className="shrink-0" />
+                </div>
+                <div className="mt-1 text-[12px] leading-snug">
+                  <span style={{ color: 'var(--ink)' }}>{product}</span>
+                  <span style={{ color: 'var(--ink-muted)' }}> · {assets}</span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="mt-4 rounded-doc p-3" style={NOTE}>
           <div className="type-mono-label" style={{ color: 'var(--ink-muted)' }}>Operator command</div>
@@ -233,7 +290,7 @@ export function ProductFlowWorkbench() {
           </div>
           <StatusBracket status="run complete" />
         </div>
-        <div className="grid gap-2 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           <Metric value="45K" label="sales rows" />
           <Metric value="7" label="source files" />
           <Metric value="90" label="agent recs" />
@@ -324,39 +381,59 @@ export function ProductFlowWorkbench() {
           </div>
           <StatusBracket status="synced 4 min ago" />
         </div>
-        <div className="grid gap-2 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           <Metric value="8" label="channels" />
           <Metric value="1,240" label="units to buy" />
           <Metric value="18" label="days cover" />
           <Metric value="42K" label="PO draft" />
         </div>
-        <div className="mt-4 overflow-x-auto rounded-doc" style={{ border: '1px solid var(--ledger)' }}>
-          {columnHeader([
-            ['SKU', 'col-span-4'],
-            ['Channel', 'col-span-2'],
-            ['Status', 'col-span-3'],
-            ['Action', 'col-span-3 text-right'],
-          ])}
-          {[
-            ['BR-772104-CAF', 'Amazon', 'low', '320 buy'],
-            ['BR-9011-CRM', 'Noon', 'in stock', 'hold'],
-            ['PMUK-GUSTO-120', 'Shopify', 'low', 'bundle SKU'],
-            ['SM-TRAIN-001', 'Retail', 'ready', 'training pack'],
-          ].map((row, index) => (
-            <div
-              key={`${row[0]}-${row[1]}`}
-              className="grid min-w-[520px] grid-cols-12 gap-3 px-3 py-3 text-[12px] last:border-b-0"
-              style={{
-                borderBottom: '1px solid var(--ledger)',
-                background: index === 0 ? 'var(--paper-shade)' : 'var(--paper-raised)',
-              }}
-            >
-              <span className="col-span-4 truncate font-mono font-semibold" style={{ color: 'var(--ink)' }}>{row[0]}</span>
-              <span className="col-span-2" style={{ color: 'var(--ink-muted)' }}>{row[1]}</span>
-              <span className="col-span-3"><StatusBracket status={row[2]} /></span>
-              <span className="col-span-3 text-right font-semibold" style={{ color: 'var(--ink)' }}>{row[3]}</span>
-            </div>
-          ))}
+        <div className="mt-4 rounded-doc" style={{ border: '1px solid var(--ledger)' }}>
+          {/* desktop / tablet: ledger grid */}
+          <div className="hidden overflow-x-auto sm:block">
+            {columnHeader([
+              ['SKU', 'col-span-4'],
+              ['Channel', 'col-span-2'],
+              ['Status', 'col-span-3'],
+              ['Action', 'col-span-3 text-right'],
+            ])}
+            {INVENTORY_ROWS.map((row, index) => (
+              <div
+                key={`${row[0]}-${row[1]}`}
+                className="grid min-w-[520px] grid-cols-12 gap-3 px-3 py-3 text-[12px] last:border-b-0"
+                style={{
+                  borderBottom: '1px solid var(--ledger)',
+                  background: index === 0 ? 'var(--paper-shade)' : 'var(--paper-raised)',
+                }}
+              >
+                <span className="col-span-4 truncate font-mono font-semibold" style={{ color: 'var(--ink)' }}>{row[0]}</span>
+                <span className="col-span-2" style={{ color: 'var(--ink-muted)' }}>{row[1]}</span>
+                <span className="col-span-3"><StatusBracket status={row[2]} /></span>
+                <span className="col-span-3 text-right font-semibold" style={{ color: 'var(--ink)' }}>{row[3]}</span>
+              </div>
+            ))}
+          </div>
+          {/* mobile: stacked ledger rows */}
+          <div className="sm:hidden">
+            {INVENTORY_ROWS.map(([sku, channel, status, action], index) => (
+              <div
+                key={`${sku}-${channel}`}
+                className="px-3 py-3 last:border-b-0"
+                style={{
+                  borderBottom: '1px solid var(--ledger)',
+                  background: index === 0 ? 'var(--paper-shade)' : 'var(--paper-raised)',
+                }}
+              >
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="truncate font-mono text-[12px] font-semibold" style={{ color: 'var(--ink)' }}>{sku}</span>
+                  <StatusBracket status={status} className="shrink-0" />
+                </div>
+                <div className="mt-1 flex items-baseline justify-between gap-3 text-[12px] leading-snug">
+                  <span style={{ color: 'var(--ink-muted)' }}>{channel}</span>
+                  <span className="font-semibold" style={{ color: 'var(--ink)' }}>{action}</span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -403,7 +480,7 @@ export function ProductFlowWorkbench() {
             Nothing writes live without review.
           </h3>
         </div>
-        <div className="grid gap-2 sm:grid-cols-2">
+        <div className="grid grid-cols-2 gap-2">
           <Metric value="17" label="needs review" />
           <Metric value="12" label="listing blockers" />
           <Metric value="3" label="pricing blockers" />
@@ -506,7 +583,7 @@ export function ProductFlowWorkbench() {
               <div className="type-mono-label" style={{ fontSize: 9, color: 'var(--ink-muted)' }}>Geoomnii workspace</div>
             </div>
           </div>
-          <div className="grid gap-1.5 sm:grid-cols-2 lg:grid-cols-1">
+          <div className="grid grid-cols-2 gap-1.5 lg:grid-cols-1">
             {PRODUCT_FLOW_TABS.map((item) => {
               const selected = item.id === active
               return (
@@ -608,11 +685,11 @@ export function ProductFlowWorkbench() {
                       {flow.decision}
                     </p>
                   </div>
-                  <div className="flex shrink-0 items-center gap-4">
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
                     <Stamp label="APPROVAL GATED" scale={0.62} />
                     <button
                       type="button"
-                      className="btn-press type-mono-label rounded-doc px-4 py-2.5"
+                      className="btn-press type-mono-label rounded-doc px-4 py-2.5 text-left"
                       style={{ background: 'var(--orange)', color: 'var(--paper)', fontWeight: 700 }}
                     >
                       {flow.action}

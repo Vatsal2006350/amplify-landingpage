@@ -219,8 +219,8 @@ export function HeroConsole() {
             <div className="mt-4 grid gap-3 xl:grid-cols-[minmax(0,1.35fr)_minmax(220px,0.65fr)]">
               {/* spreadsheet plate */}
               <section className="rounded-doc relative overflow-hidden border" style={{ borderColor: 'var(--ledger)', background: '#fff' }}>
-                <div className="type-mono-label grid grid-cols-[0.95fr_1.25fr_0.55fr_0.75fr_0.45fr_0.7fr] border-b px-3 py-2" style={{ fontSize: 8, borderColor: 'var(--ledger-strong)', color: 'var(--ink-muted)', background: 'var(--paper-shade)' }}>
-                  <span>SKU</span><span>PRODUCT</span><span>IMAGES</span><span>MATERIAL</span><span>PRICE</span><span className="text-right">STATUS</span>
+                <div className="type-mono-label grid grid-cols-[1fr_1.35fr_0.55fr_0.7fr] border-b px-3 py-2 sm:grid-cols-[0.95fr_1.25fr_0.55fr_0.75fr_0.45fr_0.7fr]" style={{ fontSize: 8, borderColor: 'var(--ledger-strong)', color: 'var(--ink-muted)', background: 'var(--paper-shade)' }}>
+                  <span>SKU</span><span>PRODUCT</span><span>IMAGES</span><span className="hidden sm:block">MATERIAL</span><span className="hidden sm:block">PRICE</span><span className="text-right">STATUS</span>
                 </div>
                 {SHEET_ROWS.map((row, index) => {
                   const filled = index < compiled
@@ -228,7 +228,7 @@ export function HeroConsole() {
                   return (
                     <m.div
                       key={row[0]}
-                      className="relative grid grid-cols-[0.95fr_1.25fr_0.55fr_0.75fr_0.45fr_0.7fr] items-center border-b px-3 py-2.5 text-[10px] last:border-b-0 sm:text-[10.5px]"
+                      className="relative grid grid-cols-[1fr_1.35fr_0.55fr_0.7fr] items-center border-b px-3 py-2.5 text-[10px] last:border-b-0 sm:grid-cols-[0.95fr_1.25fr_0.55fr_0.75fr_0.45fr_0.7fr] sm:text-[10.5px]"
                       animate={{ backgroundColor: filling ? 'rgba(29,122,109,0.10)' : filled ? 'rgba(29,122,109,0.03)' : '#ffffff' }}
                       transition={{ duration: 0.25 }}
                       style={{ borderColor: 'var(--ledger)' }}
@@ -240,7 +240,11 @@ export function HeroConsole() {
                         <span style={{ color: 'var(--ink-faint)' }}>—</span>
                       )}
                       {(['2', '3', '4'] as const).map((_, cellIndex) => (
-                        <span key={cellIndex} className="tabular truncate" style={{ color: filled ? 'var(--ink)' : 'var(--ink-faint)' }}>
+                        <span
+                          key={cellIndex}
+                          className={`tabular truncate ${cellIndex > 0 ? 'hidden sm:block' : ''}`}
+                          style={{ color: filled ? 'var(--ink)' : 'var(--ink-faint)' }}
+                        >
                           {filled ? row[(cellIndex + 2) as 2 | 3 | 4] : '—'}
                         </span>
                       ))}
@@ -291,7 +295,7 @@ export function HeroConsole() {
             {filmPhase >= 2 && filmPhase < 4 && (
               <m.div
                 key="company-brain-film"
-                className="absolute inset-0 z-20 flex flex-col"
+                className="absolute inset-0 z-20 flex flex-col overflow-y-auto"
                 style={{ background: 'var(--paper-shade)' }}
                 initial={{ opacity: 0, x: 70, scale: 0.985 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
@@ -372,7 +376,7 @@ export function HeroConsole() {
             {filmPhase === 4 && (
               <m.div
                 key="inventory-film"
-                className="absolute inset-0 z-20 flex flex-col"
+                className="absolute inset-0 z-20 flex flex-col overflow-y-auto"
                 style={{ background: 'var(--paper-shade)' }}
                 initial={{ opacity: 0, x: 70, scale: 0.985 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
@@ -397,8 +401,8 @@ export function HeroConsole() {
                       </div>
                       <StatusBracket status="Synced" className="shrink-0" />
                     </div>
-                    <div className="type-mono-label grid grid-cols-[1.5fr_0.7fr_0.6fr_0.6fr] border-b px-3.5 py-2" style={{ fontSize: 8, borderColor: 'var(--ledger)', color: 'var(--ink-muted)' }}>
-                      <span>Location</span><span>Units</span><span>Cover</span><span className="text-right">Status</span>
+                    <div className="type-mono-label grid grid-cols-[1.4fr_0.8fr_0.7fr] border-b px-3.5 py-2 sm:grid-cols-[1.5fr_0.7fr_0.6fr_0.6fr]" style={{ fontSize: 8, borderColor: 'var(--ledger)', color: 'var(--ink-muted)' }}>
+                      <span>Location</span><span>Units</span><span className="hidden sm:block">Cover</span><span className="text-right">Status</span>
                     </div>
                     {WAREHOUSES.map(([name, units, cover, status], index) => (
                       <m.div
@@ -406,12 +410,12 @@ export function HeroConsole() {
                         initial={{ opacity: 0, x: -14 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.35 + index * 0.16, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                        className="grid grid-cols-[1.5fr_0.7fr_0.6fr_0.6fr] items-center border-b px-3.5 py-2.5 text-[10px] last:border-b-0 sm:text-[11px]"
+                        className="grid grid-cols-[1.4fr_0.8fr_0.7fr] items-center border-b px-3.5 py-2.5 text-[10px] last:border-b-0 sm:grid-cols-[1.5fr_0.7fr_0.6fr_0.6fr] sm:text-[11px]"
                         style={{ borderColor: 'var(--ledger)', background: status === 'Low' ? 'rgba(200,50,30,0.05)' : 'var(--paper-raised)' }}
                       >
                         <span className="truncate font-semibold" style={{ color: 'var(--ink)' }}>{name}</span>
-                        <span className="tabular" style={{ color: 'var(--ink)' }}>{units}</span>
-                        <span className="tabular" style={{ color: 'var(--ink-muted)' }}>{cover}</span>
+                        <span className="tabular truncate" style={{ color: 'var(--ink)' }}>{units}</span>
+                        <span className="tabular hidden sm:block" style={{ color: 'var(--ink-muted)' }}>{cover}</span>
                         <span className="text-right"><StatusBracket status={status === 'Low' ? 'Blocked' : status === 'Watch' ? 'Review' : 'Ready'} className="!text-[8px]" /></span>
                       </m.div>
                     ))}
@@ -465,7 +469,7 @@ export function HeroConsole() {
             {filmPhase === LAST_PHASE && (
               <m.div
                 key="publish-film"
-                className="absolute inset-0 z-20 flex flex-col"
+                className="absolute inset-0 z-20 flex flex-col overflow-y-auto"
                 style={{ background: 'var(--paper-shade)' }}
                 initial={{ opacity: 0, x: 70, scale: 0.985 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
