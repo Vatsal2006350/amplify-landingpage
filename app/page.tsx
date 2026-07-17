@@ -10,6 +10,7 @@ import { SiteFooter } from '../components/sections/footer'
 import { Hero } from '../components/sections/hero'
 import { InceptionMembership } from '../components/sections/inception'
 import { Integrations } from '../components/sections/integrations'
+import { McpServer } from '../components/sections/mcp'
 import { SiteNav } from '../components/sections/nav'
 import { Ticker } from '../components/sections/ticker'
 import { UseCaseLines } from '../components/sections/use-case-lines'
@@ -31,6 +32,7 @@ export default function LandingPage() {
         <UseCaseLines />
         <TetrisBay />
         <Integrations />
+        <McpServer />
         <FinalCta />
         <SiteFooter />
       </main>
