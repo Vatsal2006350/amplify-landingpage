@@ -54,7 +54,7 @@ export function SiteNav({
           {ORIGIN}
         </span>
         <span className="type-mono-label" style={{ fontSize: 9, color: 'var(--ink-faint)' }}>
-          SHEET 1 OF 7
+          SHEET 1 OF 6
         </span>
       </div>
 

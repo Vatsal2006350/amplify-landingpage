@@ -1,6 +1,8 @@
 'use client'
 
+import { useRef } from 'react'
 import { m, useReducedMotion } from 'motion/react'
+import { useReveal } from '../motion-primitives'
 
 /**
  * Global SVG filter defs for stamp ink-bleed. Mount once in layout.
@@ -34,6 +36,8 @@ export function Stamp({
   className?: string
 }) {
   const reduced = useReducedMotion()
+  const ref = useRef<HTMLSpanElement>(null)
+  const revealed = useReveal(ref, { amount: 0.6 })
 
   const face = (
     <span
@@ -67,14 +71,18 @@ export function Stamp({
 
   return (
     <m.span
+      ref={ref}
       className={`inline-block ${className}`}
       initial={{ scale: 2.6, opacity: 0, rotate: rotate - 8 }}
-      whileInView={{
-        scale: [2.6, 0.94, 1.02, 1],
-        opacity: [0, 1, 1, 1],
-        rotate: [rotate - 8, rotate, rotate, rotate],
-      }}
-      viewport={{ once: true, amount: 0.6 }}
+      animate={
+        revealed
+          ? {
+              scale: [2.6, 0.94, 1.02, 1],
+              opacity: [0, 1, 1, 1],
+              rotate: [rotate - 8, rotate, rotate, rotate],
+            }
+          : undefined
+      }
       transition={{ duration: 0.5, times: [0, 0.55, 0.75, 1], ease: [0.34, 1.56, 0.64, 1] }}
     >
       {face}

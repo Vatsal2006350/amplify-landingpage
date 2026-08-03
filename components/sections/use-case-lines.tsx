@@ -1,16 +1,20 @@
 'use client'
 
+import { useRef } from 'react'
 import { m, stagger, useReducedMotion } from 'motion/react'
 import { HOME_USE_CASES } from '../../lib/home-data'
 import { DocHeader, Rule } from '../doc/chrome'
+import { useReveal } from '../motion-primitives'
 
 export function UseCaseLines() {
   const reduced = useReducedMotion()
+  const listRef = useRef<HTMLDivElement>(null)
+  const revealed = useReveal(listRef, { amount: 0.15 })
 
   return (
     <section id="use-cases" className="scroll-mt-[80px]">
       <div className="mx-auto max-w-[1200px] px-4 py-16 sm:px-6 sm:py-24">
-        <DocHeader index="04 / LINE ITEMS" meta={['PAGE 5 OF 7', 'SCHEDULE A']} />
+        <DocHeader index="05 / LINE ITEMS" meta={['PAGE 6 OF 6', 'SCHEDULE A']} />
         <div className="mt-8 grid gap-6 lg:grid-cols-12 lg:items-end">
           <h2
             className="type-h2 lg:col-span-7"
@@ -41,9 +45,9 @@ export function UseCaseLines() {
           </div>
           <Rule variant="thick-thin" />
           <m.div
+            ref={listRef}
             initial={reduced ? undefined : 'hidden'}
-            whileInView={reduced ? undefined : 'show'}
-            viewport={{ once: true, amount: 0.15 }}
+            animate={reduced || revealed ? 'show' : undefined}
             transition={{ delayChildren: stagger(0.07) }}
           >
             {HOME_USE_CASES.map((item, index) => (

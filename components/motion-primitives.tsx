@@ -21,6 +21,40 @@ import {
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
+/**
+ * Scroll reveals with a guaranteed floor.
+ *
+ * `whileInView` alone is not safe for anything that hides content: if the
+ * IntersectionObserver callback never reports (Safari with certain zoom levels,
+ * elements taller than the viewport, some embedded/backgrounded webviews), the
+ * element is stuck in its hidden `initial` state forever. For an opacity reveal
+ * that is a missing animation; for the clip-path photo reveal it meant the image
+ * never appeared at all, which is why some visitors saw blank cards.
+ *
+ * This hook reveals on intersection *or* after a short timeout, whichever comes
+ * first, so content can never be permanently hidden by a reveal.
+ */
+const REVEAL_FALLBACK_MS = 2200
+
+export function useReveal(
+  ref: React.RefObject<Element | null>,
+  { amount = 0.16 }: { amount?: number } = {},
+) {
+  const inView = useInView(ref, { once: true, amount })
+  const [revealed, setRevealed] = useState(false)
+
+  useEffect(() => {
+    if (inView) setRevealed(true)
+  }, [inView])
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setRevealed(true), REVEAL_FALLBACK_MS)
+    return () => window.clearTimeout(timer)
+  }, [])
+
+  return revealed
+}
+
 export function MotionShell({ children }: { children: ReactNode }) {
   const { scrollYProgress } = useScroll()
   const progress = useSpring(scrollYProgress, { stiffness: 110, damping: 28, restDelta: 0.001 })
@@ -51,14 +85,17 @@ type RevealProps = {
 
 export function Reveal({ children, className, style, delay = 0, x = 0, y = 16, amount = 0.16 }: RevealProps) {
   const reduceMotion = useReducedMotion()
+  const ref = useRef<HTMLDivElement>(null)
+  const revealed = useReveal(ref, { amount })
+  const show = reduceMotion || revealed
 
   return (
     <m.div
+      ref={ref}
       className={className}
       style={style}
       initial={reduceMotion ? false : { opacity: 0, x, y }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, x: 0, y: 0 }}
-      viewport={{ once: true, amount }}
+      animate={show ? { opacity: 1, x: 0, y: 0 } : undefined}
       transition={{ duration: 0.66, delay, ease: EASE }}
     >
       {children}
@@ -68,14 +105,17 @@ export function Reveal({ children, className, style, delay = 0, x = 0, y = 16, a
 
 export function ProductStage({ children, className, delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
   const reduceMotion = useReducedMotion()
+  const ref = useRef<HTMLDivElement>(null)
+  const revealed = useReveal(ref, { amount: 0.12 })
+  const show = reduceMotion || revealed
 
   return (
     <m.div
+      ref={ref}
       className={className}
       initial={reduceMotion ? false : { opacity: 0, y: 28, scale: 0.99 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
+      animate={show ? { opacity: 1, y: 0, scale: 1 } : undefined}
       whileHover={reduceMotion ? undefined : { y: -4 }}
-      viewport={{ once: true, amount: 0.12 }}
       transition={{ duration: 0.72, delay, ease: EASE }}
     >
       {children}
@@ -85,14 +125,17 @@ export function ProductStage({ children, className, delay = 0 }: { children: Rea
 
 export function MotionCard({ children, className, delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
   const reduceMotion = useReducedMotion()
+  const ref = useRef<HTMLDivElement>(null)
+  const revealed = useReveal(ref, { amount: 0.2 })
+  const show = reduceMotion || revealed
 
   return (
     <m.div
+      ref={ref}
       className={className}
       initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+      animate={show ? { opacity: 1, y: 0 } : undefined}
       whileHover={reduceMotion ? undefined : { y: -5 }}
-      viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.54, delay, ease: EASE }}
     >
       {children}
@@ -117,6 +160,8 @@ export function MaskedWords({
   delay?: number
 }) {
   const reduceMotion = useReducedMotion()
+  const ref = useRef<HTMLSpanElement>(null)
+  const revealed = useReveal(ref, { amount: 0.5 })
   const words = text.split(' ')
 
   if (reduceMotion) {
@@ -133,10 +178,10 @@ export function MaskedWords({
   return (
     <Tag className={className} aria-label={text}>
       <m.span
+        ref={ref}
         aria-hidden
         initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.5 }}
+        animate={revealed ? 'show' : undefined}
         transition={{ delayChildren: stagger(0.045, { startDelay: delay }) }}
         style={{ display: 'inline' }}
       >

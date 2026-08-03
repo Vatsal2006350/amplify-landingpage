@@ -324,7 +324,7 @@ export function Enrichment() {
   return (
     <section id="enrichment" className="scroll-mt-[80px]">
       <div className="mx-auto max-w-[1200px] px-4 py-16 sm:px-6 sm:py-24">
-        <DocHeader index="03 / CUSTOMS DECLARATION" meta={['PAGE 4 OF 7', 'FORM AMP-03']} />
+        <DocHeader index="03 / CUSTOMS DECLARATION" meta={['PAGE 4 OF 6', 'FORM AMP-03']} />
         <div className="mt-8 grid gap-6 lg:grid-cols-12 lg:items-end">
           <h2
             className="type-h2 lg:col-span-7"

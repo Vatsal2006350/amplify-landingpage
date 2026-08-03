@@ -161,7 +161,7 @@ export function ProductFlowWorkbench() {
           <div>
             <div className="type-mono-label" style={{ color: 'var(--ink-muted)' }}>Workbook preview</div>
             <h3 className="font-display mt-1" style={{ fontSize: 20, fontWeight: 540, color: 'var(--ink)' }}>
-              Generated rows before export
+              Rows before export
             </h3>
           </div>
           <div
@@ -194,7 +194,6 @@ export function ProductFlowWorkbench() {
             ['BR-772104-CAF', 'Leather Lace-Up Boot', '5 images', 'Ready'],
             ['BR-9011-CRM', 'Carryover Sandal', '3 images', 'Ready'],
             ['BR-772105-PRE', 'Patent Mary Jane', 'price approval', 'Review'],
-            ['BR-772106-NDE', 'Comfort Mule', 'material check', 'Review'],
           ].map((row, index) => (
             <div
               key={row[0]}
@@ -210,12 +209,6 @@ export function ProductFlowWorkbench() {
               <span className="col-span-2 text-right"><StatusBracket status={row[3]} /></span>
             </div>
           ))}
-        </div>
-        <div className="mt-4 rounded-doc p-3" style={NOTE}>
-          <div className="type-mono-label" style={{ color: 'var(--ink-muted)' }}>Operator command</div>
-          <div className="font-display mt-1" style={{ fontSize: 14, fontWeight: 540, color: 'var(--ink)' }}>
-            Generate review workbook for blocked price and material fields.
-          </div>
         </div>
       </section>
     </div>
@@ -233,11 +226,10 @@ export function ProductFlowWorkbench() {
           </div>
           <StatusBracket status="run complete" />
         </div>
-        <div className="grid gap-2 sm:grid-cols-4">
+        <div className="grid gap-2 sm:grid-cols-3">
           <Metric value="45K" label="sales rows" />
           <Metric value="7" label="source files" />
           <Metric value="90" label="agent recs" />
-          <Metric value="82" label="health" />
         </div>
         <div className="mt-4 rounded-doc p-4" style={{ border: '1px solid var(--ledger)', background: 'var(--paper-raised)' }}>
           <div className="mb-3 flex items-center justify-between">
@@ -287,10 +279,9 @@ export function ProductFlowWorkbench() {
         </div>
         <div className="space-y-3">
           {[
-            ['Save SKU and barcode join memory', 'Sales, stock, and listing files now share stable product identity.', 'Ready'],
-            ['Review pricing wave for UAE', 'Top sellers do not need markdown; slower color needs bundle test.', 'Review'],
-            ['Unblock supplier stock sync', 'Stock slice can publish after supplier policy is confirmed.', 'Open'],
-            ['Send listing fixes to approvals', '12 SKUs need fit copy and material confirmation.', 'Ready'],
+            ['Review pricing wave for UAE', 'Top sellers do not need markdown.', 'Review'],
+            ['Unblock supplier stock sync', 'Waiting on supplier policy confirmation.', 'Open'],
+            ['Send listing fixes to approvals', '12 SKUs need fit copy and material.', 'Ready'],
           ].map((item) => (
             <div
               key={item[0]}
@@ -372,7 +363,6 @@ export function ProductFlowWorkbench() {
             ['Reorder carryover boots', '320 units, 21 day lead time', 'Approve'],
             ['Hold slow color', 'size curve under target', 'Hold'],
             ['Generate PO draft', '$42K to Beira Rio', 'Review'],
-            ['Push channel stock', 'single pool with caps', 'Ready'],
           ].map((item) => (
             <div
               key={item[0]}
@@ -427,7 +417,6 @@ export function ProductFlowWorkbench() {
             ['Listing repair', 'BR-772105-PRE', 'Approve target price before Centrepoint export.', 'Approve'],
             ['Pricing exception', 'BR-9011-CRM', 'Keep price steady; markdown not recommended.', 'Needs info'],
             ['Replenishment RFQ', 'BR-772104-CAF', 'PO draft for 320 units from forecast.', 'Review'],
-            ['AI ads action', 'PMUK-GUSTO-120', 'Bundle ad copy and SKU generator output ready.', 'Approve'],
           ].map((item) => (
             <div
               key={`${item[0]}-${item[1]}`}

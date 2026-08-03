@@ -1,7 +1,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { m, useReducedMotion } from 'motion/react'
+import { m } from 'motion/react'
 import { DocHeader } from '../doc/chrome'
 
 function TippedPhoto({
@@ -13,16 +13,14 @@ function TippedPhoto({
   caption: string
   dark?: boolean
 }) {
-  const reduced = useReducedMotion()
   return (
     <figure className="relative">
-      <m.div
-        className="relative overflow-hidden"
-        initial={reduced ? false : { clipPath: 'inset(0 100% 0 0)' }}
-        whileInView={reduced ? undefined : { clipPath: 'inset(0 0% 0 0)' }}
-        viewport={{ once: true, amount: 0.4 }}
-        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-      >
+      {/* No reveal animation on the photo itself. This used to be a clip-path
+          wipe driven by `whileInView`, so any visitor whose IntersectionObserver
+          did not report left the image clipped to zero width and saw a blank
+          card. The photo is now plain markup; the surrounding card still
+          animates in, so nothing is lost visually. */}
+      <div className="relative overflow-hidden">
         <img
           src={src}
           alt=""
@@ -30,7 +28,7 @@ function TippedPhoto({
           className="aspect-[16/9] w-full object-cover"
           style={dark ? { filter: 'grayscale(0.35) contrast(1.02) brightness(0.9)' } : undefined}
         />
-      </m.div>
+      </div>
       {/* photo corners */}
       {[
         'left-[-3px] top-[-3px] border-r-0 border-b-0',
@@ -153,11 +151,35 @@ function RecordCard({
   )
 }
 
+/** the logo strip that used to be its own section — proof and its evidence now sit together */
+function LogoCell({
+  children,
+  label,
+  href,
+}: {
+  children: ReactNode
+  label: string
+  href: string
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="group flex min-h-[104px] items-center justify-center px-6 py-5 transition-colors hover:bg-paper focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-safety"
+      style={{ background: 'var(--paper-raised)' }}
+      aria-label={`${label} website (opens in a new tab)`}
+    >
+      <span className="transition-transform duration-200 group-hover:scale-[1.03]">{children}</span>
+    </a>
+  )
+}
+
 export function Customers() {
   return (
     <section id="customers" className="scroll-mt-[80px]">
       <div className="mx-auto max-w-[1200px] px-4 py-16 sm:px-6 sm:py-20">
-        <DocHeader index="01 / CONSIGNEES" meta={['PAGE 2 OF 7', 'REV. 2026-07']} />
+        <DocHeader index="01 / CONSIGNEES" meta={['PAGE 2 OF 6', 'REV. 2026-07']} />
         <div className="mt-8 grid gap-6 lg:grid-cols-12 lg:items-end">
           <h2
             className="type-h2 lg:col-span-8"
@@ -176,7 +198,46 @@ export function Customers() {
           </div>
         </div>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div
+          className="mt-8 grid gap-px overflow-hidden rounded-doc sm:grid-cols-3"
+          style={{ background: 'var(--ledger-strong)', border: '1px solid var(--ledger-strong)' }}
+        >
+          <LogoCell label="Geo Partnering Group" href="https://www.linkedin.com/company/geo-partnering/">
+            <img
+              src="/logos/geo-partnering-group.png"
+              alt="Geo Partnering Group"
+              className="h-[60px] w-auto max-w-full object-contain"
+            />
+          </LogoCell>
+          <LogoCell label="Beira Rio" href="https://www.beirario.com.br/en/">
+            <img
+              src="/logos/beira-rio.png"
+              alt="Beira Rio"
+              className="h-[44px] w-auto max-w-full object-contain"
+            />
+          </LogoCell>
+          <LogoCell label="PMUK and Gusto Foods" href="https://gustoindia.in/">
+            <div className="flex items-center gap-3">
+              <span
+                className="type-mono-label border-r pr-3"
+                style={{ fontSize: 10, color: 'var(--ink-faint)', borderColor: 'var(--ledger-strong)' }}
+              >
+                PMUK
+              </span>
+              <span
+                className="font-sans text-[28px] tracking-[-0.04em]"
+                style={{ color: 'var(--ink)', fontWeight: 800 }}
+              >
+                Gusto<span style={{ color: '#76B900' }}>●</span>
+              </span>
+              <span className="type-mono-label -ml-2 mt-4" style={{ fontSize: 7, color: 'var(--ink-muted)' }}>
+                FOODS
+              </span>
+            </div>
+          </LogoCell>
+        </div>
+
+        <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <RecordCard
             index="001"
             consignee="GEOOMNII / BEIRA RIO"
