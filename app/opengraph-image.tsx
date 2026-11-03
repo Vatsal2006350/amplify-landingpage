@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
 export const runtime = 'nodejs'
-export const alt = 'Amplify | AI Workspace for Brand Operators'
+export const alt = 'Amplify | Turn your catalog into more sales'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
@@ -40,8 +40,8 @@ export default async function Image() {
             color: 'rgba(20,19,17,0.55)',
           }}
         >
-          <span>00 / MANIFEST OF GOODS</span>
-          <span>MANIFEST NO. AMP-2026-184</span>
+          <span>FOR ECOMMERCE BRANDS</span>
+          <span>GROW WITH AMPLIFY</span>
         </div>
 
         <div
@@ -66,7 +66,7 @@ export default async function Image() {
               Amplify
             </div>
             <div style={{ fontSize: 30, color: 'rgba(20,19,17,0.64)' }}>
-              AI Workspace for Brand Operators
+              Turn your catalog into more sales
             </div>
           </div>
         </div>
@@ -83,7 +83,7 @@ export default async function Image() {
           }}
         >
           <span style={{ color: 'rgba(20,19,17,0.55)' }}>
-            CONTENTS: LISTINGS · DECISIONS · ACTIONS
+            PRODUCT IMAGES · ADS · LISTINGS
           </span>
           <span
             style={{
@@ -94,7 +94,7 @@ export default async function Image() {
               transform: 'rotate(-4deg)',
             }}
           >
-            APPROVED — HUMAN
+            PAY WHEN SALES GROW
           </span>
         </div>
       </div>

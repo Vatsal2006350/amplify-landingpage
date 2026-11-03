@@ -4,20 +4,20 @@ import { display, mono, sans } from './fonts'
 import { DocDefs } from '../components/doc/stamp'
 
 export const metadata: Metadata = {
-  title: 'Amplify | AI Workspace for Brand Operators',
-  description: 'Run listing automation, company brain analysis, inventory forecasts, purchase orders, sales actions, and marketplace approvals from one AI workspace.',
+  title: 'Amplify | Turn your catalog into more sales',
+  description: 'Better product images and ads. Marketplace-ready listings. Sales and stock insights. Pay only when sales increase under an agreed growth pilot.',
   metadataBase: new URL('https://www.use-amplify.com'),
   openGraph: {
-    title: 'Amplify | AI Workspace for Brand Operators',
-    description: 'One workspace for listing automation, company brain analysis, forecasts, purchase orders, sales actions, and approvals.',
+    title: 'Amplify | Turn your catalog into more sales',
+    description: 'Help great products become growing businesses with better images, ads and marketplace listings.',
     url: 'https://www.use-amplify.com',
     siteName: 'Amplify',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Amplify | AI Workspace for Brand Operators',
-    description: 'Keep the commerce stack you already run, and make weekly catalog, sales, inventory, and PO work cleaner.',
+    title: 'Amplify | Turn your catalog into more sales',
+    description: 'No setup fee or monthly platform fee. Pay 5% of qualifying sales growth above an agreed baseline.',
   },
 }
 
