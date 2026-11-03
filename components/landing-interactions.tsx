@@ -38,9 +38,19 @@ export function ProductJourney() {
     );
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let frame: number | null = null;
-    const update = () => {
+    let position = 0;
+    let lastFrame = 0;
+    const update = (time: number) => {
       frame = null;
-      if (!pinned.matches || reducedMotion.matches) return;
+      if (!pinned.matches || reducedMotion.matches) {
+        demo.querySelectorAll<HTMLElement>('[data-scene], [data-heading], [data-step]').forEach(element => {
+          element.style.removeProperty('--scene-weight');
+          element.style.removeProperty('--scene-offset');
+        });
+        demo.style.removeProperty('--journey-progress');
+        lastFrame = 0;
+        return;
+      }
       const start =
         track.getBoundingClientRect().top +
         window.scrollY -
@@ -51,11 +61,43 @@ export function ProductJourney() {
         0,
         Math.min(1, (window.scrollY - start) / distance),
       );
-      const next = Math.min(
-        steps.length - 1,
-        Math.floor(progress * steps.length),
+      const target = progress * (steps.length - 1);
+      const elapsed = Math.min(64, lastFrame ? time - lastFrame : 16);
+      lastFrame = time;
+      // Brief damping smooths wheel ticks while keeping the sequence scroll-driven.
+      position += (target - position) * (1 - Math.exp(-elapsed / 65));
+      if (
+        Math.abs(target - position) < 0.001 ||
+        progress === 0 ||
+        progress === 1
+      )
+        position = target;
+      demo.style.setProperty(
+        "--journey-progress",
+        String(position / (steps.length - 1)),
       );
+      for (let index = 0; index < steps.length; index++) {
+        const delta = index - position;
+        const linear = Math.max(0, 1 - Math.abs(delta));
+        const weight = linear * linear * (3 - 2 * linear);
+        const layer = demo.querySelector<HTMLElement>(
+          `[data-scene="${index}"]`,
+        );
+        layer?.style.setProperty("--scene-weight", String(weight));
+        layer?.style.setProperty(
+          "--scene-offset",
+          `${Math.max(-1, Math.min(1, delta)) * 64}px`,
+        );
+        demo
+          .querySelector<HTMLElement>(`[data-step="${index}"]`)
+          ?.style.setProperty("--scene-weight", String(weight));
+        demo
+          .querySelector<HTMLElement>(`[data-heading="${index}"]`)
+          ?.style.setProperty("--scene-weight", String(weight));
+      }
+      const next = Math.round(position);
       setActive((previous) => (previous === next ? previous : next));
+      if (position !== target) frame = requestAnimationFrame(update);
     };
     const schedule = () => {
       if (frame === null) frame = requestAnimationFrame(update);
@@ -95,13 +137,13 @@ export function ProductJourney() {
       track.getBoundingClientRect().top +
       window.scrollY -
       parseFloat(getComputedStyle(demo).top);
-    // Aim inside each step's scroll interval so the next frame stays on it.
+    // Each shortcut lands where its scene is fully in view.
     const offset =
       index >= steps.length
         ? distance + 80
         : index === 0
           ? 0
-          : (distance * (index + 0.5)) / steps.length;
+          : (distance * index) / (steps.length - 1);
     window.scrollTo({ top: start + offset, behavior: "smooth" });
   };
   return (
@@ -145,6 +187,7 @@ export function ProductJourney() {
             {steps.map((step, index) => (
               <button
                 key={step.short}
+                data-step={index}
                 type="button"
                 aria-pressed={active === index}
                 className={`sequence-step ${active === index ? "is-active" : ""}`}
@@ -161,13 +204,33 @@ export function ProductJourney() {
           </div>
           <div className="sequence-stage" data-stage={active}>
             <div className="sequence-stage-meta">
-              <span>{steps[active].short.toUpperCase()}</span>
-              <span>0{active + 1} / 04</span>
+              <div className="sequence-heading-stack" aria-hidden="true">
+                {steps.map((step, index) => (
+                  <span
+                    key={step.short}
+                    data-heading={index}
+                    className={active === index ? "is-active" : ""}
+                  >
+                    {step.short.toUpperCase()}
+                  </span>
+                ))}
+              </div>
+              <span
+                className="sequence-scroll-progress"
+                role="progressbar"
+                aria-label="Product journey progress"
+                aria-valuemin={1}
+                aria-valuemax={4}
+                aria-valuenow={active + 1}
+              >
+                <i />
+              </span>
             </div>
             <div className="sequence-scene-wrap">
               {scenes.map((Scene, index) => (
                 <div
                   key={index}
+                  data-scene={index}
                   className={`sequence-scene-layer ${active === index ? "is-active" : ""}`}
                   aria-hidden={active !== index}
                   inert={active !== index}
