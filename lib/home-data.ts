@@ -1,27 +1,26 @@
 export const NAV_LINKS = [
-  { label: 'How it works', href: '#how-it-works' },
-  { label: 'Product', href: '#product-flow' },
-  { label: 'Enrichment', href: '#enrichment' },
-  { label: 'Integrations', href: '#integrations' },
+  { label: 'Images & ads', href: '#images-ads' },
+  { label: 'Listings', href: '#listings' },
+  { label: 'Sales & inventory', href: '#inventory' },
+  { label: 'Pricing', href: '#pricing' },
 ]
 
 export const USE_CASE_LINKS = [
-  { label: 'Listing Ops', href: '/use-cases/listing-ops', detail: 'Generate marketplace files' },
-  { label: 'Company Brain', href: '/use-cases/company-brain', detail: 'Ask sales and stock' },
-  { label: 'Inventory', href: '/use-cases/inventory', detail: 'Read the channel ledger' },
-  { label: 'Approvals', href: '/use-cases/approvals', detail: 'Review agent work' },
-  { label: 'Marketplace files', href: '/use-cases/marketplace-files', detail: 'Invoice to XLSX' },
+  { label: 'Marketplace listings', href: '/#listings', detail: 'Prepare listings for each channel' },
+  { label: 'Product images & ads', href: '/#images-ads', detail: 'Create assets from existing photos' },
+  { label: 'Sales & inventory', href: '/#inventory', detail: 'See what to promote or restock' },
+  { label: 'Growth pilot pricing', href: '/pricing', detail: 'Pay only when sales increase' },
 ]
 
 export const HOME_USE_CASES = [
   {
-    title: 'Listing Ops',
+    title: 'Marketplace listings',
     href: '/use-cases/listing-ops',
     metric: '184 SKU rows',
     body: 'Turn source files into marketplace-ready listings.',
   },
   {
-    title: 'Company Brain',
+    title: 'Sales insights',
     href: '/use-cases/company-brain',
     metric: '45K sales rows',
     body: 'Ask what changed and what deserves attention.',
@@ -91,7 +90,7 @@ export const ENRICHMENT_ROWS = [
 export const PRODUCT_FLOW_TABS = [
   {
     id: 'listings',
-    label: 'Listing Ops',
+    label: 'Marketplace listings',
     eyebrow: 'Template compile',
     chart: [32, 46, 58, 79, 92],
     decision: 'Confirm the four uncertain fields, then export both marketplace files.',
@@ -99,7 +98,7 @@ export const PRODUCT_FLOW_TABS = [
   },
   {
     id: 'brain',
-    label: 'Company Brain',
+    label: 'Sales insights',
     eyebrow: 'Retail planning',
     chart: [44, 52, 49, 68, 81],
     decision: 'Keep price steady and shift stock toward Amazon.',

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, m } from 'motion/react'
 import { NAV_LINKS, USE_CASE_LINKS } from '../../lib/home-data'
+import { FOUNDER_CALL_URL } from '../../lib/growth-pricing'
 import { MANIFEST_NO, ORIGIN } from '../../lib/manifest'
 import { Magnetic } from '../motion-primitives'
 
@@ -210,7 +211,7 @@ export function SiteNav({
           <div className="flex items-center gap-2">
             <Magnetic className="hidden sm:block">
               <a
-                href={href('#cta')}
+                href={FOUNDER_CALL_URL}
                 className="btn-press type-mono-label flex h-9 items-center rounded-doc px-4"
                 style={{
                   background: 'var(--orange)',
@@ -219,7 +220,7 @@ export function SiteNav({
                   fontWeight: 700,
                 }}
               >
-                GET EARLY ACCESS
+                SEE IT WITH YOUR PRODUCT
               </a>
             </Magnetic>
             <button

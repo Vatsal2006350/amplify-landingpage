@@ -20,7 +20,7 @@ export type UseCase = {
 export const USE_CASES: UseCase[] = [
   {
     slug: 'listing-ops',
-    label: 'Listing Ops',
+    label: 'Marketplace listings',
     navDetail: 'Generate marketplace files',
     eyebrow: 'Catalog operations',
     headline: 'Turn messy product files into approved channel listings.',
@@ -51,7 +51,7 @@ export const USE_CASES: UseCase[] = [
   },
   {
     slug: 'company-brain',
-    label: 'Company Brain',
+    label: 'Sales insights',
     navDetail: 'Ask sales and stock',
     eyebrow: 'Retail analysis',
     headline: 'Ask what changed, why it moved, and what to do next.',
