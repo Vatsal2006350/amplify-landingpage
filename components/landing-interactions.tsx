@@ -26,22 +26,84 @@ const steps = [
 ];
 export function ProductJourney() {
   const [active, setActive] = useState(0);
-  const [playing, setPlaying] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const demoRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    if (
-      !playing ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    )
+    const track = ref.current;
+    const demo = demoRef.current;
+    if (!track || !demo) return;
+    const pinned = window.matchMedia(
+      "(min-width: 641px) and (min-height: 650px)",
+    );
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let frame: number | null = null;
+    const update = () => {
+      frame = null;
+      if (!pinned.matches || reducedMotion.matches) return;
+      const start =
+        track.getBoundingClientRect().top +
+        window.scrollY -
+        parseFloat(getComputedStyle(demo).top);
+      const distance = track.offsetHeight - demo.offsetHeight;
+      if (distance <= 0) return;
+      const progress = Math.max(
+        0,
+        Math.min(1, (window.scrollY - start) / distance),
+      );
+      const next = Math.min(
+        steps.length - 1,
+        Math.floor(progress * steps.length),
+      );
+      setActive((previous) => (previous === next ? previous : next));
+    };
+    const schedule = () => {
+      if (frame === null) frame = requestAnimationFrame(update);
+    };
+    const observer = new ResizeObserver(schedule);
+    observer.observe(track);
+    observer.observe(demo);
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    pinned.addEventListener("change", schedule);
+    reducedMotion.addEventListener("change", schedule);
+    schedule();
+    return () => {
+      if (frame !== null) cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      pinned.removeEventListener("change", schedule);
+      reducedMotion.removeEventListener("change", schedule);
+    };
+  }, []);
+
+  const moveToStep = (index: number) => {
+    const track = ref.current;
+    const demo = demoRef.current;
+    if (!track || !demo) return;
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const distance = track.offsetHeight - demo.offsetHeight;
+    const sticky = getComputedStyle(demo).position === "sticky";
+    if (!sticky || distance <= 0 || reducedMotion) {
+      setActive(Math.min(index, steps.length - 1));
       return;
-    const timer = window.setInterval(() => {
-      const bounds = ref.current?.getBoundingClientRect();
-      if (bounds && bounds.top < window.innerHeight && bounds.bottom > 0)
-        setActive((value) => (value + 1) % steps.length);
-    }, 6000);
-    return () => window.clearInterval(timer);
-  }, [playing]);
-  const Scene = scenes[active];
+    }
+    const start =
+      track.getBoundingClientRect().top +
+      window.scrollY -
+      parseFloat(getComputedStyle(demo).top);
+    // Aim inside each step's scroll interval so the next frame stays on it.
+    const offset =
+      index >= steps.length
+        ? distance + 80
+        : index === 0
+          ? 0
+          : (distance * (index + 0.5)) / steps.length;
+    window.scrollTo({ top: start + offset, behavior: "smooth" });
+  };
   return (
     <div className="journey-scroll-track" ref={ref}>
       <div className="journey-mobile">
@@ -53,7 +115,7 @@ export function ProductJourney() {
           </article>
         ))}
       </div>
-      <div className="journey sequence">
+      <div className="journey sequence" ref={demoRef}>
         <div className="journey-topbar">
           <div className="journey-topbar-title">
             <strong className="journey-wordmark">Amplify</strong>
@@ -64,13 +126,13 @@ export function ProductJourney() {
               className="sequence-play"
               type="button"
               aria-label={
-                playing
-                  ? "Pause product demonstration"
-                  : "Play product demonstration"
+                active === steps.length - 1
+                  ? "Continue below product demonstration"
+                  : "Next product demonstration step"
               }
-              onClick={() => setPlaying((value) => !value)}
+              onClick={() => moveToStep(active + 1)}
             >
-              {playing ? "Ⅱ" : "▶"}
+              <span aria-hidden="true">↓</span>
             </button>
           </div>
         </div>
@@ -86,10 +148,7 @@ export function ProductJourney() {
                 type="button"
                 aria-pressed={active === index}
                 className={`sequence-step ${active === index ? "is-active" : ""}`}
-                onClick={() => {
-                  setActive(index);
-                  setPlaying(false);
-                }}
+                onClick={() => moveToStep(index)}
               >
                 <span className="sequence-step-number">0{index + 1}</span>
                 <span className="sequence-step-copy">
@@ -106,7 +165,16 @@ export function ProductJourney() {
               <span>0{active + 1} / 04</span>
             </div>
             <div className="sequence-scene-wrap">
-              <Scene />
+              {scenes.map((Scene, index) => (
+                <div
+                  key={index}
+                  className={`sequence-scene-layer ${active === index ? "is-active" : ""}`}
+                  aria-hidden={active !== index}
+                  inert={active !== index}
+                >
+                  <Scene />
+                </div>
+              ))}
             </div>
           </div>
         </div>
