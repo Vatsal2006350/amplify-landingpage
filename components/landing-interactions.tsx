@@ -3,24 +3,25 @@ import { useEffect, useRef, useState } from "react";
 import { scenes } from "./landing-scenes";
 const steps = [
   {
-    label: "Bring in your catalog",
+    label: "Start with your product",
     short: "Catalog",
-    detail: "Start with the photos and product file you already have.",
+    detail: "Upload your existing photos and catalog files.",
   },
   {
-    label: "Prepare better listings",
+    label: "Make it ready to sell",
     short: "Listings",
-    detail: "Add the images and details each channel needs.",
+    detail:
+      "Create product images and prepare the details each marketplace needs.",
   },
   {
-    label: "Create campaign variations",
+    label: "Give customers a reason to click",
     short: "Ads",
-    detail: "Give customers a reason to click. Review before publishing.",
+    detail: "Generate campaign creative variations for your team to review.",
   },
   {
-    label: "Plan the next sale",
+    label: "Decide what happens next",
     short: "Sales planning",
-    detail: "Ask what sold and what needs restocking.",
+    detail: "See sales performance and identify stock that needs attention.",
   },
 ];
 export function ProductJourney() {

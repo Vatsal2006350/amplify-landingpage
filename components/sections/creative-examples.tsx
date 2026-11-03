@@ -11,8 +11,8 @@ export function CreativeExamples() {
           </h2>
           <p className="text-[15px] leading-[1.7] text-[var(--ink-muted)] lg:col-span-5">
             Create product images and campaign variations from photos you
-            already have. Review your assets, then prepare them for your
-            connected channels.
+            already have, without arranging a new shoot for every campaign.
+            Review your assets before publishing.
           </p>
         </div>
         <div className="mt-8 grid gap-5 sm:grid-cols-3">

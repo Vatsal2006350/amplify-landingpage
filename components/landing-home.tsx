@@ -2,12 +2,19 @@ import { LandingNav, LandingFooter } from "./landing-shell";
 import { ProductJourney } from "./landing-interactions";
 import { GrowthPricing } from "./growth-pricing";
 import { CreativeExamples } from "./sections/creative-examples";
+import {
+  ListingBenefits,
+  OperationalBenefits,
+} from "./sections/sales-benefits";
 export function LandingHome() {
   return (
     <main className="landing-page">
       <LandingNav />
       <section className="hero-section">
         <div className="hero-copy">
+          <p className="eyebrow pb-4">
+            For brands selling across stores and marketplaces
+          </p>
           <h1>
             {"Turn your catalog"}
             <br />
@@ -16,7 +23,7 @@ export function LandingHome() {
           </h1>
           <p className="hero-description">
             {
-              "Turn your product photos and files into better listings and ads. Use sales and stock data to decide what to improve next."
+              "Create better product images and ads. Build marketplace listings that help shoppers buy. Use your sales and stock data to decide what to improve next."
             }
           </p>
           <div className="hero-actions">
@@ -37,12 +44,14 @@ export function LandingHome() {
           <ProductJourney />
         </div>
       </section>
+      <CreativeExamples />
+      <ListingBenefits />
       <section id="connections" className="connections-section">
         <div className="connections-copy">
           <h2>
-            {"Make the product once."}
+            {"Prepare once."}
             <br />
-            <em>{"Take it everywhere."}</em>
+            <em>{"Sell across channels."}</em>
           </h2>
           <p>
             {
@@ -124,10 +133,12 @@ export function LandingHome() {
               <div className="customer-proof-logo">
                 <img src="/logos/geoomnii.png" alt="Geoomnii" />
               </div>
-              <h3>{"Get footwear listings ready for each channel."}</h3>
+              <h3>
+                {"Turn a large footwear catalog into channel-ready listings."}
+              </h3>
               <p>
                 {
-                  "Product files, images, and marketplace templates become listings the team can review."
+                  "Geoomnii works across marketplaces with different listing requirements. Amplify brings product files and images into channel-specific exports, with gaps visible for the team to review."
                 }
               </p>
               <span>{"CATALOG · MARKETPLACE FILES"}</span>
@@ -149,9 +160,11 @@ export function LandingHome() {
               <div className="customer-proof-logo">
                 <img src="/logos/gusto-foods.jpg" alt="Gusto Foods" />
               </div>
-              <h3>{"Keep a growing food catalog moving."}</h3>
+              <h3>{"Bring food-catalog stock and campaign work together."}</h3>
               <p>
-                {"Stock, bundles, and campaign work stay visible in one place."}
+                {
+                  "Gusto manages products sold as singles and bundles across channels. Amplify supports stock updates and sales reporting alongside campaign creative preparation."
+                }
               </p>
               <span>{"INVENTORY · CREATIVES"}</span>
             </div>
@@ -170,10 +183,10 @@ export function LandingHome() {
               <div className="customer-proof-logo">
                 <img src="/logos/metro-brands.png" alt="Metro Brands" />
               </div>
-              <h3>{"Prepare richer footwear listings."}</h3>
+              <h3>{"Review footwear listings before they go live."}</h3>
               <p>
                 {
-                  "A focused listing pilot for product detail and marketplace readiness."
+                  "Metro Brands is running a focused listing pilot. Amplify helps review product details and marketplace readiness within the pilot’s agreed catalog-only scope."
                 }
               </p>
               <span>{"LISTING PILOT"}</span>
@@ -202,7 +215,9 @@ export function LandingHome() {
           <figcaption>
             <strong>{"What needs attention today"}</strong>
             <span>
-              {"Stock that is already gone, then the product sitting still."}
+              {
+                "Spot stockouts and excess inventory before choosing what to promote or reorder."
+              }
             </span>
           </figcaption>
         </figure>
@@ -216,7 +231,7 @@ export function LandingHome() {
               <strong>{"Which products are ready for ads"}</strong>
               <span>
                 {
-                  "Campaign images from the catalog photo. The answer says which ones to hold."
+                  "Create campaign assets while checking which products have stock available to support demand."
                 }
               </span>
             </figcaption>
@@ -229,13 +244,15 @@ export function LandingHome() {
             <figcaption>
               <strong>{"What actually sold"}</strong>
               <span>
-                {"Best sellers from the same sales file, ranked by units."}
+                {
+                  "See which products sell, then use that evidence to guide promotion and restocking."
+                }
               </span>
             </figcaption>
           </figure>
         </div>
       </section>
-      <CreativeExamples />
+      <OperationalBenefits />
       <GrowthPricing />
       <section id="early-access" className="early-access-section">
         <div className="early-access-inner">

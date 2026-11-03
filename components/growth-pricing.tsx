@@ -57,7 +57,7 @@ export function GrowthPricing() {
             <li>No increase means a $0 Amplify fee.</li>
           </ul>
           <a href={FOUNDER_CALL_URL} className="btn-press inline-flex items-center justify-center gap-4 rounded-doc bg-[var(--orange)] px-5 py-4 text-[13px] font-semibold text-[var(--paper)]">
-            Start a growth pilot <span aria-hidden="true">↗</span>
+            Book a call <span aria-hidden="true">↗</span>
           </a>
           <p className="mt-4 text-[12px] leading-relaxed text-[var(--ink-muted)]">
             90-day initial pilot. Cancel anytime. Advertising spend is paid

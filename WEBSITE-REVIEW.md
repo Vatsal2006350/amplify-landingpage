@@ -2,7 +2,7 @@
 
 Uses the layout shown at use-amplify.com: centered Instrument Serif headline, light background, rounded green buttons and the dark green four-stage product demonstration. The repository default branch had a different document-style design. The homepage markup, demo scenes and CSS were recovered from the public website so this change follows the selected design rather than redesigning it.
 
-Keeps the existing channel, customer and inventory sections. Updates the mission and supporting copy in place. Adds compact creative examples and transparent pricing within the same palette. The product demo retains step selection and playback controls. Mobile retains the live layout's stacked step cards.
+Keeps the existing channel, customer and inventory section layouts. Updates the mission and supporting copy in place. Places creative examples after the hero and adds listing before-and-after content plus a section explaining reduced operational work, using existing section and card styles. Customer stories explain each brand’s use. Navigation follows images/ads, listings and sales/inventory. All booking buttons say Book a call. Pricing retains the agreed offer. The product demo retains step selection and playback controls. Mobile retains the live layout's stacked step cards.
 
 ## Growth pilot offer
 

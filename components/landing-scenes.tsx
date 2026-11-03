@@ -35,17 +35,17 @@ export const scenes = [
               <span className="sequence-status">{"Needs work"}</span>
             </div>
             <div className="sequence-sheet-row sequence-sheet-primary">
-              <img src="/images/customers/pmuk-gusto-hot-sauce.png" alt="" />
-              <strong>{"Hot sauce duo"}</strong>
+              <img src="/images/products/source-shoe-boot.jpg" alt="" />
+              <strong>{"Brown boots · EU 39"}</strong>
               <span>{"ERP export"}</span>
               <span className="sequence-status-quiet">{"In file"}</span>
             </div>
             <div className="sequence-sheet-row sequence-sheet-primary">
               <img
-                src="/images/customers/gusto-samples/pancake-kit.jpg"
+                src="/images/products/source-shoe-boot.jpg"
                 alt=""
               />
-              <strong>{"Pancake kit"}</strong>
+              <strong>{"Brown boots · EU 40"}</strong>
               <span>{"Supplier sheet"}</span>
               <span className="sequence-status-quiet">{"In file"}</span>
             </div>
@@ -192,7 +192,7 @@ export const scenes = [
               <span>{"Campaign ideas"}</span>
               <small>{"EXAMPLE"}</small>
             </div>
-            <p>{"Compare creative directions"}</p>
+            <p>{"Illustrative click-through rates"}</p>
             <div className="sequence-option-grid">
               <div className="sequence-option sequence-option-a">
                 <div className="sequence-option-art">
@@ -267,7 +267,7 @@ export const scenes = [
             </div>
             <div className="sequence-ask-query">
               {
-                "What are my sales this month? Which SKUs sold most, and what should I restock?"
+                "How are the brown boots selling? Is there enough stock for another campaign?"
               }
               <span
                 className="sequence-typing-cursor"
@@ -276,29 +276,29 @@ export const scenes = [
             </div>
             <div className="sequence-ask-response">
               <div className="sequence-sales-summary">
-                <span>{"Sales this month"}</span>
+                <span>{"Boot sales this month"}</span>
                 <strong>{"$42.8k"}</strong>
                 <small>{"Sample data"}</small>
               </div>
               <div className="sequence-chart-heading">
-                {"Top selling products"}
+                {"Boot sales by size"}
               </div>
               <div className="sequence-top-sku">
-                <span>{"Brown ankle boots"}</span>
+                <span>{"Brown boots · EU 38"}</span>
                 <i>
                   <b></b>
                 </i>
                 <strong>{"132"}</strong>
               </div>
               <div className="sequence-top-sku">
-                <span>{"Canvas low-top"}</span>
+                <span>{"Brown boots · EU 39"}</span>
                 <i>
                   <b></b>
                 </i>
                 <strong>{"84"}</strong>
               </div>
               <div className="sequence-top-sku">
-                <span>{"Leather belt"}</span>
+                <span>{"Brown boots · EU 40"}</span>
                 <i>
                   <b></b>
                 </i>

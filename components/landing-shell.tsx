@@ -1,4 +1,3 @@
-import { UseCaseMenu } from "./landing-interactions";
 export function LandingNav() {
   return (
     <header className="simple-nav">
@@ -7,9 +6,9 @@ export function LandingNav() {
         <span>{"Amplify"}</span>
       </a>
       <nav aria-label="Main navigation">
-        <a href="/#how-it-works">{"Product"}</a>
-        <UseCaseMenu />
-        <a href="/#connections">{"Channels"}</a>
+        <a href="/#images-ads">{"Images & ads"}</a>
+        <a href="/#listings">{"Listings"}</a>
+        <a href="/#inventory">{"Sales & inventory"}</a>
         <a href="/#pricing">{"Pricing"}</a>
       </nav>
       <a
@@ -31,6 +30,7 @@ export function LandingFooter() {
       </a>
       <p>{"Helping brands turn great products into growing businesses."}</p>
       <div>
+        <a href="/#connections">{"Channels"}</a>
         <a href="/pricing">{"Pricing"}</a>
         <a href="/privacy">{"Privacy"}</a>
         <span>
