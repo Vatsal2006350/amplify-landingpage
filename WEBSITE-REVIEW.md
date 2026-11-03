@@ -1,6 +1,8 @@
-# Focused positioning and pricing additions
+# Positioning and pricing in the current public website layout
 
-This revision preserves the original `structa-landing-page` layout, global styles and animations. It updates the hero and mission copy within the existing sections. The workbench and enrichment demo remain intact. A compact product-image/ad example strip and pricing section use the existing typography, colors and document components. There is no replacement homepage or custom global stylesheet.
+Uses the layout shown at use-amplify.com: centered Instrument Serif headline, light background, rounded green buttons and the dark green four-stage product demonstration. The repository default branch had a different document-style design. The homepage markup, demo scenes and CSS were recovered from the public website so this change follows the selected design rather than redesigning it.
+
+Keeps the existing channel, customer and inventory sections. Updates the mission and supporting copy in place. Adds compact creative examples and transparent pricing within the same palette. The product demo retains step selection and playback controls. Mobile retains the live layout's stacked step cards.
 
 ## Growth pilot offer
 
@@ -24,4 +26,4 @@ The homepage and `/pricing` share the same pricing component and calculation. Th
 - Browser checks cover desktop and phone layouts.
 - Check existing demo controls, navigation anchors, calculator edits and invalid inputs, displayed images and `/pricing`.
 
-Review locally with `npm run dev -- --port 3187` or run the built site with `npm run start -- --port 3187`. Merge and deploy after reviewing the UI and commercial terms. The GitHub deployment metadata points at the older default-branch version while the public domain serves the sales-led version, so verify the hosting project and production branch before publishing.
+Review locally with `npm run dev -- --port 3187` or run the built site with `npm run start -- --port 3187`. Review against the screenshot and commercial terms before merging and deploying. The GitHub deployment metadata points at the older default-branch version while the public domain serves the sales-led version, so verify the hosting project and production branch before publishing.

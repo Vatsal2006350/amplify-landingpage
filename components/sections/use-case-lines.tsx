@@ -20,10 +20,10 @@ export function UseCaseLines() {
             className="type-h2 lg:col-span-7"
             style={{ fontSize: 'clamp(32px, 4vw, 50px)', color: 'var(--ink)' }}
           >
-            Grow with less work behind <em>every sale.</em>
+            Built for the work your team <em>repeats.</em>
           </h2>
           <p className="text-[15px] leading-[1.7] lg:col-span-5" style={{ color: 'var(--ink-muted)' }}>
-            Spend less time rebuilding marketplace files and reports. Give your team more time to grow the business.
+            Open a focused workspace for each operational job.
           </p>
         </div>
 

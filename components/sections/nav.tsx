@@ -219,7 +219,7 @@ export function SiteNav({
                   fontWeight: 700,
                 }}
               >
-                SEE YOUR PRODUCT
+                GET EARLY ACCESS
               </a>
             </Magnetic>
             <button

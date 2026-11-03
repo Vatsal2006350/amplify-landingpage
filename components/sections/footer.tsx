@@ -30,7 +30,7 @@ const COLUMNS: { title: string; links: { label: string; href: string; external?:
   {
     title: 'COMPANY',
     links: [
-      { label: 'Growth pilot pricing', href: '/pricing' },
+      { label: 'Early access', href: '/#cta' },
       { label: 'Privacy', href: '/privacy' },
     ],
   },

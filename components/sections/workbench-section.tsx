@@ -14,10 +14,10 @@ export function WorkbenchSection() {
             className="type-h2 lg:col-span-7"
             style={{ fontSize: 'clamp(32px, 4.2vw, 52px)', color: 'var(--ink)' }}
           >
-            Know what to improve, promote or <em>restock.</em>
+            One workspace. <em>Four</em> operating views.
           </h2>
           <p className="text-[15px] leading-[1.7] lg:col-span-5" style={{ color: 'var(--ink-muted)' }}>
-            Explore listings, sales and inventory together. Review the next action before it goes live.
+            Click through the views your catalog, merchandising, and inventory teams work in.
           </p>
         </div>
         <ProductStage className="mt-10">

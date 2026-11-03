@@ -3,15 +3,14 @@ export const NAV_LINKS = [
   { label: 'Product', href: '#product-flow' },
   { label: 'Enrichment', href: '#enrichment' },
   { label: 'Integrations', href: '#integrations' },
-  { label: 'Pricing', href: '#pricing' },
 ]
 
 export const USE_CASE_LINKS = [
-  { label: 'Marketplace listings', href: '/use-cases/listing-ops', detail: 'Prepare channel-ready listings' },
-  { label: 'Sales insights', href: '/use-cases/company-brain', detail: 'Ask about sales and stock' },
+  { label: 'Listing Ops', href: '/use-cases/listing-ops', detail: 'Generate marketplace files' },
+  { label: 'Company Brain', href: '/use-cases/company-brain', detail: 'Ask sales and stock' },
   { label: 'Inventory', href: '/use-cases/inventory', detail: 'Read the channel ledger' },
   { label: 'Approvals', href: '/use-cases/approvals', detail: 'Review agent work' },
-  { label: 'Product images & ads', href: '/#images-ads', detail: 'Start with your product photos' },
+  { label: 'Marketplace files', href: '/use-cases/marketplace-files', detail: 'Invoice to XLSX' },
 ]
 
 export const HOME_USE_CASES = [
