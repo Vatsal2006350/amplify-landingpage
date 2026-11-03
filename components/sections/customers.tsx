@@ -185,15 +185,14 @@ export function Customers() {
             className="type-h2 lg:col-span-8"
             style={{ fontSize: 'clamp(34px, 4.5vw, 56px)', color: 'var(--ink)' }}
           >
-            Proof from teams moving <em>real</em> inventory.
+            How brands use <em>Amplify.</em>
           </h2>
           <div className="lg:col-span-4">
             <p className="type-mono-label" style={{ fontSize: 10, color: 'var(--ink-faint)' }}>
               SCOPE:
             </p>
             <p className="mt-1 text-[14px] leading-[1.7]" style={{ color: 'var(--ink-muted)' }}>
-              Three operator stories across catalog, inventory, ads, training, and marketplace
-              outputs.
+              We help brands turn great products into growing businesses. These stories show the work behind it.
             </p>
           </div>
         </div>

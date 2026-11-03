@@ -3,14 +3,14 @@
 import { Barcode, Rule, SizeRunGrid } from '../doc/chrome'
 import { Stamp } from '../doc/stamp'
 import { CountUp, MaskedWords, Reveal } from '../motion-primitives'
-import { WaitlistForm } from '../waitlist-form'
+import { FOUNDER_CALL_URL } from '../../lib/growth-pricing'
 import { HeroFlow } from './hero-flow'
 
 const STATS = [
-  { value: '35K', label: 'SKU rows enriched' },
-  { value: '8+', label: 'channels supported' },
-  { value: '45K', label: 'sales rows analyzed' },
-  { value: '0', label: 'unapproved writes' },
+  { value: '5%', label: 'of qualifying sales growth' },
+  { value: '90', label: 'day initial pilot' },
+  { value: '$0', label: 'setup fee' },
+  { value: '$0', label: 'fee when sales do not increase' },
 ]
 
 export function Hero() {
@@ -64,18 +64,18 @@ export function Hero() {
             className="type-hero"
             style={{ fontSize: 'clamp(52px, 8.5vw, 112px)', color: 'var(--ink)' }}
           >
-            <MaskedWords text="Retail operations, finally in one place." em={['finally']} />
+            <MaskedWords text="Turn your catalog into more sales." em={['more', 'sales.']} />
           </h1>
           <Reveal delay={0.3} className="mt-7 max-w-[560px]">
             <p className="text-[17px] leading-[1.65] sm:text-[18px]" style={{ color: 'var(--ink-muted)' }}>
-              Turn product files, sales, and stock into ready listings, clear decisions, and
-              approved actions.
+              Create better images and ads. Prepare marketplace listings that help shoppers buy.
+              Use sales and stock data to decide what to improve next.
             </p>
           </Reveal>
           <Reveal delay={0.42} className="mt-8 max-w-[560px]">
-            <WaitlistForm tone="paper" />
+            <a href={FOUNDER_CALL_URL} className="btn-press inline-flex items-center justify-center gap-4 rounded-doc px-5 py-4 text-[13px] font-semibold" style={{ background: 'var(--orange)', color: 'var(--paper)' }}>See Amplify with your product <span aria-hidden="true">↗</span></a>
             <p className="type-mono-label mt-3" style={{ fontSize: 9, color: 'var(--ink-faint)' }}>
-              NO CREDIT CARD · PROCESSED ON RECEIPT
+              NO SETUP FEE · PAY ONLY WHEN SALES INCREASE
             </p>
           </Reveal>
         </div>

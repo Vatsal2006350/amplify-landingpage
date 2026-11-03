@@ -7,8 +7,8 @@ const COLUMNS: { title: string; links: { label: string; href: string; external?:
     title: 'PRODUCT',
     links: [
       { label: 'How it works', href: '/#how-it-works' },
-      { label: 'Product images & ads', href: '/#images-ads' },
-      { label: 'Channels', href: '/#connections' },
+      { label: 'Enrichment', href: '/#enrichment' },
+      { label: 'Integrations', href: '/#integrations' },
       { label: 'Free audit', href: '/audit' },
     ],
   },

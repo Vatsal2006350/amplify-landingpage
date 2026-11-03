@@ -451,7 +451,7 @@ export default async function UseCasePage({ params }: PageProps) {
                 See the workflow
               </a>
               <Link
-                href="https://cal.com/vatsal-shah-sbzsly/amplify-demo"
+                href="/#cta"
                 className="type-mono-label flex h-11 items-center rounded-doc px-5"
                 style={{ border: '1px solid var(--ink)', color: 'var(--ink)', background: 'transparent', fontWeight: 700 }}
               >
@@ -508,11 +508,11 @@ export default async function UseCasePage({ params }: PageProps) {
               </h2>
             </Reveal>
             <Link
-              href="https://cal.com/vatsal-shah-sbzsly/amplify-demo"
+              href="/#cta"
               className="type-mono-label flex min-h-[52px] items-center justify-between rounded-doc px-5"
               style={{ background: 'var(--dk-text)', color: 'var(--ink)', fontWeight: 700 }}
             >
-              <span>See Amplify with your product</span>
+              <span>Bring us your workflow</span>
               <span aria-hidden>→</span>
             </Link>
           </div>

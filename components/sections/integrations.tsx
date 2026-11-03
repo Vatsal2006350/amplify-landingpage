@@ -67,8 +67,8 @@ export function Integrations() {
             Keep the stack. Make the work <em>smarter.</em>
           </h2>
           <p className="text-[15px] leading-[1.7] lg:col-span-5" style={{ color: 'var(--ink-muted)' }}>
-            Nothing to rip out and nothing to migrate. Amplify sits in the middle of the systems and
-            files your team already works from.
+            Connect supported stores and marketplaces directly. Prepare reviewed upload files for
+            other channels. Available updates depend on your account permissions.
           </p>
         </div>
 
