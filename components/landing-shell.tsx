@@ -16,7 +16,7 @@ export function LandingNav() {
         className="nav-cta"
         href="https://cal.com/vatsal-shah-sbzsly/amplify-demo"
       >
-        {"See it with your product "}
+        {"Book a call "}
         <span aria-hidden="true">{"↗"}</span>
       </a>
     </header>

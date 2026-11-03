@@ -24,7 +24,7 @@ export function LandingHome() {
               className="button-primary"
               href="https://cal.com/vatsal-shah-sbzsly/amplify-demo"
             >
-              {"See Amplify with your product "}
+              {"Book a call "}
               <span aria-hidden="true">{"↗"}</span>
             </a>
             <a className="text-link" href="#how-it-works">
@@ -255,7 +255,7 @@ export function LandingHome() {
             className="button-primary"
             href="https://cal.com/vatsal-shah-sbzsly/amplify-demo"
           >
-            {"See Amplify with your product "}
+            {"Book a call "}
             <span aria-hidden="true">{"↗"}</span>
           </a>
         </div>
