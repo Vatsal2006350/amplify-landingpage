@@ -1,20 +1,17 @@
 import { LandingNav, LandingFooter } from "./landing-shell";
 import { ProductJourney } from "./landing-interactions";
 import { GrowthPricing } from "./growth-pricing";
+import { GrowthValueCalculator } from "./growth-value-calculator";
 import { CreativeExamples } from "./sections/creative-examples";
-import {
-  ListingBenefits,
-  OperationalBenefits,
-} from "./sections/sales-benefits";
+import { HomeSalesVisual } from "./home-sales-visual";
+import { LandingLoopVisual } from "./landing-loop";
+import { ListingBenefits } from "./sections/sales-benefits";
 export function LandingHome() {
   return (
     <main className="landing-page">
       <LandingNav />
       <section className="hero-section">
         <div className="hero-copy">
-          <p className="eyebrow pb-4">
-            For brands selling across stores and marketplaces
-          </p>
           <h1>
             {"Turn your catalog"}
             <br />
@@ -23,7 +20,7 @@ export function LandingHome() {
           </h1>
           <p className="hero-description">
             {
-              "Create better product images and ads. Build marketplace listings that help shoppers buy. Use your sales and stock data to decide what to improve next."
+              "Turn catalog photos into ads and listings shoppers can understand. Use sales and stock to decide what to promote next."
             }
           </p>
           <div className="hero-actions">
@@ -197,62 +194,19 @@ export function LandingHome() {
       <section id="inventory" className="inventory-section is-live">
         <div className="inventory-heading">
           <h2>
-            {"What should you promote?"}
+            {"Make ads for the products"}
             <br />
-            <em>{"What needs restocking?"}</em>
+            <em>{"people already buy."}</em>
           </h2>
           <p>
             {
-              "Use sales and stock data to see what needs attention. Promote products you have available, and update supported marketplace listings linked to your products. These screenshots show a live food catalog; the figures belong to that business."
+              "Ask Amplify for a batch of product ads using your catalog and sales. Review each creative before it goes out."
             }
           </p>
         </div>
-        <figure className="product-shot">
-          <img
-            src="/images/product/ask-attention.jpg"
-            alt="Ask Amplify listing stockouts and a product with far too much stock"
-          />
-          <figcaption>
-            <strong>{"What needs attention today"}</strong>
-            <span>
-              {
-                "Spot stockouts and excess inventory before choosing what to promote or reorder."
-              }
-            </span>
-          </figcaption>
-        </figure>
-        <div className="product-shot-row">
-          <figure className="product-shot">
-            <img
-              src="/images/product/ask-ads.jpg"
-              alt="AI Ads workspace and an answer about which products are ready to advertise"
-            />
-            <figcaption>
-              <strong>{"Which products are ready for ads"}</strong>
-              <span>
-                {
-                  "Create campaign assets while checking which products have stock available to support demand."
-                }
-              </span>
-            </figcaption>
-          </figure>
-          <figure className="product-shot">
-            <img
-              src="/images/product/best-sellers.jpg"
-              alt="Best sellers report showing JUST LEMONZ 200ML leading the catalog"
-            />
-            <figcaption>
-              <strong>{"What actually sold"}</strong>
-              <span>
-                {
-                  "See which products sell, then use that evidence to guide promotion and restocking."
-                }
-              </span>
-            </figcaption>
-          </figure>
-        </div>
+        <HomeSalesVisual />
       </section>
-      <OperationalBenefits />
+      <GrowthValueCalculator />
       <GrowthPricing />
       <section id="early-access" className="early-access-section">
         <div className="early-access-inner">
@@ -268,13 +222,16 @@ export function LandingHome() {
               }
             </p>
           </div>
-          <a
-            className="button-primary"
-            href="https://cal.com/vatsal-shah-sbzsly/amplify-demo"
-          >
-            {"Book a call "}
-            <span aria-hidden="true">{"↗"}</span>
-          </a>
+          <div className="early-access-art-column">
+            <LandingLoopVisual />
+            <a
+              className="button-primary"
+              href="https://cal.com/vatsal-shah-sbzsly/amplify-demo"
+            >
+              {"Book a call "}
+              <span aria-hidden="true">{"↗"}</span>
+            </a>
+          </div>
         </div>
       </section>
       <LandingFooter />

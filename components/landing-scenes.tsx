@@ -1,3 +1,8 @@
+import type { CSSProperties } from "react";
+
+const askQuestion =
+  "How are the brown boots selling? Is there enough stock for another campaign?";
+
 export const scenes = [
   function Scene0() {
     return (
@@ -77,6 +82,7 @@ export const scenes = [
                 alt="Unstyled phone photo of the brown boots on a cluttered floor"
                 src="/images/products/source-shoe-boot.jpg"
               />
+              <span className="sequence-source-scan" aria-hidden="true" />
               <div className="sequence-source-copy">
                 <strong>{"Men Shoes Brown"}</strong>
                 <span>{"No description · Missing attributes"}</span>
@@ -90,9 +96,12 @@ export const scenes = [
                 <span>{"✦"}</span>
               </div>
               <div className="sequence-processing-copy">
-                {"Preparing"}
+                {"AI is preparing"}
                 <br />
                 {"your listing"}
+              </div>
+              <div className="sequence-processing-progress" aria-hidden="true">
+                <span />
               </div>
               <div className="sequence-processing-arrow" aria-hidden="true">
                 {"→"}
@@ -260,21 +269,37 @@ export const scenes = [
               </div>
             </div>
           </div>
-          <div className="sequence-sales-card">
+          <div
+            className="sequence-sales-card"
+            style={{
+              "--sequence-answer-delay": `${askQuestion.length * 18 + 160}ms`,
+            } as CSSProperties}
+          >
             <div className="sequence-card-heading">
               <span>{"Ask Amplify"}</span>
               <small>{"EXAMPLE"}</small>
             </div>
-            <div className="sequence-ask-query">
-              {
-                "How are the brown boots selling? Is there enough stock for another campaign?"
-              }
+            <div
+              className="sequence-ask-query"
+              aria-label={askQuestion}
+            >
+              <span className="sequence-query-copy" aria-hidden="true">
+                {Array.from(askQuestion).map((character, index) => (
+                  <span
+                    className="sequence-query-char"
+                    key={`${character}-${index}`}
+                    style={{ "--sequence-type-delay": `${index * 18}ms` } as CSSProperties}
+                  >
+                    {character}
+                  </span>
+                ))}
+              </span>
               <span
                 className="sequence-typing-cursor"
                 aria-hidden="true"
               ></span>
             </div>
-            <div className="sequence-ask-response">
+            <div className="sequence-ask-response" aria-label="Example answer from sales and stock data">
               <div className="sequence-sales-summary">
                 <span>{"Boot sales this month"}</span>
                 <strong>{"$42.8k"}</strong>
@@ -286,21 +311,21 @@ export const scenes = [
               <div className="sequence-top-sku">
                 <span>{"Brown boots · EU 38"}</span>
                 <i>
-                  <b></b>
+                  <b style={{ "--sequence-size-share": "100%" } as CSSProperties}></b>
                 </i>
                 <strong>{"132"}</strong>
               </div>
               <div className="sequence-top-sku">
                 <span>{"Brown boots · EU 39"}</span>
                 <i>
-                  <b></b>
+                  <b style={{ "--sequence-size-share": "64%" } as CSSProperties}></b>
                 </i>
                 <strong>{"84"}</strong>
               </div>
               <div className="sequence-top-sku">
                 <span>{"Brown boots · EU 40"}</span>
                 <i>
-                  <b></b>
+                  <b style={{ "--sequence-size-share": "46%" } as CSSProperties}></b>
                 </i>
                 <strong>{"61"}</strong>
               </div>

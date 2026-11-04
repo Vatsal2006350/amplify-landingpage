@@ -5,7 +5,7 @@ import { DocDefs } from '../components/doc/stamp'
 
 export const metadata: Metadata = {
   title: 'Amplify | Turn your catalog into more sales',
-  description: 'Better product images and ads. Marketplace-ready listings. Sales and stock insights. Pay only when sales increase under an agreed growth pilot.',
+  description: 'Better product images and ads. Marketplace-ready listings. Sales and stock insights. Amplify takes 5% of qualifying sales growth after subtracting increases in ad spend.',
   metadataBase: new URL('https://www.use-amplify.com'),
   openGraph: {
     title: 'Amplify | Turn your catalog into more sales',
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Amplify | Turn your catalog into more sales',
-    description: 'No setup fee or monthly platform fee. Pay 5% of qualifying sales growth above an agreed baseline.',
+    description: 'Amplify takes 5% of qualifying sales growth after subtracting increases in ad spend.',
   },
 }
 
@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`scroll-smooth ${display.variable} ${sans.variable} ${mono.variable}`}>
+    <html lang="en" className={`${display.variable} ${sans.variable} ${mono.variable}`}>
       <body className="antialiased">
         <DocDefs />
         {children}

@@ -10,7 +10,6 @@ export const USE_CASE_LINKS = [
   { label: 'Company Brain', href: '/use-cases/company-brain', detail: 'Ask sales and stock' },
   { label: 'Inventory', href: '/use-cases/inventory', detail: 'Read the channel ledger' },
   { label: 'Approvals', href: '/use-cases/approvals', detail: 'Review agent work' },
-  { label: 'Marketplace files', href: '/use-cases/marketplace-files', detail: 'Invoice to XLSX' },
 ]
 
 export const HOME_USE_CASES = [
@@ -37,12 +36,6 @@ export const HOME_USE_CASES = [
     href: '/use-cases/approvals',
     metric: '17 decisions',
     body: 'Review agent work before anything goes live.',
-  },
-  {
-    title: 'Marketplace files',
-    href: '/use-cases/marketplace-files',
-    metric: '4 platforms',
-    body: 'Convert supplier data into channel-ready files.',
   },
 ]
 

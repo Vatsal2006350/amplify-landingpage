@@ -38,9 +38,7 @@ export function ProductJourney() {
     );
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let frame: number | null = null;
-    let position = 0;
-    let lastFrame = 0;
-    const update = (time: number) => {
+    const update = () => {
       frame = null;
       if (!pinned.matches || reducedMotion.matches) {
         demo.querySelectorAll<HTMLElement>('[data-scene], [data-heading], [data-step]').forEach(element => {
@@ -48,7 +46,6 @@ export function ProductJourney() {
           element.style.removeProperty('--scene-offset');
         });
         demo.style.removeProperty('--journey-progress');
-        lastFrame = 0;
         return;
       }
       const start =
@@ -61,43 +58,16 @@ export function ProductJourney() {
         0,
         Math.min(1, (window.scrollY - start) / distance),
       );
-      const target = progress * (steps.length - 1);
-      const elapsed = Math.min(64, lastFrame ? time - lastFrame : 16);
-      lastFrame = time;
-      // Brief damping smooths wheel ticks while keeping the sequence scroll-driven.
-      position += (target - position) * (1 - Math.exp(-elapsed / 65));
-      if (
-        Math.abs(target - position) < 0.001 ||
-        progress === 0 ||
-        progress === 1
-      )
-        position = target;
-      demo.style.setProperty(
-        "--journey-progress",
-        String(position / (steps.length - 1)),
-      );
-      for (let index = 0; index < steps.length; index++) {
-        const delta = index - position;
-        const linear = Math.max(0, 1 - Math.abs(delta));
-        const weight = linear * linear * (3 - 2 * linear);
-        const layer = demo.querySelector<HTMLElement>(
-          `[data-scene="${index}"]`,
-        );
-        layer?.style.setProperty("--scene-weight", String(weight));
-        layer?.style.setProperty(
-          "--scene-offset",
-          `${Math.max(-1, Math.min(1, delta)) * 64}px`,
-        );
-        demo
-          .querySelector<HTMLElement>(`[data-step="${index}"]`)
-          ?.style.setProperty("--scene-weight", String(weight));
-        demo
-          .querySelector<HTMLElement>(`[data-heading="${index}"]`)
-          ?.style.setProperty("--scene-weight", String(weight));
-      }
-      const next = Math.round(position);
-      setActive((previous) => (previous === next ? previous : next));
-      if (position !== target) frame = requestAnimationFrame(update);
+      const position = progress * (steps.length - 1);
+      demo.style.setProperty("--journey-progress", String(progress));
+      // Keep the active scene discrete. Hysteresis prevents trackpad jitter at
+      // a boundary while allowing a quick swipe to move directly to its target.
+      setActive((previous) => {
+        let next = previous;
+        while (position > next + 0.58 && next < steps.length - 1) next++;
+        while (position < next - 0.58 && next > 0) next--;
+        return next;
+      });
     };
     const schedule = () => {
       if (frame === null) frame = requestAnimationFrame(update);
@@ -278,24 +248,24 @@ export function UseCaseMenu() {
           <div className="use-case-panel-card">
             {[
               [
-                "Images & ads",
-                "/#images-ads",
-                "Create assets from existing photos",
-              ],
-              [
                 "Marketplace listings",
-                "/#how-it-works",
-                "Prepare your product for each channel",
+                "/use-cases/listing-ops",
+                "Prepare product details for each channel",
               ],
               [
                 "Sales & inventory",
-                "/#inventory",
-                "See what to promote or restock",
+                "/use-cases/inventory",
+                "See what sold and what needs restocking",
               ],
               [
-                "Growth pilot pricing",
-                "/pricing",
-                "Pay only when sales increase",
+                "Ask Amplify",
+                "/use-cases/company-brain",
+                "Get answers from your business data",
+              ],
+              [
+                "Approvals",
+                "/use-cases/approvals",
+                "Review actions before they go live",
               ],
             ].map(([label, href, description]) => (
               <a key={href} href={href} onClick={() => setOpen(false)}>

@@ -5,7 +5,7 @@ import "../landing.css";
 export const metadata: Metadata = {
   title: "Amplify pricing | Pay only when sales increase",
   description:
-    "No setup fee or monthly platform fee. Pay 5% of qualifying additional sales above an agreed baseline after deducting increases in ad spend.",
+    "Amplify takes 5% of qualifying sales growth after subtracting increases in ad spend. Use the calculator to see your fee and what you keep.",
 };
 export default function PricingPage() {
   return (
